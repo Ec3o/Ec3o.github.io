@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Web后端开发第一课杭电助手简单后端Go项目开发–ToDo List项目初始化打开GoLand，创建项目文件夹，打开终端，输入以下代码并回车： 1go mod init &lt;文件夹名称&gt;  新建一个go文件，命名为 main.go ,之后用到的主程序代码都写在里面啦 ♡&gt;𖥦&lt;)!! 在main.go文件里面，我们开始正式构建go项目 Link Start！一些库导入以及前期">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://example.com/2023/10/19/Web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%AC%AC%E4%B8%80%E8%AF%BE/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Web后端开发第一课杭电助手简单后端Go项目开发–ToDo List项目初始化打开GoLand，创建项目文件夹，打开终端，输入以下代码并回车： 1go mod init &lt;文件夹名称&gt;  新建一个go文件，命名为 main.go ,之后用到的主程序代码都写在里面啦 ♡&gt;𖥦&lt;)!! 在main.go文件里面，我们开始正式构建go项目 Link Start！一些库导入以及前期">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-10-19T12:24:30.933Z">
+<meta property="article:modified_time" content="2023-09-28T01:59:41.316Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        
+          <a class="nav-icon" href="/atom.xml" title="RSS Feed"><span class="fa fa-rss"></span></a>
+        
+        <a class="nav-icon nav-search-btn" title="Search"><span class="fa fa-search"></span></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-Web后端开发第一课" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2023/10/19/Web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%AC%AC%E4%B8%80%E8%AF%BE/" class="article-date">
+  <time class="dt-published" datetime="2023-10-19T12:24:30.933Z" itemprop="datePublished">2023-10-19</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="Web后端开发第一课"><a href="#Web后端开发第一课" class="headerlink" title="Web后端开发第一课"></a>Web后端开发第一课</h1><h1 id="杭电助手简单后端Go项目开发–ToDo-List"><a href="#杭电助手简单后端Go项目开发–ToDo-List" class="headerlink" title="杭电助手简单后端Go项目开发–ToDo List"></a>杭电助手简单后端Go项目开发–ToDo List</h1><h2 id="项目初始化"><a href="#项目初始化" class="headerlink" title="项目初始化"></a>项目初始化</h2><p>打开<strong>GoLand</strong>，创建项目文件夹，打开终端，输入以下代码并回车：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">go</span> mod init &lt;文件夹名称&gt;</span><br></pre></td></tr></table></figure>
+
+<p>新建一个go文件，命名为 <code>main.go</code> ,之后用到的主程序代码都写在里面啦 ♡&gt;𖥦&lt;)!!</p>
+<p>在<code>main.go</code>文件里面，我们开始正式构建go项目</p>
+<h2 id="Link-Start！"><a href="#Link-Start！" class="headerlink" title="Link Start！"></a>Link Start！</h2><h4 id="一些库导入以及前期准备"><a href="#一些库导入以及前期准备" class="headerlink" title="一些库导入以及前期准备"></a>一些库导入以及前期准备</h4><p>一个基本的go文件框架大概长得像以下这个样子：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"><span class="keyword">import</span>(</span><br><span class="line">    <span class="comment">//一些必要的库导入</span></span><br><span class="line">)</span><br><span class="line"><span class="comment">//一些必要的初始化</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="comment">//实现一些必要的功能</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>本项目使用<strong>gin</strong>框架进行简单的后端开发</p>
+<p>要使用<strong>gin</strong>框架，请在终端中输入如下命令：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">go</span> get -u github.com/gin-gonic/gin</span><br></pre></td></tr></table></figure>
+
+<p>并在用到<strong>gin</strong>框架时，在<strong>import</strong>部分将其导入</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span>(</span><br><span class="line">    <span class="string">&quot;github.com/gin-gonic/gin&quot;</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>必要的准备工作完成。</p>
+<h4 id="路由及其功能实现"><a href="#路由及其功能实现" class="headerlink" title="路由及其功能实现"></a>路由及其功能实现</h4><p>接下来是main函数部分</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">r := gin.Default() </span><br></pre></td></tr></table></figure>
+
+<p> 这导入了Gin框架并使用默认的配置创建了一个Gin的路由引擎</p>
+<p>接下来给出一个示例:</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">r.GET(<span class="string">&quot;/todo&quot;</span>,<span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span>&#123;</span><br><span class="line">    <span class="comment">//要在路由中实现的功能</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>上面的实例中,“<strong>GET</strong>”部分是访问路由时使用的方法，“**&#x2F;todo**”是希望访问的路径,”**func(c *gin.Context)**”用来传递一些必要的参数。有了一定的了解之后，我们可以利用自己对编程语言的理解完成各个功能的实现，下面是各个功能实现过程的解析：</p>
+<p>在所有功能开始做之前，我进行了一些必要的初始化，例如定义结构体内容、文件变量等。下面给出具体代码</p>
+<p><strong>定义主包</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br></pre></td></tr></table></figure>
+
+<p><strong>导入必要的库</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;encoding/json&quot;</span>#用来读写json文件</span><br><span class="line">	<span class="string">&quot;github.com/gin-gonic/gin&quot;</span>#gin框架</span><br><span class="line">	<span class="string">&quot;io/ioutil&quot;</span>#用于读取和写入文件、目录</span><br><span class="line">	<span class="string">&quot;sort&quot;</span>#用于排序</span><br><span class="line">	<span class="string">&quot;strconv&quot;</span>#用于数据类型转换</span><br><span class="line">	<span class="string">&quot;time&quot;</span>#用于处理时间相关操作</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p><strong>定义结构体</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> TODO <span class="keyword">struct</span> &#123;</span><br><span class="line">	Content  <span class="type">string</span> <span class="string">`json:&quot;content&quot;`</span></span><br><span class="line">	Done     <span class="type">bool</span>   <span class="string">`json:&quot;done&quot;`</span></span><br><span class="line">	Deadline <span class="type">string</span> <span class="string">`json:&quot;deadline&quot;`</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这段定义定义了三个变量，分别是<strong>字符型</strong><code> content</code>、<strong>布尔型</strong><code>done</code>和<strong>字符型</strong><code>deadline</code>用来进行数据处理</p>
+<p><strong>定义文件</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> todosFile = <span class="string">&quot;todos.json&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>处理文件读写</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;encoding/json&quot;</span></span><br><span class="line">	<span class="string">&quot;io/ioutil&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 函数功能：从文件中读取数据</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">loadTodosFromFile</span><span class="params">()</span></span> ([]TODO, <span class="type">error</span>) &#123;</span><br><span class="line">	data, err := ioutil.ReadFile(todosFile)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">nil</span>, err</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">var</span> todos []TODO</span><br><span class="line">	err = json.Unmarshal(data, &amp;todos)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">nil</span>, err</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> todos, <span class="literal">nil</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 函数功能：将数据保存至文件中</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">saveTodosToFile</span><span class="params">(todos []TODO)</span></span> <span class="type">error</span> &#123;</span><br><span class="line">	data, err := json.Marshal(todos)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> err</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	err = ioutil.WriteFile(todosFile, data, <span class="number">0644</span>)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> err</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>为了代码的易维护性,我们将其封装在<code>fileio.go</code>文件中,并将其放置于<code>main.go</code>同一目录下,它可以实现文件的读写功能o(<em>￣▽￣</em>)ブ</p>
+<h4 id="status-ok-link-start-qwq"><a href="#status-ok-link-start-qwq" class="headerlink" title="status ok,link start!qwq"></a>status ok,link start!qwq</h4><h2 id="添加功能"><a href="#添加功能" class="headerlink" title="添加功能"></a>添加功能</h2><h4 id="Todo上传"><a href="#Todo上传" class="headerlink" title="Todo上传"></a>Todo上传</h4><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">r.POST(<span class="string">&quot;/todo&quot;</span>, <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">		<span class="keyword">var</span> todo TODO  #将TODO实例化</span><br><span class="line">		<span class="keyword">if</span> err := c.BindJSON(&amp;todo); err != <span class="literal">nil</span> &#123;</span><br><span class="line">           #这个函数尝试将上传的数据按照json格式解析，如果失败则返回错误信息，说明用户上传的信息不合法</span><br><span class="line">			c.JSON(<span class="number">400</span>, gin.H&#123;<span class="string">&quot;error&quot;</span>: <span class="string">&quot;抱歉，您提供的TODO数据格式不正确&quot;</span>&#125;)</span><br><span class="line">			<span class="keyword">return</span></span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 检查是否传入截止时间字段</span></span><br><span class="line">		<span class="keyword">if</span> todo.Deadline == <span class="string">&quot;&quot;</span> &#123;</span><br><span class="line">			<span class="comment">// 如果没有传入，设置默认值为今天日期往后七天</span></span><br><span class="line">			defaultDeadline := time.Now().Add(time.Hour * <span class="number">24</span> * <span class="number">7</span>)</span><br><span class="line">			todo.Deadline = defaultDeadline.Format(<span class="string">&quot;2006-01-02&quot;</span>)</span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			<span class="comment">// 尝试解析截止时间字段</span></span><br><span class="line">			parsedDeadline, err := time.Parse(<span class="string">&quot;2006-01-02&quot;</span>, todo.Deadline)</span><br><span class="line">            #time.Parse函数用来尝试将上传的deadline解析</span><br><span class="line">			<span class="keyword">if</span> err != <span class="literal">nil</span> || parsedDeadline.Before(time.Now()) &#123;</span><br><span class="line">				<span class="comment">// 如果解析失败或时间早于当前时间，返回错误</span></span><br><span class="line">                #deadline.Before函数用来比较两个时间值并返回一个布尔型结果</span><br><span class="line">				c.JSON(<span class="number">400</span>, gin.H&#123;<span class="string">&quot;error&quot;</span>: <span class="string">&quot;无效的截止时间，格式应为 &#x27;2006-01-02&#x27; 并且不能是过去的时间&quot;</span>&#125;)</span><br><span class="line">				<span class="keyword">return</span></span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 读取已有的TODO数据</span></span><br><span class="line">		existingTodos, err := loadTodosFromFile()</span><br><span class="line">		<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">			c.JSON(<span class="number">500</span>, gin.H&#123;<span class="string">&quot;error&quot;</span>: <span class="string">&quot;无法读取TODO数据&quot;</span>&#125;)</span><br><span class="line">			<span class="keyword">return</span></span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 添加新的TODO</span></span><br><span class="line">		existingTodos = <span class="built_in">append</span>(existingTodos, todo)</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 保存更新后的TODO数据</span></span><br><span class="line">		err = saveTodosToFile(existingTodos)</span><br><span class="line">		<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">			c.JSON(<span class="number">500</span>, gin.H&#123;<span class="string">&quot;error&quot;</span>: <span class="string">&quot;无法保存TODO数据&quot;</span>&#125;)</span><br><span class="line">			<span class="keyword">return</span></span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		c.JSON(<span class="number">200</span>, gin.H&#123;<span class="string">&quot;status&quot;</span>: <span class="string">&quot;数据提交成功&quot;</span>&#125;)</span><br><span class="line">	&#125;)</span><br></pre></td></tr></table></figure>
+
+<p><code>nil</code>代表了空值,类似于<code>null</code>,常用于判断是否产生了错误,经常用于错误处理</p>
+<p>我们进行了几次判断:</p>
+<p>1.判断用户上传是否有效,否则报错</p>
+<p>2.判断是否设置了<code>deadline</code>,否则设置默认<code>deadline</code>为七天后</p>
+<p>3.解析上传的<code>deadline</code>(如果有的话),判断是否为有效时间,否则报错</p>
+<p>4.尝试读取数据,失败报错</p>
+<p>5.尝试上传数据,失败报错</p>
+<p>6.数据上传成功,返回<code>200</code>状态码和提示语</p>
+<h4 id="Todo删除"><a href="#Todo删除" class="headerlink" title="Todo删除"></a>Todo删除</h4><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">r.DELETE(<span class="string">&quot;/todo/:index&quot;</span>, <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">		index, err := strconv.Atoi(c.Param(<span class="string">&quot;index&quot;</span>))</span><br><span class="line">		<span class="keyword">if</span> err != <span class="literal">nil</span> || index &lt; <span class="number">0</span> &#123;</span><br><span class="line">			c.JSON(<span class="number">404</span>, gin.H&#123;<span class="string">&quot;error&quot;</span>: <span class="string">&quot;抱歉，您要删除的ToDo目前不存在，请先创建&quot;</span>&#125;)</span><br><span class="line">			<span class="keyword">return</span></span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 读取已有的TODO数据</span></span><br><span class="line">		existingTodos, err := loadTodosFromFile()</span><br><span class="line">		<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">			c.JSON(<span class="number">500</span>, gin.H&#123;<span class="string">&quot;error&quot;</span>: <span class="string">&quot;无法读取TODO数据&quot;</span>&#125;)</span><br><span class="line">			<span class="keyword">return</span></span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 检查索引是否超出范围</span></span><br><span class="line">		<span class="keyword">if</span> index &gt;= <span class="built_in">len</span>(existingTodos) &#123;</span><br><span class="line">			c.JSON(<span class="number">404</span>, gin.H&#123;<span class="string">&quot;error&quot;</span>: <span class="string">&quot;抱歉，您要删除的ToDo目前不存在，请先创建&quot;</span>&#125;)</span><br><span class="line">			<span class="keyword">return</span></span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 删除指定索引的 TODO 项</span></span><br><span class="line">		deletedTodo := existingTodos[index]</span><br><span class="line">		existingTodos = <span class="built_in">append</span>(existingTodos[:index], existingTodos[index+<span class="number">1</span>:]...)</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 保存更新后的TODO数据</span></span><br><span class="line">		err = saveTodosToFile(existingTodos)</span><br><span class="line">		<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">			c.JSON(<span class="number">500</span>, gin.H&#123;<span class="string">&quot;error&quot;</span>: <span class="string">&quot;无法保存TODO数据&quot;</span>&#125;)</span><br><span class="line">			<span class="keyword">return</span></span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		c.JSON(<span class="number">200</span>, gin.H&#123;<span class="string">&quot;status&quot;</span>: <span class="string">&quot;删除成功&quot;</span>, <span class="string">&quot;被删除的数据是&quot;</span>: deletedTodo&#125;)</span><br><span class="line">	&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>我们进行了几次判断:</p>
+<ol>
+<li>判断用户上传参数是否有效,否则报错.</li>
+<li>尝试读取数据,失败报错.</li>
+<li>尝试上传删除后的数据,失败报错.</li>
+<li>数据删除成功,返回200状态码和被删除的数据.</li>
+</ol>
+<p>一些补充:</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">index, err := strconv.Atoi(c.Param(<span class="string">&quot;index&quot;</span>))</span><br></pre></td></tr></table></figure>
+
+<p>这个函数的意思是,尝试将获得的<code>index</code>参数(ASCII)转换成整型.<code>Atoi</code> 代表 “ASCII to Integer”.</p>
+<p>Go的<code>append</code>函数用法似乎与python的不同:</p>
+<p>在python中,列表<code>list</code>添加新元素使用<code>append</code>函数:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">list</span>.append(element)</span><br></pre></td></tr></table></figure>
+
+<p>在go中,通常进行重新赋值</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">list=<span class="built_in">append</span>(list,element)</span><br></pre></td></tr></table></figure>
+
+<p>删除操作即相当于把原列表(切片)取list[index:]部分和list[:index]部分重新拼接即可.</p>
+<h4 id="Todo修改"><a href="#Todo修改" class="headerlink" title="Todo修改"></a>Todo修改</h4><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">r.PUT(<span class="string">&quot;/todo/:index&quot;</span>, <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">	index, err := strconv.Atoi(c.Param(<span class="string">&quot;index&quot;</span>))</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> || index &lt; <span class="number">0</span> &#123;</span><br><span class="line">		c.JSON(<span class="number">404</span>, gin.H&#123;<span class="string">&quot;error&quot;</span>: <span class="string">&quot;抱歉，您要修改的ToDo目前不存在，请先创建&quot;</span>&#125;)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">var</span> todo TODO</span><br><span class="line">	<span class="keyword">if</span> err := c.BindJSON(&amp;todo); err != <span class="literal">nil</span> &#123;</span><br><span class="line">		c.JSON(<span class="number">400</span>, gin.H&#123;<span class="string">&quot;error&quot;</span>: <span class="string">&quot;抱歉，您提供的TODO数据格式不正确&quot;</span>&#125;)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 读取已有的TODO数据</span></span><br><span class="line">	existingTodos, err := loadTodosFromFile()</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		c.JSON(<span class="number">500</span>, gin.H&#123;<span class="string">&quot;error&quot;</span>: <span class="string">&quot;无法读取TODO数据&quot;</span>&#125;)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 检查索引是否超出范围</span></span><br><span class="line">	<span class="keyword">if</span> index &gt;= <span class="built_in">len</span>(existingTodos) &#123;</span><br><span class="line">		c.JSON(<span class="number">404</span>, gin.H&#123;<span class="string">&quot;error&quot;</span>: <span class="string">&quot;抱歉，您要修改的ToDo目前不存在，请先创建&quot;</span>&#125;)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 更新指定索引的 TODO 项</span></span><br><span class="line">	existingTodos[index] = todo</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 保存更新后的TODO数据</span></span><br><span class="line">	err = saveTodosToFile(existingTodos)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		c.JSON(<span class="number">500</span>, gin.H&#123;<span class="string">&quot;error&quot;</span>: <span class="string">&quot;无法保存TODO数据&quot;</span>&#125;)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	c.JSON(<span class="number">200</span>, gin.H&#123;<span class="string">&quot;status&quot;</span>: <span class="string">&quot;修改成功&quot;</span>&#125;)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>我们进行了几次判断:</p>
+<ol>
+<li>判断用户上传参数是否有效,否则报错.</li>
+<li>尝试读取数据,失败报错.</li>
+<li>尝试上传修改后的数据,失败报错.</li>
+<li>数据删除成功,返回<code>200</code>状态码和提示语</li>
+</ol>
+<h4 id="汇总Todo"><a href="#汇总Todo" class="headerlink" title="汇总Todo"></a>汇总Todo</h4><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">r.GET(<span class="string">&quot;/todo&quot;</span>, <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">		<span class="comment">// 读取已有的 TODO 数据</span></span><br><span class="line">		existingTodos, err := loadTodosFromFile()</span><br><span class="line">		<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">			c.JSON(<span class="number">500</span>, gin.H&#123;<span class="string">&quot;error&quot;</span>: <span class="string">&quot;无法读取 TODO 数据&quot;</span>&#125;)</span><br><span class="line">			<span class="keyword">return</span></span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 创建一个新的切片来存储包含序号的 TODO 数据</span></span><br><span class="line">		todosWithIndex := []<span class="keyword">map</span>[<span class="type">string</span>]<span class="keyword">interface</span>&#123;&#125;&#123;&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 遍历现有的 TODO 数据，为每个 TODO 添加序号</span></span><br><span class="line">		<span class="keyword">for</span> index, todo := <span class="keyword">range</span> existingTodos &#123;</span><br><span class="line">			todoWithIndex := <span class="keyword">map</span>[<span class="type">string</span>]<span class="keyword">interface</span>&#123;&#125;&#123;</span><br><span class="line">				<span class="string">&quot;index&quot;</span>:    index,</span><br><span class="line">				<span class="string">&quot;content&quot;</span>:  todo.Content,</span><br><span class="line">				<span class="string">&quot;done&quot;</span>:     todo.Done,</span><br><span class="line">				<span class="string">&quot;deadline&quot;</span>: todo.Deadline,</span><br><span class="line">			&#125;</span><br><span class="line">			todosWithIndex = <span class="built_in">append</span>(todosWithIndex, todoWithIndex)</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		c.JSON(<span class="number">200</span>, todosWithIndex)</span><br><span class="line">	&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>其中</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">todosWithIndex := []<span class="keyword">map</span>[<span class="type">string</span>]<span class="keyword">interface</span>&#123;&#125;&#123;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这段代码的意思是创建一个元素为<code>string</code>-<code>任意类型</code>的键值对元素空切片用来存储数据.这段代码遍历了所有<code>todo</code>并为其增加了索引,最后输出<code>todo</code>.实现了我们所需要的功能</p>
+<h4 id="查询Todo"><a href="#查询Todo" class="headerlink" title="查询Todo"></a>查询Todo</h4><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">r.GET(<span class="string">&quot;/todo/:index&quot;</span>, <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">		index, err := strconv.Atoi(c.Param(<span class="string">&quot;index&quot;</span>))</span><br><span class="line">		<span class="keyword">if</span> err != <span class="literal">nil</span> || index &lt; <span class="number">0</span> &#123;</span><br><span class="line">			c.JSON(<span class="number">404</span>, gin.H&#123;<span class="string">&quot;error&quot;</span>: <span class="string">&quot;抱歉，您访问的 ToDo 目前不存在，请先创建&quot;</span>&#125;)</span><br><span class="line">			<span class="keyword">return</span></span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 读取已有的 TODO 数据</span></span><br><span class="line">		existingTodos, err := loadTodosFromFile()</span><br><span class="line">		<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">			c.JSON(<span class="number">500</span>, gin.H&#123;<span class="string">&quot;error&quot;</span>: <span class="string">&quot;无法读取 TODO 数据&quot;</span>&#125;)</span><br><span class="line">			<span class="keyword">return</span></span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 检查索引是否超出范围</span></span><br><span class="line">		<span class="keyword">if</span> index &gt;= <span class="built_in">len</span>(existingTodos) &#123;</span><br><span class="line">			c.JSON(<span class="number">404</span>, gin.H&#123;<span class="string">&quot;error&quot;</span>: <span class="string">&quot;抱歉，您访问的 ToDo 目前不存在，请先创建&quot;</span>&#125;)</span><br><span class="line">			<span class="keyword">return</span></span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 获取单个 TODO，并添加序号</span></span><br><span class="line">		todoWithIndex := <span class="keyword">map</span>[<span class="type">string</span>]<span class="keyword">interface</span>&#123;&#125;&#123;</span><br><span class="line">			<span class="string">&quot;index&quot;</span>:    index,</span><br><span class="line">			<span class="string">&quot;content&quot;</span>:  existingTodos[index].Content,</span><br><span class="line">			<span class="string">&quot;done&quot;</span>:     existingTodos[index].Done,</span><br><span class="line">			<span class="string">&quot;deadline&quot;</span>: existingTodos[index].Deadline,</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		c.JSON(<span class="number">200</span>, todoWithIndex)</span><br><span class="line">	&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>类似查询所有todo的代码,不过我们的输出是单个的而已</p>
+<h4 id="今日Todo"><a href="#今日Todo" class="headerlink" title="今日Todo"></a>今日Todo</h4><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">r.GET(<span class="string">&quot;/list_today&quot;</span>, <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">		<span class="comment">// 获取今天的日期</span></span><br><span class="line">		today := time.Now().Format(<span class="string">&quot;2006-01-02&quot;</span>)#获得今天的日期信息并按格式处理</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 读取已有的TODO数据</span></span><br><span class="line">		existingTodos, err := loadTodosFromFile()</span><br><span class="line">		<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">			c.JSON(<span class="number">500</span>, gin.H&#123;<span class="string">&quot;error&quot;</span>: <span class="string">&quot;无法读取TODO数据&quot;</span>&#125;)</span><br><span class="line">			<span class="keyword">return</span></span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 创建一个新的切片来存储符合条件的 TODO 数据</span></span><br><span class="line">		todayTodos := []TODO&#123;&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 遍历现有的 TODO 数据，找到截止日期为今天的 TODO</span></span><br><span class="line">		<span class="keyword">for</span> _, todo := <span class="keyword">range</span> existingTodos &#123;</span><br><span class="line">			<span class="keyword">if</span> todo.Deadline == today #简单的&#123;</span><br><span class="line">				todayTodos = <span class="built_in">append</span>(todayTodos, todo)</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span> <span class="built_in">len</span>(todayTodos) == <span class="number">0</span> &#123;</span><br><span class="line">			c.JSON(<span class="number">404</span>, gin.H&#123;<span class="string">&quot;message&quot;</span>: <span class="string">&quot;今天没有截止的TODO&quot;</span>&#125;)</span><br><span class="line">			<span class="keyword">return</span></span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		c.JSON(<span class="number">200</span>, todayTodos)</span><br><span class="line">	&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>获取今日todo并存储输出,就是这么简单~</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> _, todo := <span class="keyword">range</span> existingTodos &#123;</span><br><span class="line">			<span class="keyword">if</span> todo.Deadline == today #简单的&#123;</span><br><span class="line">				todayTodos = <span class="built_in">append</span>(todayTodos, todo)</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>_</code>代表了匿名变量,就是我们不会用到的变量可以用它来代替,它代表了序列中的index(序号),但这里我们暂时用不上.</p>
+<h4 id="本周Todo"><a href="#本周Todo" class="headerlink" title="本周Todo"></a>本周Todo</h4><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">r.GET(<span class="string">&quot;/list_week&quot;</span>, <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">		<span class="comment">// 获取本周一的日期</span></span><br><span class="line">		today := time.Now()</span><br><span class="line">		weekday := today.Weekday()</span><br><span class="line">		diff := <span class="type">int</span>(weekday - time.Monday)</span><br><span class="line">		<span class="keyword">if</span> diff &lt; <span class="number">0</span> &#123;</span><br><span class="line">			diff += <span class="number">7</span></span><br><span class="line">		&#125;</span><br><span class="line">		startOfWeek := today.AddDate(<span class="number">0</span>, <span class="number">0</span>, -diff)</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 获取下周一的日期</span></span><br><span class="line">		endOfWeek := startOfWeek.AddDate(<span class="number">0</span>, <span class="number">0</span>, <span class="number">7</span>)</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 读取已有的TODO数据</span></span><br><span class="line">		existingTodos, err := loadTodosFromFile()</span><br><span class="line">		<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">			c.JSON(<span class="number">500</span>, gin.H&#123;<span class="string">&quot;error&quot;</span>: <span class="string">&quot;无法读取TODO数据&quot;</span>&#125;)</span><br><span class="line">			<span class="keyword">return</span></span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 创建一个新的切片来存储符合条件的 TODO 数据</span></span><br><span class="line">		thisWeekTodos := []TODO&#123;&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 遍历现有的 TODO 数据，找到截止日期在本周内的 TODO</span></span><br><span class="line">		<span class="keyword">for</span> _, todo := <span class="keyword">range</span> existingTodos &#123;</span><br><span class="line">			deadline, err := time.Parse(<span class="string">&quot;2006-01-02&quot;</span>, todo.Deadline)</span><br><span class="line">			<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">				<span class="keyword">continue</span> <span class="comment">// 如果日期格式不正确，跳过</span></span><br><span class="line">			&#125;</span><br><span class="line"></span><br><span class="line">			<span class="comment">// 检查是否截止日期在本周内</span></span><br><span class="line">			<span class="keyword">if</span> deadline.After(startOfWeek) &amp;&amp; deadline.Before(endOfWeek) &#123;</span><br><span class="line">				thisWeekTodos = <span class="built_in">append</span>(thisWeekTodos, todo)</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span> <span class="built_in">len</span>(thisWeekTodos) == <span class="number">0</span> &#123;</span><br><span class="line">			c.JSON(<span class="number">404</span>, gin.H&#123;<span class="string">&quot;message&quot;</span>: <span class="string">&quot;本周没有截止的 TODO&quot;</span>&#125;)</span><br><span class="line">			<span class="keyword">return</span></span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		c.JSON(<span class="number">200</span>, thisWeekTodos)</span><br><span class="line">	&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>后面几个模块功能其实差不多,都是基本的文件读写+条件判断,这里判断是在本周一之后,下周一之前的<code>Todo</code>会被列入我们的清单</p>
+<h4 id="待办Todo"><a href="#待办Todo" class="headerlink" title="待办Todo"></a>待办Todo</h4><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">r.GET(<span class="string">&quot;/unfinished_todo&quot;</span>, <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">		<span class="comment">// 读取已有的TODO数据</span></span><br><span class="line">		existingTodos, err := loadTodosFromFile()</span><br><span class="line">		<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">			c.JSON(<span class="number">500</span>, gin.H&#123;<span class="string">&quot;error&quot;</span>: <span class="string">&quot;无法读取TODO数据&quot;</span>&#125;)</span><br><span class="line">			<span class="keyword">return</span></span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 创建一个新的切片来存储未完成的 TODO 数据，包括序号</span></span><br><span class="line">		unfinishedTodos := []<span class="keyword">map</span>[<span class="type">string</span>]<span class="keyword">interface</span>&#123;&#125;&#123;&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 遍历现有的 TODO 数据，找到未完成的 TODO</span></span><br><span class="line">		<span class="keyword">for</span> index, todo := <span class="keyword">range</span> existingTodos &#123;</span><br><span class="line">			<span class="keyword">if</span> !todo.Done &#123;</span><br><span class="line">				<span class="comment">// 创建包含序号的 map</span></span><br><span class="line">				todoWithIndex := <span class="keyword">map</span>[<span class="type">string</span>]<span class="keyword">interface</span>&#123;&#125;&#123;</span><br><span class="line">					<span class="string">&quot;index&quot;</span>:    index,</span><br><span class="line">					<span class="string">&quot;content&quot;</span>:  todo.Content,</span><br><span class="line">					<span class="string">&quot;done&quot;</span>:     todo.Done,</span><br><span class="line">					<span class="string">&quot;deadline&quot;</span>: todo.Deadline,</span><br><span class="line">				&#125;</span><br><span class="line">				unfinishedTodos = <span class="built_in">append</span>(unfinishedTodos, todoWithIndex)</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 对未完成的 TODO 按照截止时间排序（由近到远）</span></span><br><span class="line">		sort.Slice(unfinishedTodos, <span class="function"><span class="keyword">func</span><span class="params">(i, j <span class="type">int</span>)</span></span> <span class="type">bool</span> &#123;</span><br><span class="line">			deadlineI, _ := time.Parse(<span class="string">&quot;2006-01-02&quot;</span>, unfinishedTodos[i][<span class="string">&quot;deadline&quot;</span>].(<span class="type">string</span>))</span><br><span class="line">			deadlineJ, _ := time.Parse(<span class="string">&quot;2006-01-02&quot;</span>, unfinishedTodos[j][<span class="string">&quot;deadline&quot;</span>].(<span class="type">string</span>))</span><br><span class="line">			<span class="keyword">return</span> deadlineI.Before(deadlineJ)</span><br><span class="line">		&#125;)</span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span> <span class="built_in">len</span>(unfinishedTodos) == <span class="number">0</span> &#123;</span><br><span class="line">			c.JSON(<span class="number">404</span>, gin.H&#123;<span class="string">&quot;message&quot;</span>: <span class="string">&quot;没有未完成的 TODO&quot;</span>&#125;)</span><br><span class="line">			<span class="keyword">return</span></span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		c.JSON(<span class="number">200</span>, unfinishedTodos)</span><br><span class="line">	&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>与之前的代码类似,但是增加了排序功能,更加实用.</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sort.Slice(unfinishedTodos, <span class="function"><span class="keyword">func</span><span class="params">(i, j <span class="type">int</span>)</span></span> <span class="type">bool</span> &#123;</span><br><span class="line">			deadlineI, _ := time.Parse(<span class="string">&quot;2006-01-02&quot;</span>, unfinishedTodos[i][<span class="string">&quot;deadline&quot;</span>].(<span class="type">string</span>))</span><br><span class="line">			deadlineJ, _ := time.Parse(<span class="string">&quot;2006-01-02&quot;</span>, unfinishedTodos[j][<span class="string">&quot;deadline&quot;</span>].(<span class="type">string</span>))</span><br><span class="line">			<span class="keyword">return</span> deadlineI.Before(deadlineJ)</span><br><span class="line">		&#125;)</span><br></pre></td></tr></table></figure>
+
+<p><code>sort.Slice</code> 是Go语言标准库中的一个函数，用于对切片进行排序。</p>
+<p><code>func(i, j int) bool &#123; ... &#125;</code> 是比较函数，它定义了如何比较切片中的两个元素（任务）以确定它们的顺序。该函数接受两个整数参数 <code>i</code> 和 <code>j</code>，它们表示切片中两个要比较的元素的索引。</p>
+<p>Go语言会将元素按照func(i,j)为true的模式进行排序.代码比较两个任务的截止日期，使用 <code>deadlineI.Before(deadlineJ)</code> 来确定哪个任务的截止日期在前。如果 <code>deadlineI</code> 在 <code>deadlineJ</code> 之前，比较函数返回 <code>true</code>，表示任务 <code>i</code> 应该排在任务 <code>j</code> 之前，从而实现了按截止日期升序排序。</p>
+<h4 id="一步之遥"><a href="#一步之遥" class="headerlink" title="一步之遥"></a>一步之遥</h4><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">r.Run(<span class="string">&quot;:8100&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>电脑8080端口被占用了,所以临时换了端口.</p>
+<h2 id="Congratulations"><a href="#Congratulations" class="headerlink" title="Congratulations!"></a>Congratulations!</h2><p>至此,程序可以正常运行,实现了以下功能:</p>
+<ul>
+<li><strong>数据持久化</strong></li>
+<li><strong>错误输入处理</strong></li>
+<li><strong>加入了截止日期</strong></li>
+<li><strong>在增删查改之外,添加了每日&#x2F;每周&#x2F;代办事项的提示</strong></li>
+<li><strong>数据排序</strong></li>
+<li><strong>功能函数模块化,易于维护.</strong></li>
+</ul>
+<h4 id="可以尝试的改进"><a href="#可以尝试的改进" class="headerlink" title="可以尝试的改进:"></a><strong>可以尝试的改进:</strong></h4><ol>
+<li>尝试使用gorm数据库代替文件存储:考虑将数据存储到数据库中，以便更可靠地管理和检索TODO数据。</li>
+<li>用户身份验证和授权:添加多个用户，可以实现用户身份验证和授权系统，以确保只有授权用户可以执行操作。</li>
+<li>用户界面（Web界面或移动应用程序）:可以构建一个用户友好的前端界面</li>
+<li>任务分类和标签:允许用户为TODO任务添加标签或将它们分为不同的类别，以便更好地组织和过滤任务。</li>
+<li>提醒和通知:实现任务截止日期的提醒功能，以及通过电子邮件、短信或推送通知用户。</li>
+<li>任务优先级:允许用户为任务设置优先级，并按照优先级对任务进行排序。</li>
+<li>搜索和过滤:添加搜索功能，使用户可以根据关键字、日期范围或其他条件来查找和过滤任务。</li>
+<li>安全性增强：确保应用程序具有适当的安全性措施，如防止跨站脚本攻击（XSS）和SQL注入。</li>
+</ol>
+<blockquote>
+<p>Created By Ec3o.All right reserved.</p>
+<p>项目地址详见<a target="_blank" rel="noopener" href="https://github.com/Ec3o/TODOlist/tree/main/TODOlist">TODOlist&#x2F;TODOlist at main · Ec3o&#x2F;TODOlist · GitHub</a></p>
+<p>先写这么多吧,相信不久后就会有第二版说明文档的</p>
+</blockquote>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/10/19/Web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%AC%AC%E4%B8%80%E8%AF%BE/" data-id="clnx5qaj50008ygst5uht4xtk" data-title="" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2023/10/19/Web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%AC%AC%E4%B8%80%E8%AF%BE2.0/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          (no title)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2023/10/19/Web%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title"></div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/10/">October 2023</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2023/10/19/%E5%A6%82%E4%BD%95%E5%BC%80%E5%90%AF%E4%B8%80%E4%B8%AAdocker/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2023/10/19/%E5%90%AF%E5%8A%A8jar%E6%96%87%E4%BB%B6/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2023/10/19/%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5%E7%BB%95%E8%BF%87%E6%96%B9%E5%BC%8F%E6%80%BB%E7%BB%93/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2023/10/19/Web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%AC%AC%E4%B8%80%E8%AF%BE2.0/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2023/10/19/Web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%AC%AC%E4%B8%80%E8%AF%BE/">(no title)</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2023 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.6.4.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

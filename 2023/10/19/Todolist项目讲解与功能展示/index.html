@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="To-do list项目讲解与功能展示项目功能任何情况下的功能:  用户注册 用户登录  以下功能登录后使用:  To-do上传 To-do修改 To-do删除 To-do筛选查询(按截止时间,完成情况,升序&#x2F;倒序排序) To-do按索引查询  新增功能:jwt鉴权中间件 *本项目使用json文件进行数据持久化 用户注册路由 1r.POST(&quot;&#x2F;register&quot;,">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://example.com/2023/10/19/Todolist%E9%A1%B9%E7%9B%AE%E8%AE%B2%E8%A7%A3%E4%B8%8E%E5%8A%9F%E8%83%BD%E5%B1%95%E7%A4%BA/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="To-do list项目讲解与功能展示项目功能任何情况下的功能:  用户注册 用户登录  以下功能登录后使用:  To-do上传 To-do修改 To-do删除 To-do筛选查询(按截止时间,完成情况,升序&#x2F;倒序排序) To-do按索引查询  新增功能:jwt鉴权中间件 *本项目使用json文件进行数据持久化 用户注册路由 1r.POST(&quot;&#x2F;register&quot;,">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\Todo_images\reg_passwdfail.png">
+<meta property="og:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\Todo_images\reg_success.png">
+<meta property="og:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\Todo_images\reg_usernamefail.png">
+<meta property="og:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\Todo_images\reg_storage.png">
+<meta property="og:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\Todo_images\login_not_register.png">
+<meta property="og:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\Todo_images\login_passwdwrong.png">
+<meta property="og:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\Todo_images\login_success.png">
+<meta property="og:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\Todo_images\upload_not_a_user.png">
+<meta property="og:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\Todo_images\upload_login.png">
+<meta property="og:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\Todo_images\upload_go_invalid_deadline.png">
+<meta property="og:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\Todo_images\upload_success.png">
+<meta property="og:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\Todo_images\upload_storage.png">
+<meta property="og:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\Todo_images\update_index_not_exist.png">
+<meta property="og:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\Todo_images\update_success.png">
+<meta property="og:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\Todo_images\delete_todo_notfound.png">
+<meta property="og:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\Todo_images\delete_success.png">
+<meta property="og:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\Todo_images\delete_todo_again.png">
+<meta property="og:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\Todo_images\list_all.png">
+<meta property="og:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\Todo_images\list_deadline.png">
+<meta property="og:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\Todo_images\list_done.png">
+<meta property="og:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\Todo_images\list_reverse.png">
+<meta property="og:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\Todo_images\list_another_user.png">
+<meta property="og:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\Todo_images\get_index_invalid.png">
+<meta property="og:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\Todo_images\get_success.png">
+<meta property="article:published_time" content="2023-10-19T12:24:30.926Z">
+<meta property="article:modified_time" content="2023-10-13T06:13:06.044Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\Todo_images\reg_passwdfail.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        
+          <a class="nav-icon" href="/atom.xml" title="RSS Feed"><span class="fa fa-rss"></span></a>
+        
+        <a class="nav-icon nav-search-btn" title="Search"><span class="fa fa-search"></span></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-Todolist项目讲解与功能展示" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2023/10/19/Todolist%E9%A1%B9%E7%9B%AE%E8%AE%B2%E8%A7%A3%E4%B8%8E%E5%8A%9F%E8%83%BD%E5%B1%95%E7%A4%BA/" class="article-date">
+  <time class="dt-published" datetime="2023-10-19T12:24:30.926Z" itemprop="datePublished">2023-10-19</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="To-do-list项目讲解与功能展示"><a href="#To-do-list项目讲解与功能展示" class="headerlink" title="To-do list项目讲解与功能展示"></a>To-do list项目讲解与功能展示</h1><h1 id="项目功能"><a href="#项目功能" class="headerlink" title="项目功能"></a>项目功能</h1><p><strong>任何情况下的功能:</strong></p>
+<ul>
+<li>用户<strong>注册</strong></li>
+<li>用户<strong>登录</strong></li>
+</ul>
+<p><strong>以下功能登录后使用:</strong></p>
+<ul>
+<li>To-do<strong>上传</strong></li>
+<li>To-do<strong>修改</strong></li>
+<li>To-do<strong>删除</strong></li>
+<li>To-do<strong>筛选</strong>查询(按截止时间,完成情况,升序&#x2F;倒序排序)</li>
+<li>To-do按索引<strong>查询</strong></li>
+</ul>
+<p>新增功能:<strong>jwt鉴权中间件</strong></p>
+<p>*本项目使用<strong>json</strong>文件进行数据持久化</p>
+<h2 id="用户注册"><a href="#用户注册" class="headerlink" title="用户注册"></a>用户注册</h2><p><strong>路由</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">r.POST(<span class="string">&quot;/register&quot;</span>, useregister) <span class="comment">//注册</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>功能代码</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">useregister</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> user USER</span><br><span class="line">    <span class="keyword">if</span> err := c.BindJSON(&amp;user); err != <span class="literal">nil</span> &#123;</span><br><span class="line">       c.JSON(<span class="number">400</span>, ErrInvalidUSERFormat)</span><br><span class="line">       <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">len</span>(user.Password) &lt;= <span class="number">6</span> &#123; <span class="comment">//密码长度过短提示重新设置</span></span><br><span class="line">       c.JSON(<span class="number">400</span>, ErrInvalidPassword)</span><br><span class="line">       <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    existingUsers, err := loadUsersFromFile()</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">       c.JSON(<span class="number">500</span>, ErrReadUserData)</span><br><span class="line">       <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 检查是否已经存在相同的用户名</span></span><br><span class="line">    <span class="keyword">for</span> _, existingUser := <span class="keyword">range</span> existingUsers &#123;</span><br><span class="line">       <span class="keyword">if</span> existingUser.Username == user.Username &#123;</span><br><span class="line">          c.JSON(<span class="number">400</span>, ErrRegister)</span><br><span class="line">          <span class="keyword">return</span></span><br><span class="line">       &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    existingUsers = <span class="built_in">append</span>(existingUsers, user)</span><br><span class="line">    err = saveUsersToFile(existingUsers)</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">       c.JSON(<span class="number">500</span>, ErrSaveUserData)</span><br><span class="line">       <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    c.JSON(<span class="number">200</span>, UserRegisterSuccess)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="代码逻辑"><a href="#代码逻辑" class="headerlink" title="代码逻辑"></a>代码逻辑</h3><ol>
+<li>绑定json数据至user结构体</li>
+<li>判断密码长度</li>
+<li>读取用户文件并查重用户名</li>
+<li>保存用户名至文件</li>
+</ol>
+<h3 id="Apifox测试"><a href="#Apifox测试" class="headerlink" title="Apifox测试"></a>Apifox测试</h3><p><strong>尝试注册,失败,密码长度过短</strong></p>
+<p><img src="C:\Users\24993\Desktop\博客文章\Todo_images\reg_passwdfail.png"></p>
+<p><strong>注册成功</strong></p>
+<p><img src="C:\Users\24993\Desktop\博客文章\Todo_images\reg_success.png"></p>
+<p><strong>注册失败,用户名已被注册</strong></p>
+<p><img src="C:\Users\24993\Desktop\博客文章\Todo_images\reg_usernamefail.png"></p>
+<p><strong>用户名在user.json中存储成功</strong></p>
+<p><img src="C:\Users\24993\Desktop\博客文章\Todo_images\reg_storage.png"></p>
+<h2 id="用户登录"><a href="#用户登录" class="headerlink" title="用户登录"></a>用户登录</h2><p><strong>路由</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">r.POST(<span class="string">&quot;/login&quot;</span>, userlogin)      <span class="comment">//登录</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>功能代码</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">userlogin</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> user USER</span><br><span class="line">    <span class="keyword">if</span> err := c.BindJSON(&amp;user); err != <span class="literal">nil</span> &#123;</span><br><span class="line">       c.JSON(<span class="number">400</span>, ErrInvalidUSERFormat)</span><br><span class="line">       <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    existingUsers, err := loadUsersFromFile()</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">       c.JSON(<span class="number">500</span>, ErrReadUserData)</span><br><span class="line">       <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> foundUser USER</span><br><span class="line">    <span class="keyword">for</span> _, existingUser := <span class="keyword">range</span> existingUsers &#123;</span><br><span class="line">       <span class="keyword">if</span> existingUser.Username == user.Username &amp;&amp; existingUser.Password == user.Password &#123;</span><br><span class="line">          foundUser = existingUser</span><br><span class="line">          <span class="keyword">break</span></span><br><span class="line">       &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> foundUser.Username != <span class="string">&quot;&quot;</span> &#123;</span><br><span class="line">       currentUser = foundUser.Username <span class="comment">// 设置全局变量为当前用户的用户名</span></span><br><span class="line">       c.JSON(<span class="number">200</span>, gin.H&#123;<span class="string">&quot;status&quot;</span>: <span class="string">&quot;用户登录成功&quot;</span>, <span class="string">&quot;username&quot;</span>: foundUser.Username&#125;)</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">       c.JSON(<span class="number">404</span>, ErrUserlogin)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="代码逻辑-1"><a href="#代码逻辑-1" class="headerlink" title="代码逻辑"></a>代码逻辑</h3><ol>
+<li>绑定json数据至user结构体</li>
+<li>读取用户文件</li>
+<li>遍历判断用户名密码是否符合</li>
+<li>返回登录状态,用户名和token</li>
+</ol>
+<h3 id="Apifox测试-1"><a href="#Apifox测试-1" class="headerlink" title="Apifox测试"></a>Apifox测试</h3><p><strong>用户名未注册</strong></p>
+<p><img src="C:\Users\24993\Desktop\博客文章\Todo_images\login_not_register.png"></p>
+<p><strong>用户名密码不匹配</strong></p>
+<p><img src="C:\Users\24993\Desktop\博客文章\Todo_images\login_passwdwrong.png"></p>
+<p><strong>登录成功</strong></p>
+<p><img src="C:\Users\24993\Desktop\博客文章\Todo_images\login_success.png"></p>
+<h2 id="数据上传"><a href="#数据上传" class="headerlink" title="数据上传"></a>数据上传</h2><p><strong>路由</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">authGroup.POST(<span class="string">&quot;/todo&quot;</span>, TodoCreation)          <span class="comment">//增</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>功能代码</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TodoCreation</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">    currentUser := currentUser</span><br><span class="line">    <span class="keyword">if</span> currentUser == <span class="string">&quot;&quot;</span> &#123;</span><br><span class="line">       c.JSON(<span class="number">401</span>, ErrUser)</span><br><span class="line">       <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> todo TODO</span><br><span class="line">    <span class="keyword">if</span> err := c.BindJSON(&amp;todo); err != <span class="literal">nil</span> &#123;</span><br><span class="line">       c.JSON(<span class="number">400</span>, ErrInvalidTODOFormat)</span><br><span class="line">       <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> todo.Deadline == <span class="number">0</span> &#123;</span><br><span class="line">       defaultDeadline := time.Now().Add(time.Hour * <span class="number">24</span> * <span class="number">7</span>)</span><br><span class="line">       todo.Deadline = UnixTimestamp(defaultDeadline.Unix())</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> <span class="type">int64</span>(todo.Deadline) &lt; time.Now().Unix() &#123;</span><br><span class="line">       c.JSON(<span class="number">400</span>, ErrInvalidDeadline)</span><br><span class="line">       <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    existingTodos, err := loadTodosFromFile()</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">       c.JSON(<span class="number">500</span>, ErrReadTODOData)</span><br><span class="line">       <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 计算用户的索引</span></span><br><span class="line">    userIndex := <span class="number">1</span></span><br><span class="line">    <span class="keyword">for</span> _, t := <span class="keyword">range</span> existingTodos &#123;</span><br><span class="line">       <span class="keyword">if</span> t.Username == currentUser &#123;</span><br><span class="line">          userIndex++</span><br><span class="line">       &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 为新的 Todo 分配 index 序号</span></span><br><span class="line">    todo.Index = userIndex</span><br><span class="line">    todo.Username = currentUser</span><br><span class="line"></span><br><span class="line">    existingTodos = <span class="built_in">append</span>(existingTodos, todo)</span><br><span class="line"></span><br><span class="line">    err = saveTodosToFile(existingTodos)</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">       c.JSON(<span class="number">500</span>, ErrSaveTODOData)</span><br><span class="line">       <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line">    c.JSON(<span class="number">200</span>, TodoSubmitSuccess)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="代码逻辑-2"><a href="#代码逻辑-2" class="headerlink" title="代码逻辑"></a>代码逻辑</h3><ol>
+<li>获取当前用户</li>
+<li>尝试绑定json数据到todo结构体变量</li>
+<li>解析传入的截止时间(必须在当前时间之后)</li>
+<li>如果todo数据格式正确,则计算已经存储的,属于当前用户的todo的个数,并将其值+1作为新的index传入</li>
+<li>结构体已经被全部赋值,使用<code>json</code>库的<code>marshal/unmarshal</code>和<code>ioutil</code>库的<code>writefile/readfile</code>来进行文件读取与保存实现功能</li>
+</ol>
+<h3 id="Apifox测试-2"><a href="#Apifox测试-2" class="headerlink" title="Apifox测试"></a>Apifox测试</h3><p><strong>用户未登录,操作无效</strong></p>
+<p><img src="C:\Users\24993\Desktop\博客文章\Todo_images\upload_not_a_user.png"></p>
+<p><strong>进行用户登录</strong></p>
+<p><img src="C:\Users\24993\Desktop\博客文章\Todo_images\upload_login.png"></p>
+<p><strong>截止时间无效</strong></p>
+<p><img src="C:\Users\24993\Desktop\博客文章\Todo_images\upload_go_invalid_deadline.png"></p>
+<p><strong>数据提交成功</strong></p>
+<p><img src="C:\Users\24993\Desktop\博客文章\Todo_images\upload_success.png"></p>
+<p><strong>数据存储</strong></p>
+<p><img src="C:\Users\24993\Desktop\博客文章\Todo_images\upload_storage.png"></p>
+<h2 id="数据修改"><a href="#数据修改" class="headerlink" title="数据修改"></a>数据修改</h2><p><strong>路由</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">authGroup.PUT(<span class="string">&quot;/todo/:index&quot;</span>, TodoUpdate)      <span class="comment">//改</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>功能代码</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TodoUpdate</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">    currentUser := currentUser</span><br><span class="line">    <span class="keyword">if</span> currentUser == <span class="string">&quot;&quot;</span> &#123;</span><br><span class="line">       c.JSON(<span class="number">401</span>, ErrUser)</span><br><span class="line">       <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line">    indexToUpdate, err := strconv.Atoi(c.Param(<span class="string">&quot;index&quot;</span>))</span><br><span class="line">    indexToUpdate -= <span class="number">1</span></span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> || indexToUpdate &lt; <span class="number">0</span> &#123;</span><br><span class="line">       c.JSON(<span class="number">404</span>, ErrTODOIndexNotExist)</span><br><span class="line">       <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> todo TODO</span><br><span class="line">    <span class="keyword">if</span> err := c.BindJSON(&amp;todo); err != <span class="literal">nil</span> &#123;</span><br><span class="line">       c.JSON(<span class="number">400</span>, ErrInvalidTODOFormat)</span><br><span class="line">       <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    existingTodos, err := loadTodosFromFile()</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">       c.JSON(<span class="number">500</span>, ErrReadTODOData)</span><br><span class="line">       <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 遍历待办事项列表，找到与当前用户匹配的待办事项并匹配索引</span></span><br><span class="line">    <span class="keyword">for</span> index, existingTodo := <span class="keyword">range</span> existingTodos &#123;</span><br><span class="line">       <span class="keyword">if</span> existingTodo.Username == currentUser &amp;&amp; index == indexToUpdate &#123;</span><br><span class="line">          <span class="comment">// 更新待办事项内容</span></span><br><span class="line">          existingTodo.Content = todo.Content</span><br><span class="line">          existingTodo.Done = todo.Done</span><br><span class="line">          existingTodo.Deadline = todo.Deadline</span><br><span class="line"></span><br><span class="line">          <span class="comment">// 更新待办事项回到列表</span></span><br><span class="line">          existingTodos[index] = existingTodo</span><br><span class="line"></span><br><span class="line">          err = saveTodosToFile(existingTodos)</span><br><span class="line">          <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">             c.JSON(<span class="number">500</span>, ErrSaveTODOData)</span><br><span class="line">             <span class="keyword">return</span></span><br><span class="line">          &#125;</span><br><span class="line"></span><br><span class="line">          c.JSON(<span class="number">200</span>, gin.H&#123;<span class="string">&quot;status&quot;</span>: <span class="string">&quot;修改成功&quot;</span>&#125;)</span><br><span class="line">          <span class="keyword">return</span></span><br><span class="line">       &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 如果没有匹配的待办事项，返回错误</span></span><br><span class="line">    c.JSON(<span class="number">404</span>, ErrTODOIndexNotExist)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="代码逻辑-3"><a href="#代码逻辑-3" class="headerlink" title="代码逻辑"></a>代码逻辑</h3><p>1.获取当前用户名</p>
+<p>2.获取index参数并处理</p>
+<p>3.遍历待办事项列表，找到与当前用户匹配的待办事项并匹配索引</p>
+<p>4.更新待办事项内容</p>
+<p>5.返回</p>
+<h3 id="Apifox测试-3"><a href="#Apifox测试-3" class="headerlink" title="Apifox测试"></a>Apifox测试</h3><p>当前todos.json文件内容如下:</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">[</span><span class="punctuation">&#123;</span><span class="attr">&quot;username&quot;</span><span class="punctuation">:</span><span class="string">&quot;admin&quot;</span><span class="punctuation">,</span><span class="attr">&quot;index&quot;</span><span class="punctuation">:</span><span class="number">1</span><span class="punctuation">,</span><span class="attr">&quot;content&quot;</span><span class="punctuation">:</span><span class="string">&quot;学习Go语言&quot;</span><span class="punctuation">,</span><span class="attr">&quot;done&quot;</span><span class="punctuation">:</span><span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span><span class="attr">&quot;deadline&quot;</span><span class="punctuation">:</span><span class="number">1698624000</span><span class="punctuation">&#125;</span><span class="punctuation">,</span><span class="punctuation">&#123;</span><span class="attr">&quot;username&quot;</span><span class="punctuation">:</span><span class="string">&quot;admin&quot;</span><span class="punctuation">,</span><span class="attr">&quot;index&quot;</span><span class="punctuation">:</span><span class="number">2</span><span class="punctuation">,</span><span class="attr">&quot;content&quot;</span><span class="punctuation">:</span><span class="string">&quot;学习PHP反序列化漏洞&quot;</span><span class="punctuation">,</span><span class="attr">&quot;done&quot;</span><span class="punctuation">:</span><span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span><span class="attr">&quot;deadline&quot;</span><span class="punctuation">:</span><span class="number">1701302400</span><span class="punctuation">&#125;</span><span class="punctuation">,</span><span class="punctuation">&#123;</span><span class="attr">&quot;username&quot;</span><span class="punctuation">:</span><span class="string">&quot;admin&quot;</span><span class="punctuation">,</span><span class="attr">&quot;index&quot;</span><span class="punctuation">:</span><span class="number">3</span><span class="punctuation">,</span><span class="attr">&quot;content&quot;</span><span class="punctuation">:</span><span class="string">&quot;学习文件包含漏洞&quot;</span><span class="punctuation">,</span><span class="attr">&quot;done&quot;</span><span class="punctuation">:</span><span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span><span class="attr">&quot;deadline&quot;</span><span class="punctuation">:</span><span class="number">1703894400</span><span class="punctuation">&#125;</span><span class="punctuation">,</span><span class="punctuation">&#123;</span><span class="attr">&quot;username&quot;</span><span class="punctuation">:</span><span class="string">&quot;admin&quot;</span><span class="punctuation">,</span><span class="attr">&quot;index&quot;</span><span class="punctuation">:</span><span class="number">4</span><span class="punctuation">,</span><span class="attr">&quot;content&quot;</span><span class="punctuation">:</span><span class="string">&quot;学习变量覆盖漏洞&quot;</span><span class="punctuation">,</span><span class="attr">&quot;done&quot;</span><span class="punctuation">:</span><span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span><span class="attr">&quot;deadline&quot;</span><span class="punctuation">:</span><span class="number">1706572800</span><span class="punctuation">&#125;</span><span class="punctuation">,</span><span class="punctuation">&#123;</span><span class="attr">&quot;username&quot;</span><span class="punctuation">:</span><span class="string">&quot;admin&quot;</span><span class="punctuation">,</span><span class="attr">&quot;index&quot;</span><span class="punctuation">:</span><span class="number">5</span><span class="punctuation">,</span><span class="attr">&quot;content&quot;</span><span class="punctuation">:</span><span class="string">&quot;学习SQL注入漏洞&quot;</span><span class="punctuation">,</span><span class="attr">&quot;done&quot;</span><span class="punctuation">:</span><span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span><span class="attr">&quot;deadline&quot;</span><span class="punctuation">:</span><span class="number">1709251200</span><span class="punctuation">&#125;</span><span class="punctuation">]</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>todo不存在错误</strong></p>
+<p><img src="C:\Users\24993\Desktop\博客文章\Todo_images\update_index_not_exist.png"></p>
+<p>更新成功</p>
+<p><img src="C:\Users\24993\Desktop\博客文章\Todo_images\update_success.png"></p>
+<p>修改后:</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">[</span><span class="punctuation">&#123;</span><span class="attr">&quot;username&quot;</span><span class="punctuation">:</span><span class="string">&quot;admin&quot;</span><span class="punctuation">,</span><span class="attr">&quot;index&quot;</span><span class="punctuation">:</span><span class="number">1</span><span class="punctuation">,</span><span class="attr">&quot;content&quot;</span><span class="punctuation">:</span><span class="string">&quot;学习Go语言&quot;</span><span class="punctuation">,</span><span class="attr">&quot;done&quot;</span><span class="punctuation">:</span><span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span><span class="attr">&quot;deadline&quot;</span><span class="punctuation">:</span><span class="number">1698624000</span><span class="punctuation">&#125;</span><span class="punctuation">,</span><span class="punctuation">&#123;</span><span class="attr">&quot;username&quot;</span><span class="punctuation">:</span><span class="string">&quot;admin&quot;</span><span class="punctuation">,</span><span class="attr">&quot;index&quot;</span><span class="punctuation">:</span><span class="number">2</span><span class="punctuation">,</span><span class="attr">&quot;content&quot;</span><span class="punctuation">:</span><span class="string">&quot;学习PHP反序列化漏洞&quot;</span><span class="punctuation">,</span><span class="attr">&quot;done&quot;</span><span class="punctuation">:</span><span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span><span class="attr">&quot;deadline&quot;</span><span class="punctuation">:</span><span class="number">1701302400</span><span class="punctuation">&#125;</span><span class="punctuation">,</span><span class="punctuation">&#123;</span><span class="attr">&quot;username&quot;</span><span class="punctuation">:</span><span class="string">&quot;admin&quot;</span><span class="punctuation">,</span><span class="attr">&quot;index&quot;</span><span class="punctuation">:</span><span class="number">3</span><span class="punctuation">,</span><span class="attr">&quot;content&quot;</span><span class="punctuation">:</span><span class="string">&quot;学习文件包含漏洞&quot;</span><span class="punctuation">,</span><span class="attr">&quot;done&quot;</span><span class="punctuation">:</span><span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span><span class="attr">&quot;deadline&quot;</span><span class="punctuation">:</span><span class="number">1703894400</span><span class="punctuation">&#125;</span><span class="punctuation">,</span><span class="punctuation">&#123;</span><span class="attr">&quot;username&quot;</span><span class="punctuation">:</span><span class="string">&quot;admin&quot;</span><span class="punctuation">,</span><span class="attr">&quot;index&quot;</span><span class="punctuation">:</span><span class="number">4</span><span class="punctuation">,</span><span class="attr">&quot;content&quot;</span><span class="punctuation">:</span><span class="string">&quot;学习变量覆盖漏洞&quot;</span><span class="punctuation">,</span><span class="attr">&quot;done&quot;</span><span class="punctuation">:</span><span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span><span class="attr">&quot;deadline&quot;</span><span class="punctuation">:</span><span class="number">1706572800</span><span class="punctuation">&#125;</span><span class="punctuation">,</span><span class="punctuation">&#123;</span><span class="attr">&quot;username&quot;</span><span class="punctuation">:</span><span class="string">&quot;admin&quot;</span><span class="punctuation">,</span><span class="attr">&quot;index&quot;</span><span class="punctuation">:</span><span class="number">5</span><span class="punctuation">,</span><span class="attr">&quot;content&quot;</span><span class="punctuation">:</span><span class="string">&quot;学习SQL注入漏洞&quot;</span><span class="punctuation">,</span><span class="attr">&quot;done&quot;</span><span class="punctuation">:</span><span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span><span class="attr">&quot;deadline&quot;</span><span class="punctuation">:</span><span class="number">1709252200</span><span class="punctuation">&#125;</span><span class="punctuation">]</span></span><br></pre></td></tr></table></figure>
+
+<p>修改成功.</p>
+<h2 id="数据删除"><a href="#数据删除" class="headerlink" title="数据删除"></a><strong>数据删除</strong></h2><p><strong>路由</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">authGroup.DELETE(<span class="string">&quot;/todo/:index&quot;</span>, TodoDeletion) <span class="comment">// 删(不改动序号)</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>功能代码</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TodoDeletion</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">    currentUser := currentUser</span><br><span class="line">    <span class="keyword">if</span> currentUser == <span class="string">&quot;&quot;</span> &#123;</span><br><span class="line">       c.JSON(<span class="number">401</span>, gin.H&#123;<span class="string">&quot;status&quot;</span>: <span class="string">&quot;用户未登录或无效的用户&quot;</span>&#125;)</span><br><span class="line">       <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line">    indexToDelete, err := strconv.Atoi(c.Param(<span class="string">&quot;index&quot;</span>))</span><br><span class="line">    indexToDelete-=<span class="number">1</span></span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> || indexToDelete &lt; <span class="number">0</span> &#123;</span><br><span class="line">       c.JSON(<span class="number">404</span>, ErrTODOIndexNotExist)</span><br><span class="line">       <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    existingTodos, err := loadTodosFromFile()</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">       c.JSON(<span class="number">500</span>, ErrTODONotFound)</span><br><span class="line">       <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> deletedContent <span class="type">string</span> <span class="comment">// 用于保存被删除的待办事项内容</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 遍历待办事项列表，找到与当前用户匹配的待办事项并匹配索引</span></span><br><span class="line">    <span class="keyword">for</span> index, todo := <span class="keyword">range</span> existingTodos &#123;</span><br><span class="line">       <span class="keyword">if</span> todo.Username == currentUser &amp;&amp; index == indexToDelete &#123;</span><br><span class="line">          <span class="comment">// 检查是否已经在已删除的待办事项列表中</span></span><br><span class="line">          <span class="keyword">if</span> todo.Content == <span class="string">&quot;此Todo已被删除&quot;</span> &#123;</span><br><span class="line">             c.JSON(<span class="number">400</span>, TodoDeleteSuccess)</span><br><span class="line">             <span class="keyword">return</span></span><br><span class="line">          &#125;</span><br><span class="line">          <span class="comment">// 保存被删除的待办事项内容</span></span><br><span class="line">          deletedContent = todo.Content</span><br><span class="line"></span><br><span class="line">          <span class="comment">// 标记待办事项为已删除</span></span><br><span class="line">          todo.Content = <span class="string">&quot;此Todo已被删除&quot;</span></span><br><span class="line">          todo.Done = <span class="literal">true</span></span><br><span class="line"></span><br><span class="line">          <span class="comment">// 更新待办事项回到列表</span></span><br><span class="line">          existingTodos[index] = todo</span><br><span class="line">          err = saveTodosToFile(existingTodos)</span><br><span class="line">          <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">             c.JSON(<span class="number">500</span>, ErrSaveTODOData)</span><br><span class="line">             <span class="keyword">return</span></span><br><span class="line">          &#125;</span><br><span class="line"></span><br><span class="line">          <span class="comment">// 在 JSON 响应中包括被删除的内容</span></span><br><span class="line">          c.JSON(<span class="number">200</span>, gin.H&#123;<span class="string">&quot;status&quot;</span>: <span class="string">&quot;删除成功&quot;</span>, <span class="string">&quot;被删除的内容是&quot;</span>: deletedContent&#125;)</span><br><span class="line">          <span class="keyword">return</span></span><br><span class="line">       &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 如果没有匹配的待办事项，返回错误</span></span><br><span class="line">    c.JSON(<span class="number">404</span>, ErrTODOIndexNotExist)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="代码逻辑-4"><a href="#代码逻辑-4" class="headerlink" title="代码逻辑"></a>代码逻辑</h3><p>1.获取当前用户名</p>
+<p>2.获取index参数并处理</p>
+<p>3.遍历待办事项列表，找到与当前用户匹配的待办事项并匹配索引</p>
+<p>4.检查是否已经在已删除的待办事项列表中,若否则保存被删除的待办事项内容,标记待办事项为已删除,并更新待办事项回到列表</p>
+<p>5.在json响应中返回被删除的内容和删除状态码.</p>
+<h3 id="Apifox测试-4"><a href="#Apifox测试-4" class="headerlink" title="Apifox测试"></a>Apifox测试</h3><p>删除不存在的数据(失败)</p>
+<p><img src="C:\Users\24993\Desktop\博客文章\Todo_images\delete_todo_notfound.png"></p>
+<p>删除成功,显示删除内容</p>
+<p><img src="C:\Users\24993\Desktop\博客文章\Todo_images\delete_success.png" alt="delete_todo_again"></p>
+<p>重复删除,显示提示</p>
+<p><img src="C:\Users\24993\Desktop\博客文章\Todo_images\delete_todo_again.png" alt="delete_todo_notfound"></p>
+<h2 id="数据筛选查询"><a href="#数据筛选查询" class="headerlink" title="数据筛选查询"></a>数据筛选查询</h2><p><strong>路由</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">authGroup.GET(<span class="string">&quot;/todo&quot;</span>, ListTodos)              <span class="comment">// 查(使用条件筛选)</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>功能代码</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ListTodos</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">    <span class="comment">// 从请求上下文中获取当前用户的用户名</span></span><br><span class="line">    currentUser := currentUser</span><br><span class="line">    <span class="keyword">if</span> currentUser == <span class="string">&quot;&quot;</span> &#123;</span><br><span class="line">       c.JSON(<span class="number">401</span>, ErrUser)</span><br><span class="line">       <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    existingTodos, err := loadTodosFromFile()</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">       c.JSON(<span class="number">500</span>, ErrReadTODOData)</span><br><span class="line">       <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 获取查询参数</span></span><br><span class="line">    deadline := c.DefaultQuery(<span class="string">&quot;deadline&quot;</span>, <span class="string">&quot;0&quot;</span>) <span class="comment">// 默认值设置为 &quot;0&quot;，表示不进行筛选</span></span><br><span class="line">    reverse := c.DefaultQuery(<span class="string">&quot;reverse&quot;</span>, <span class="string">&quot;false&quot;</span>)</span><br><span class="line">    finished := c.DefaultQuery(<span class="string">&quot;finished&quot;</span>, <span class="string">&quot;&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 转换 reverse 字符串为布尔值</span></span><br><span class="line">    reverseSort := (reverse != <span class="string">&quot;true&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 根据 finished 参数过滤待办事项</span></span><br><span class="line">    filteredTodos := []TODOWithOriginalIndex&#123;&#125; <span class="comment">// 使用新的结构体保存待办事项和原始索引</span></span><br><span class="line">    <span class="keyword">for</span> index, todo := <span class="keyword">range</span> existingTodos &#123;</span><br><span class="line">       <span class="comment">// 检查索引是否在 deletedTodoIndexes 中，如果在就跳过</span></span><br><span class="line">       <span class="keyword">if</span> todo.Content == <span class="string">&quot;此Todo已被删除&quot;</span> &#123;</span><br><span class="line">          <span class="keyword">continue</span></span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       <span class="comment">// 只返回属于当前用户的待办事项</span></span><br><span class="line">       <span class="keyword">if</span> todo.Username != currentUser &#123;</span><br><span class="line">          <span class="keyword">continue</span></span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       <span class="comment">// 直接将查询参数转换为整数</span></span><br><span class="line">       queryDeadline, err := strconv.ParseInt(deadline, <span class="number">10</span>, <span class="number">64</span>)</span><br><span class="line">       <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">          c.JSON(<span class="number">400</span>, ErrInvalidDeadline)</span><br><span class="line">          <span class="keyword">return</span></span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       <span class="comment">// 检查截止日期是否符合筛选条件</span></span><br><span class="line">       <span class="keyword">if</span> (finished == <span class="string">&quot;true&quot;</span> &amp;&amp; todo.Done) || (finished == <span class="string">&quot;false&quot;</span> &amp;&amp; !todo.Done) || finished == <span class="string">&quot;&quot;</span> &#123;</span><br><span class="line">          <span class="keyword">if</span> queryDeadline == <span class="number">0</span> || (queryDeadline != <span class="number">0</span> &amp;&amp; <span class="type">int64</span>(todo.Deadline) &lt;= queryDeadline) &#123;</span><br><span class="line">             <span class="comment">// 保存待办事项和原始索引</span></span><br><span class="line">             filteredTodos = <span class="built_in">append</span>(filteredTodos, TODOWithOriginalIndex&#123;todo, index&#125;)</span><br><span class="line">          &#125;</span><br><span class="line">       &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 根据 reverseSort 参数排序</span></span><br><span class="line">    <span class="keyword">if</span> reverseSort &#123;</span><br><span class="line">       sort.Slice(filteredTodos, <span class="function"><span class="keyword">func</span><span class="params">(i, j <span class="type">int</span>)</span></span> <span class="type">bool</span> &#123;</span><br><span class="line">          <span class="keyword">return</span> <span class="type">int64</span>(filteredTodos[i].Todo.Deadline) &lt; <span class="type">int64</span>(filteredTodos[j].Todo.Deadline)</span><br><span class="line">       &#125;)</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">       sort.Slice(filteredTodos, <span class="function"><span class="keyword">func</span><span class="params">(i, j <span class="type">int</span>)</span></span> <span class="type">bool</span> &#123;</span><br><span class="line">          <span class="keyword">return</span> <span class="type">int64</span>(filteredTodos[i].Todo.Deadline) &gt; <span class="type">int64</span>(filteredTodos[j].Todo.Deadline)</span><br><span class="line">       &#125;)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 返回结果</span></span><br><span class="line">    todosWithIndex := []<span class="keyword">map</span>[<span class="type">string</span>]<span class="keyword">interface</span>&#123;&#125;&#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> _, todo := <span class="keyword">range</span> filteredTodos &#123;</span><br><span class="line">       todoWithIndex := <span class="keyword">map</span>[<span class="type">string</span>]<span class="keyword">interface</span>&#123;&#125;&#123;</span><br><span class="line">          <span class="string">&quot;index&quot;</span>:    todo.Index + <span class="number">1</span>,</span><br><span class="line">          <span class="string">&quot;content&quot;</span>:  todo.Todo.Content,</span><br><span class="line">          <span class="string">&quot;done&quot;</span>:     todo.Todo.Done,</span><br><span class="line">          <span class="string">&quot;deadline&quot;</span>: todo.Todo.Deadline, <span class="comment">// 已经是 int64 格式</span></span><br><span class="line">       &#125;</span><br><span class="line">       todosWithIndex = <span class="built_in">append</span>(todosWithIndex, todoWithIndex)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    c.JSON(<span class="number">200</span>, todosWithIndex)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="代码逻辑-5"><a href="#代码逻辑-5" class="headerlink" title="代码逻辑"></a>代码逻辑</h3><ol>
+<li>获取当前用户名</li>
+<li>从文件中读取todo,将筛选参数赋值(未传入按照默认值赋值)</li>
+<li>进行筛选,默认按照截止时间从小到大升序排列,相同则按照index从小到大排列;若传入筛选参数deadline,则筛选出deadline之前的所有todo(包含等于deadline的情况);若传入done参数,则按照done属性为true&#x2F;false筛选;传入reverse参数,false为升序排列,true为降序排列.</li>
+<li>保存原有的todo序号输出.</li>
+</ol>
+<h3 id="Apifox测试-5"><a href="#Apifox测试-5" class="headerlink" title="Apifox测试"></a>Apifox测试</h3><p>未输入参数,默认全部(不能勾选deadline参数)</p>
+<p><img src="C:\Users\24993\Desktop\博客文章\Todo_images\list_all.png"></p>
+<p>设置deadline,筛选出deadline之前的数据</p>
+<p><img src="C:\Users\24993\Desktop\博客文章\Todo_images\list_deadline.png" alt="list_deadline"></p>
+<p>设置finished数据,筛选done值为false的数据(这里没有)</p>
+<p><img src="C:\Users\24993\Desktop\博客文章\Todo_images\list_done.png" alt="list_done"></p>
+<p>reverse为true,降序输出数据</p>
+<p><img src="C:\Users\24993\Desktop\博客文章\Todo_images\list_reverse.png" alt="list_reverse"></p>
+<p>切换到另一位用户,没有筛选出原用户的todo,实现用户数据隔离.(这里使用的是guest用户的token)</p>
+<p><img src="C:\Users\24993\Desktop\博客文章\Todo_images\list_another_user.png"></p>
+<h2 id="数据索引查询"><a href="#数据索引查询" class="headerlink" title="数据索引查询"></a><strong>数据索引查询</strong></h2><p>路由</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">authGroup.GET(<span class="string">&quot;/todo/:index&quot;</span>, GetTodo)         <span class="comment">// 获取单个 todo 信息</span></span><br></pre></td></tr></table></figure>
+
+<p>功能代码</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">GetTodo</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">    currentUser := currentUser</span><br><span class="line">    <span class="keyword">if</span> currentUser == <span class="string">&quot;&quot;</span> &#123;</span><br><span class="line">       c.JSON(<span class="number">401</span>, gin.H&#123;<span class="string">&quot;status&quot;</span>: <span class="string">&quot;用户未登录或无效的用户&quot;</span>&#125;)</span><br><span class="line">       <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line">    indexToGet, err := strconv.Atoi(c.Param(<span class="string">&quot;index&quot;</span>))</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> || indexToGet &lt; <span class="number">0</span> &#123;</span><br><span class="line">       c.JSON(<span class="number">404</span>, ErrTODOIndexNotExist)</span><br><span class="line">       <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line">    filteredTodo := []TODO&#123;&#125;</span><br><span class="line">    existingTodos, err := loadTodosFromFile()</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">       c.JSON(<span class="number">500</span>, ErrReadTODOData)</span><br><span class="line">       <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> _, todo := <span class="keyword">range</span> existingTodos &#123;</span><br><span class="line">       <span class="comment">// 检查索引是否在 deletedTodoIndexes 中，如果在就跳过</span></span><br><span class="line">       <span class="keyword">if</span> todo.Content == <span class="string">&quot;此Todo已被删除&quot;</span> &#123;</span><br><span class="line">          <span class="keyword">continue</span></span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       <span class="comment">// 只返回属于当前用户的待办事项</span></span><br><span class="line">       <span class="keyword">if</span> todo.Username != currentUser &#123;</span><br><span class="line">          <span class="keyword">continue</span></span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       <span class="keyword">if</span> todo.Username == currentUser &amp;&amp; todo.Index == indexToGet &#123;</span><br><span class="line">          filteredTodo = <span class="built_in">append</span>(filteredTodo, todo)</span><br><span class="line">          c.JSON(<span class="number">200</span>, filteredTodo)</span><br><span class="line">          <span class="keyword">return</span></span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    c.JSON(<span class="number">404</span>, ErrTODONotFound)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="代码逻辑-6"><a href="#代码逻辑-6" class="headerlink" title="代码逻辑"></a>代码逻辑</h3><p>1.获取当前用户名</p>
+<p>2.获取index参数并处理</p>
+<p>3.遍历待办事项列表，找到与当前用户匹配的待办事项并匹配索引</p>
+<p>4.获取待办事项</p>
+<p>5.返回</p>
+<h3 id="Apifox测试-6"><a href="#Apifox测试-6" class="headerlink" title="Apifox测试"></a>Apifox测试</h3><p>查询的参数不存在报错</p>
+<p><img src="C:\Users\24993\Desktop\博客文章\Todo_images\get_index_invalid.png"></p>
+<p>查询成功,返回信息</p>
+<p><img src="C:\Users\24993\Desktop\博客文章\Todo_images\get_success.png" alt="get_success"></p>
+<h1 id="JWT鉴权"><a href="#JWT鉴权" class="headerlink" title="JWT鉴权"></a>JWT鉴权</h1><p><strong>功能代码</strong></p>
+<p><strong>生成一个token</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">createToken</span><span class="params">(username <span class="type">string</span>)</span></span> (<span class="type">string</span>, <span class="type">error</span>) &#123;</span><br><span class="line">    token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims&#123;</span><br><span class="line">       <span class="string">&quot;username&quot;</span>: username,</span><br><span class="line">    &#125;)</span><br><span class="line">    tokenString, err := token.SignedString(jwtKey)</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">       <span class="keyword">return</span> <span class="string">&quot;&quot;</span>, err</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> tokenString, <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>JWT中间件获取登录状态</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">JWTMiddleware</span><span class="params">()</span></span> gin.HandlerFunc &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">       tokenString := c.GetHeader(<span class="string">&quot;Authorization&quot;</span>)</span><br><span class="line">       <span class="built_in">print</span>(tokenString)</span><br><span class="line">       <span class="built_in">print</span>(<span class="string">&quot;123456&quot;</span>)</span><br><span class="line">       <span class="keyword">if</span> tokenString == <span class="string">&quot;&quot;</span> &#123;</span><br><span class="line">          c.JSON(<span class="number">401</span>, gin.H&#123;<span class="string">&quot;error&quot;</span>: <span class="string">&quot;未提供令牌&quot;</span>&#125;)</span><br><span class="line">          c.Abort()</span><br><span class="line">          <span class="keyword">return</span></span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       <span class="comment">// 去掉 &quot;Bearer &quot; 部分</span></span><br><span class="line">       tokenString = strings.Replace(tokenString, <span class="string">&quot;Bearer &quot;</span>, <span class="string">&quot;&quot;</span>, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">       token, err := jwt.Parse(tokenString, <span class="function"><span class="keyword">func</span><span class="params">(token *jwt.Token)</span></span> (<span class="keyword">interface</span>&#123;&#125;, <span class="type">error</span>) &#123;</span><br><span class="line">          <span class="keyword">return</span> jwtKey, <span class="literal">nil</span></span><br><span class="line">       &#125;)</span><br><span class="line"></span><br><span class="line">       <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">          c.JSON(<span class="number">401</span>, gin.H&#123;<span class="string">&quot;error&quot;</span>: <span class="string">&quot;无效的令牌&quot;</span>&#125;)</span><br><span class="line">          c.Abort()</span><br><span class="line">          <span class="keyword">return</span></span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       claims, ok := token.Claims.(jwt.MapClaims)</span><br><span class="line">       <span class="keyword">if</span> !ok || !token.Valid &#123;</span><br><span class="line">          c.JSON(<span class="number">401</span>, gin.H&#123;<span class="string">&quot;error&quot;</span>: <span class="string">&quot;无效的令牌&quot;</span>&#125;)</span><br><span class="line">          c.Abort()</span><br><span class="line">          <span class="keyword">return</span></span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       username, ok := claims[<span class="string">&quot;username&quot;</span>].(<span class="type">string</span>)</span><br><span class="line">       <span class="keyword">if</span> !ok &#123;</span><br><span class="line">          c.JSON(<span class="number">401</span>, gin.H&#123;<span class="string">&quot;error&quot;</span>: <span class="string">&quot;无效的令牌&quot;</span>&#125;)</span><br><span class="line">          c.Abort()</span><br><span class="line">          <span class="keyword">return</span></span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       currentUser = username</span><br><span class="line">       c.Next()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个JWT中间件实现了一个简单的鉴权功能.</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p><strong>项目进行了一些改进</strong></p>
+<ul>
+<li><strong>JWT鉴权</strong></li>
+<li><strong>json文件存储</strong></li>
+<li><strong>数据排序与筛选</strong></li>
+<li><strong>用户注册功能</strong></li>
+<li><strong>用户登录功能</strong></li>
+<li><strong>字段名增加了截止时间</strong></li>
+<li><strong>实现了删除后序号不改变的问题</strong></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/10/19/Todolist%E9%A1%B9%E7%9B%AE%E8%AE%B2%E8%A7%A3%E4%B8%8E%E5%8A%9F%E8%83%BD%E5%B1%95%E7%A4%BA/" data-id="clnx5qaj6000aygste7tvdiea" data-title="" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2023/10/19/Web%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          (no title)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2023/10/19/sqlmap/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title"></div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/10/">October 2023</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2023/10/19/%E5%A6%82%E4%BD%95%E5%BC%80%E5%90%AF%E4%B8%80%E4%B8%AAdocker/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2023/10/19/%E5%90%AF%E5%8A%A8jar%E6%96%87%E4%BB%B6/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2023/10/19/%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5%E7%BB%95%E8%BF%87%E6%96%B9%E5%BC%8F%E6%80%BB%E7%BB%93/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2023/10/19/Web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%AC%AC%E4%B8%80%E8%AF%BE2.0/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2023/10/19/Web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%AC%AC%E4%B8%80%E8%AF%BE/">(no title)</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2023 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.6.4.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

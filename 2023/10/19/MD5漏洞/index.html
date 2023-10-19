@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="CTF中常见php-MD5()函数漏洞el&#x2F;2023&#x2F;10&#x2F;11 22:19:29 CTF中常见php-MD5()函数漏洞1.数字与字符串之间的比较12var_dump( 0 &#x3D;&#x3D; &quot;a&quot; );var_dump( &quot;0&quot; &#x3D;&#x3D; &quot;a&quot; );  第一个返回的是 true ，第二个返回的是 false因为php把">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://example.com/2023/10/19/MD5%E6%BC%8F%E6%B4%9E/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="CTF中常见php-MD5()函数漏洞el&#x2F;2023&#x2F;10&#x2F;11 22:19:29 CTF中常见php-MD5()函数漏洞1.数字与字符串之间的比较12var_dump( 0 &#x3D;&#x3D; &quot;a&quot; );var_dump( &quot;0&quot; &#x3D;&#x3D; &quot;a&quot; );  第一个返回的是 true ，第二个返回的是 false因为php把">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-10-19T12:24:30.918Z">
+<meta property="article:modified_time" content="2023-10-11T14:21:00.356Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        
+          <a class="nav-icon" href="/atom.xml" title="RSS Feed"><span class="fa fa-rss"></span></a>
+        
+        <a class="nav-icon nav-search-btn" title="Search"><span class="fa fa-search"></span></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-MD5漏洞" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2023/10/19/MD5%E6%BC%8F%E6%B4%9E/" class="article-date">
+  <time class="dt-published" datetime="2023-10-19T12:24:30.918Z" itemprop="datePublished">2023-10-19</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h2 id="CTF中常见php-MD5-函数漏洞"><a href="#CTF中常见php-MD5-函数漏洞" class="headerlink" title="CTF中常见php-MD5()函数漏洞"></a>CTF中常见php-MD5()函数漏洞</h2><p><a target="_blank" rel="noopener" href="https://www.ngui.cc/el.html">el</a>&#x2F;2023&#x2F;10&#x2F;11 22:19:29</p>
+<h2 id="CTF中常见php-MD5-函数漏洞-1"><a href="#CTF中常见php-MD5-函数漏洞-1" class="headerlink" title="CTF中常见php-MD5()函数漏洞"></a>CTF中常见php-MD5()函数漏洞</h2><h3 id="1-数字与字符串之间的比较"><a href="#1-数字与字符串之间的比较" class="headerlink" title="1.数字与字符串之间的比较"></a>1.数字与字符串之间的比较</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_ invoke__">var_dump</span>( <span class="number">0</span> == <span class="string">&quot;a&quot;</span> );</span><br><span class="line"><span class="title function_ invoke__">var_dump</span>( <span class="string">&quot;0&quot;</span> == <span class="string">&quot;a&quot;</span> );</span><br></pre></td></tr></table></figure>
+
+<p>第一个返回的是 true ，第二个返回的是 false<br>因为php把字母开头的转化为整型时，转化为0， 前面数字后面字母的话就只取到第一个字母出现的位置之前（如intval(’’123abd45gf)结果为123）</p>
+<h3 id="2-MD5函数漏洞"><a href="#2-MD5函数漏洞" class="headerlink" title="2.MD5函数漏洞"></a>2.MD5函数漏洞</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$_GET</span>[<span class="string">&#x27;name&#x27;</span>] != <span class="variable">$_GET</span>[<span class="string">&#x27;password&#x27;</span>]</span><br><span class="line"><span class="title function_ invoke__">MD5</span>(<span class="variable">$_GET</span>[<span class="string">&#x27;name&#x27;</span>]) == <span class="title function_ invoke__">MD5</span>(<span class="variable">$_GET</span>[<span class="string">&#x27;password&#x27;</span>])</span><br></pre></td></tr></table></figure>
+
+<p>要求满足上述条件则<br>那么要求name和password数值不同但是MD5相同，在这里可以利用绕过。<br>PHP在处理哈希字符串时，它把每一个以“0E”开头的哈希值都解释为0，所以如果两个不同的密码经过哈希以后，其哈希值都是以“0E”开头的，那么PHP将会认为他们相同，都是0。</p>
+<p><strong>以下值在md5加密后以0E开头：</strong></p>
+<ul>
+<li>QNKCDZO</li>
+<li>240610708</li>
+<li>s878926199a</li>
+<li>s155964671a</li>
+<li>s214587387a</li>
+<li>s214587387a</li>
+</ul>
+<p><strong>以下值在sha1加密后以0E开头：</strong></p>
+<ul>
+<li>sha1(‘aaroZmOk’)</li>
+<li>sha1(‘aaK1STfY’)</li>
+<li>sha1(‘aaO8zKZF’)</li>
+<li>sha1(‘aa3OFF9m’)</li>
+</ul>
+<p>GET传入<code>a=QNKCDZO&amp;b=240610708</code>就能绕过了</p>
+<h3 id="3-php特性"><a href="#3-php特性" class="headerlink" title="3.php特性"></a>3.php特性</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(<span class="variable">$_POST</span>[<span class="string">&#x27;param1&#x27;</span>]!==<span class="variable">$_POST</span>[<span class="string">&#x27;param2&#x27;</span>] &amp;&amp; <span class="title function_ invoke__">md5</span>(<span class="variable">$_POST</span>[<span class="string">&#x27;param1&#x27;</span>])===<span class="title function_ invoke__">md5</span>(<span class="variable">$_POST</span>[<span class="string">&#x27;param2&#x27;</span>]))&#123;<span class="keyword">die</span>(<span class="string">&quot;success!&quot;</span>);&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在php中&#x3D;&#x3D;&#x3D;为完全等于运算，不仅比较<strong>值</strong>，而且还比较值的<strong>类型</strong>，只有<strong>两者一致</strong>才为真。再次使用a&#x3D;QNKCDZO&amp;b&#x3D;240610708就不行了，因为a和b类型不同。<br><strong>PHP中md5的函数特性</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_ invoke__">md5</span>([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]) == <span class="title function_ invoke__">md5</span>([<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>]) == <span class="literal">NULL</span></span><br></pre></td></tr></table></figure>
+
+<p>[1] !&#x3D;&#x3D; [2] &amp;&amp; md5([1]) &#x3D;&#x3D;&#x3D; md5([2])<br>所以GET传入<code>a[]=1&amp;b[]=2</code>就能够绕过了。</p>
+<h3 id="4-MD5碰撞"><a href="#4-MD5碰撞" class="headerlink" title="4.MD5碰撞"></a>4.MD5碰撞</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>((<span class="keyword">string</span>)<span class="variable">$_POST</span>[<span class="string">&#x27;param1&#x27;</span>]!==(<span class="keyword">string</span>)<span class="variable">$_POST</span>[<span class="string">&#x27;param2&#x27;</span>] &amp;&amp; <span class="title function_ invoke__">md5</span>(<span class="variable">$_POST</span>[<span class="string">&#x27;param1&#x27;</span>])===<span class="title function_ invoke__">md5</span>(<span class="variable">$_POST</span>[<span class="string">&#x27;param2&#x27;</span>]))&#123;<span class="keyword">die</span>(<span class="string">&quot;success!);</span></span><br><span class="line"><span class="string">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>要求构造param1和param2不同，但是MD5相同，也就是说要求传入两个MD5相同的不同字符串。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Param1=%4d%c9%68%ff%0e%e3%5c%20%95%72%d4%77%7b%72%15%87%d3%6f%a7%b2%1b%dc%56%b7%4a%3d%c0%78%3e%7b%95%18%af%bf%a2%00%a8%28%4b%f3%6e%8e%4b%55%b3%5f%42%75%93%d8%49%67%6d%a0%d1%55%5d%83%60%fb%5f%07%fe%a2</span><br><span class="line">Param2=%4d%c9%68%ff%0e%e3%5c%20%95%72%d4%77%7b%72%15%87%d3%6f%a7%b2%1b%dc%56%b7%4a%3d%c0%78%3e%7b%95%18%af%bf%a2%02%a8%28%4b%f3%6e%8e%4b%55%b3%5f%42%75%93%d8%49%67%6d%a0%d1%d5%5d%83%60%fb%5f%07%fe%a2</span><br></pre></td></tr></table></figure>
+
+<p>MD5值相同使用谷歌可以搜到相当多被巧妙构造出的二进制文件，其MD5相同，注意一点，post时一定要urlencode！！！</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/10/19/MD5%E6%BC%8F%E6%B4%9E/" data-id="clnx5qaj30005ygst9fhl83fh" data-title="" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2023/10/19/PHP%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          (no title)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2023/10/19/LNMP%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title"></div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/10/">October 2023</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2023/10/19/%E5%A6%82%E4%BD%95%E5%BC%80%E5%90%AF%E4%B8%80%E4%B8%AAdocker/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2023/10/19/%E5%90%AF%E5%8A%A8jar%E6%96%87%E4%BB%B6/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2023/10/19/%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5%E7%BB%95%E8%BF%87%E6%96%B9%E5%BC%8F%E6%80%BB%E7%BB%93/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2023/10/19/Web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%AC%AC%E4%B8%80%E8%AF%BE2.0/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2023/10/19/Web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%AC%AC%E4%B8%80%E8%AF%BE/">(no title)</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2023 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.6.4.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

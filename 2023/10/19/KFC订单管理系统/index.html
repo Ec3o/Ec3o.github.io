@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="KFC订单管理系统本项目是开发者在某个星期四吃KFC的时候突然想到的.可以利用HTML前端界面和Go语言实现一个简易的用户订单管理系统,从而实现自动化点单(事实上也是这么做的.) 项目需要实现的一些功能:  用户注册 用户登录 餐品选择 订单确认 订单支付(模拟) 订单发送 商家:订单管理  相比于只有后端来说,这次将添加一些前端界面,可以模拟一个真实的生产环境;使用gorm数据库来进行数据管理.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://example.com/2023/10/19/KFC%E8%AE%A2%E5%8D%95%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="KFC订单管理系统本项目是开发者在某个星期四吃KFC的时候突然想到的.可以利用HTML前端界面和Go语言实现一个简易的用户订单管理系统,从而实现自动化点单(事实上也是这么做的.) 项目需要实现的一些功能:  用户注册 用户登录 餐品选择 订单确认 订单支付(模拟) 订单发送 商家:订单管理  相比于只有后端来说,这次将添加一些前端界面,可以模拟一个真实的生产环境;使用gorm数据库来进行数据管理.">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-10-19T12:24:30.916Z">
+<meta property="article:modified_time" content="2023-10-18T09:03:47.123Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        
+          <a class="nav-icon" href="/atom.xml" title="RSS Feed"><span class="fa fa-rss"></span></a>
+        
+        <a class="nav-icon nav-search-btn" title="Search"><span class="fa fa-search"></span></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-KFC订单管理系统" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2023/10/19/KFC%E8%AE%A2%E5%8D%95%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/" class="article-date">
+  <time class="dt-published" datetime="2023-10-19T12:24:30.916Z" itemprop="datePublished">2023-10-19</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="KFC订单管理系统"><a href="#KFC订单管理系统" class="headerlink" title="KFC订单管理系统"></a>KFC订单管理系统</h1><p>本项目是开发者在某个星期四吃KFC的时候突然想到的.可以利用HTML前端界面和Go语言实现一个简易的用户订单管理系统,从而实现自动化点单(事实上也是这么做的.)</p>
+<p>项目需要实现的一些功能:</p>
+<ul>
+<li>用户注册</li>
+<li>用户登录</li>
+<li>餐品选择</li>
+<li>订单确认</li>
+<li>订单支付(模拟)</li>
+<li>订单发送</li>
+<li>商家:订单管理</li>
+</ul>
+<p>相比于只有后端来说,这次将添加一些前端界面,可以模拟一个真实的生产环境;使用gorm数据库来进行数据管理.</p>
+<h3 id="前端界面："><a href="#前端界面：" class="headerlink" title="前端界面："></a>前端界面：</h3><ol>
+<li><strong>用户注册页面：</strong><ul>
+<li>提供输入框用于输入用户名、密码等信息。</li>
+<li>添加注册按钮，将用户信息发送到后端进行注册。</li>
+</ul>
+</li>
+<li><strong>用户登录页面：</strong><ul>
+<li>类似注册页面，提供输入框用于输入用户名和密码。</li>
+<li>添加登录按钮，将用户信息发送到后端进行验证。</li>
+</ul>
+</li>
+<li><strong>餐品选择页面：</strong><ul>
+<li>列出KFC的菜单，可能包括图片、菜品名、价格等信息。</li>
+<li>用户可以选择想要的菜品，并添加到购物车中。</li>
+</ul>
+</li>
+<li><strong>购物车页面：</strong><ul>
+<li>显示用户选择的菜品列表和总价。</li>
+<li>提供编辑购物车、删除菜品等功能。</li>
+</ul>
+</li>
+<li><strong>订单确认页面：</strong><ul>
+<li>显示用户的订单信息，包括菜品、总价等。</li>
+<li>提供确认订单按钮。</li>
+</ul>
+</li>
+</ol>
+<h3 id="后端实现（使用Go语言和gorm）："><a href="#后端实现（使用Go语言和gorm）：" class="headerlink" title="后端实现（使用Go语言和gorm）："></a>后端实现（使用Go语言和gorm）：</h3><ol>
+<li><strong>用户注册和登录：</strong><ul>
+<li>使用路由处理用户注册和登录的请求。</li>
+<li>使用gorm将用户信息存储到数据库中。</li>
+</ul>
+</li>
+<li><strong>餐品选择和购物车管理：</strong><ul>
+<li>创建路由处理前端发送的菜品选择和购物车操作的请求。</li>
+<li>使用gorm将菜品信息和购物车信息存储到数据库中。</li>
+</ul>
+</li>
+<li><strong>订单确认和支付：</strong><ul>
+<li>当用户确认订单时，将订单信息存储到数据库中。</li>
+<li>可以模拟支付过程，例如直接将订单状态改为已支付。</li>
+</ul>
+</li>
+<li><strong>订单发送和商家订单管理：</strong><ul>
+<li>商家可以登录到一个后台界面查看订单列表。</li>
+<li>可以将订单标记为已发送或者已完成。</li>
+</ul>
+</li>
+</ol>
+<h3 id="数据库设计："><a href="#数据库设计：" class="headerlink" title="数据库设计："></a>数据库设计：</h3><ol>
+<li><strong>用户表：</strong><ul>
+<li>用户ID</li>
+<li>用户名</li>
+<li>密码（可能需要加密存储）</li>
+<li>其他个人信息（可选）</li>
+</ul>
+</li>
+<li><strong>菜品表：</strong><ul>
+<li>菜品ID</li>
+<li>菜名</li>
+<li>价格</li>
+<li>图片（可选）</li>
+</ul>
+</li>
+<li><strong>购物车表：</strong><ul>
+<li>购物车ID</li>
+<li>用户ID（关联用户表）</li>
+<li>菜品ID（关联菜品表）</li>
+<li>数量</li>
+</ul>
+</li>
+<li><strong>订单表：</strong><ul>
+<li>订单ID</li>
+<li>用户ID（关联用户表）</li>
+<li>总价</li>
+<li>订单状态（待支付、已支付等）</li>
+</ul>
+</li>
+<li><strong>商家订单表：</strong><ul>
+<li>订单ID（关联订单表）</li>
+<li>商家ID（可选，如果有多家商家）</li>
+</ul>
+</li>
+</ol>
+<p>代码实例</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>表单示例<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">h2</span>&gt;</span>用户注册<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">&quot;/register&quot;</span> <span class="attr">method</span>=<span class="string">&quot;post&quot;</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- action 属性指定了表单提交的目标 URL --&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- method 属性指定了请求的 HTTP 方法（GET 或 POST） --&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">label</span> <span class="attr">for</span>=<span class="string">&quot;username&quot;</span>&gt;</span>用户名:<span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">id</span>=<span class="string">&quot;username&quot;</span> <span class="attr">name</span>=<span class="string">&quot;username&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">label</span> <span class="attr">for</span>=<span class="string">&quot;password&quot;</span>&gt;</span>密码:<span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;password&quot;</span> <span class="attr">id</span>=<span class="string">&quot;password&quot;</span> <span class="attr">name</span>=<span class="string">&quot;password&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;submit&quot;</span> <span class="attr">value</span>=<span class="string">&quot;注册&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;net/http&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	http.HandleFunc(<span class="string">&quot;/register&quot;</span>, <span class="function"><span class="keyword">func</span><span class="params">(w http.ResponseWriter, r *http.Request)</span></span> &#123;</span><br><span class="line">		<span class="keyword">if</span> r.Method == http.MethodPost &#123;</span><br><span class="line">			username := r.FormValue(<span class="string">&quot;username&quot;</span>)</span><br><span class="line">			password := r.FormValue(<span class="string">&quot;password&quot;</span>)</span><br><span class="line"></span><br><span class="line">			<span class="comment">// 在这里可以进行注册逻辑</span></span><br><span class="line">			fmt.Printf(<span class="string">&quot;注册成功：用户名：%s，密码：%s\n&quot;</span>, username, password)</span><br><span class="line">		&#125;</span><br><span class="line">		http.Redirect(w, r, <span class="string">&quot;/&quot;</span>, http.StatusSeeOther)</span><br><span class="line">	&#125;)</span><br><span class="line"></span><br><span class="line">	http.ListenAndServe(<span class="string">&quot;:8080&quot;</span>, <span class="literal">nil</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/10/19/KFC%E8%AE%A2%E5%8D%95%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/" data-id="clnx5qaj20003ygstaehffi50" data-title="" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2023/10/19/LNMP%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          (no title)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2023/10/19/Hgame-mini%20Web-writeups/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title"></div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/10/">October 2023</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2023/10/19/%E5%A6%82%E4%BD%95%E5%BC%80%E5%90%AF%E4%B8%80%E4%B8%AAdocker/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2023/10/19/%E5%90%AF%E5%8A%A8jar%E6%96%87%E4%BB%B6/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2023/10/19/%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5%E7%BB%95%E8%BF%87%E6%96%B9%E5%BC%8F%E6%80%BB%E7%BB%93/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2023/10/19/Web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%AC%AC%E4%B8%80%E8%AF%BE2.0/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2023/10/19/Web%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%AC%AC%E4%B8%80%E8%AF%BE/">(no title)</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2023 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.6.4.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>
