@@ -74,13 +74,11 @@
         <div id="article">
             <div class="toc"></div>
             <div class="article-body">
-                <h2 id="CTF中常见php-MD5-函数漏洞"><a href="#CTF中常见php-MD5-函数漏洞" class="headerlink" title="CTF中常见php-MD5()函数漏洞"></a>CTF中常见php-MD5()函数漏洞</h2><h3 id="1-数字与字符串之间的比较"><a href="#1-数字与字符串之间的比较" class="headerlink" title="1.数字与字符串之间的比较"></a>1.数字与字符串之间的比较</h3><pre><code class="php">var_dump( 0 == &quot;a&quot; );
-var_dump( &quot;0&quot; == &quot;a&quot; );
-</code></pre>
+                <h2 id="CTF中常见php-MD5-函数漏洞"><a href="#CTF中常见php-MD5-函数漏洞" class="headerlink" title="CTF中常见php-MD5()函数漏洞"></a>CTF中常见php-MD5()函数漏洞</h2><h3 id="1-数字与字符串之间的比较"><a href="#1-数字与字符串之间的比较" class="headerlink" title="1.数字与字符串之间的比较"></a>1.数字与字符串之间的比较</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_ invoke__">var_dump</span>( <span class="number">0</span> == <span class="string">&quot;a&quot;</span> );</span><br><span class="line"><span class="title function_ invoke__">var_dump</span>( <span class="string">&quot;0&quot;</span> == <span class="string">&quot;a&quot;</span> );</span><br></pre></td></tr></table></figure>
+
 <p>第一个返回的是 true ，第二个返回的是 false<br>因为php把字母开头的转化为整型时，转化为0， 前面数字后面字母的话就只取到第一个字母出现的位置之前（如intval(’’123abd45gf)结果为123）</p>
-<h3 id="2-MD5函数漏洞"><a href="#2-MD5函数漏洞" class="headerlink" title="2.MD5函数漏洞"></a>2.MD5函数漏洞</h3><pre><code class="php">$_GET[&#39;name&#39;] != $_GET[&#39;password&#39;]
-MD5($_GET[&#39;name&#39;]) == MD5($_GET[&#39;password&#39;])
-</code></pre>
+<h3 id="2-MD5函数漏洞"><a href="#2-MD5函数漏洞" class="headerlink" title="2.MD5函数漏洞"></a>2.MD5函数漏洞</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$_GET</span>[<span class="string">&#x27;name&#x27;</span>] != <span class="variable">$_GET</span>[<span class="string">&#x27;password&#x27;</span>]</span><br><span class="line"><span class="title function_ invoke__">MD5</span>(<span class="variable">$_GET</span>[<span class="string">&#x27;name&#x27;</span>]) == <span class="title function_ invoke__">MD5</span>(<span class="variable">$_GET</span>[<span class="string">&#x27;password&#x27;</span>])</span><br></pre></td></tr></table></figure>
+
 <p>要求满足上述条件则<br>那么要求name和password数值不同但是MD5相同，在这里可以利用绕过。<br>PHP在处理哈希字符串时，它把每一个以“0E”开头的哈希值都解释为0，所以如果两个不同的密码经过哈希以后，其哈希值都是以“0E”开头的，那么PHP将会认为他们相同，都是0。</p>
 <p><strong>以下值在md5加密后以0E开头：</strong></p>
 <ul>
@@ -99,19 +97,17 @@ MD5($_GET[&#39;name&#39;]) == MD5($_GET[&#39;password&#39;])
 <li>sha1(‘aa3OFF9m’)</li>
 </ul>
 <p>GET传入<code>a=QNKCDZO&amp;b=240610708</code>就能绕过了</p>
-<h3 id="3-php特性"><a href="#3-php特性" class="headerlink" title="3.php特性"></a>3.php特性</h3><pre><code class="php">if($_POST[&#39;param1&#39;]!==$_POST[&#39;param2&#39;] &amp;&amp; md5($_POST[&#39;param1&#39;])===md5($_POST[&#39;param2&#39;]))&#123;die(&quot;success!&quot;);&#125;
-</code></pre>
+<h3 id="3-php特性"><a href="#3-php特性" class="headerlink" title="3.php特性"></a>3.php特性</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(<span class="variable">$_POST</span>[<span class="string">&#x27;param1&#x27;</span>]!==<span class="variable">$_POST</span>[<span class="string">&#x27;param2&#x27;</span>] &amp;&amp; <span class="title function_ invoke__">md5</span>(<span class="variable">$_POST</span>[<span class="string">&#x27;param1&#x27;</span>])===<span class="title function_ invoke__">md5</span>(<span class="variable">$_POST</span>[<span class="string">&#x27;param2&#x27;</span>]))&#123;<span class="keyword">die</span>(<span class="string">&quot;success!&quot;</span>);&#125;</span><br></pre></td></tr></table></figure>
+
 <p>在php中&#x3D;&#x3D;&#x3D;为完全等于运算，不仅比较<strong>值</strong>，而且还比较值的<strong>类型</strong>，只有<strong>两者一致</strong>才为真。再次使用a&#x3D;QNKCDZO&amp;b&#x3D;240610708就不行了，因为a和b类型不同。<br><strong>PHP中md5的函数特性</strong></p>
-<pre><code class="php">md5([1,2,3]) == md5([4,5,6]) == NULL
-</code></pre>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_ invoke__">md5</span>([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]) == <span class="title function_ invoke__">md5</span>([<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>]) == <span class="literal">NULL</span></span><br></pre></td></tr></table></figure>
+
 <p>[1] !&#x3D;&#x3D; [2] &amp;&amp; md5([1]) &#x3D;&#x3D;&#x3D; md5([2])<br>所以GET传入<code>a[]=1&amp;b[]=2</code>就能够绕过了。</p>
-<h3 id="4-MD5碰撞"><a href="#4-MD5碰撞" class="headerlink" title="4.MD5碰撞"></a>4.MD5碰撞</h3><pre><code class="php">if((string)$_POST[&#39;param1&#39;]!==(string)$_POST[&#39;param2&#39;] &amp;&amp; md5($_POST[&#39;param1&#39;])===md5($_POST[&#39;param2&#39;]))&#123;die(&quot;success!);
-&#125;
-</code></pre>
+<h3 id="4-MD5碰撞"><a href="#4-MD5碰撞" class="headerlink" title="4.MD5碰撞"></a>4.MD5碰撞</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>((<span class="keyword">string</span>)<span class="variable">$_POST</span>[<span class="string">&#x27;param1&#x27;</span>]!==(<span class="keyword">string</span>)<span class="variable">$_POST</span>[<span class="string">&#x27;param2&#x27;</span>] &amp;&amp; <span class="title function_ invoke__">md5</span>(<span class="variable">$_POST</span>[<span class="string">&#x27;param1&#x27;</span>])===<span class="title function_ invoke__">md5</span>(<span class="variable">$_POST</span>[<span class="string">&#x27;param2&#x27;</span>]))&#123;<span class="keyword">die</span>(<span class="string">&quot;success!);</span></span><br><span class="line"><span class="string">&#125;</span></span><br></pre></td></tr></table></figure>
+
 <p>要求构造param1和param2不同，但是MD5相同，也就是说要求传入两个MD5相同的不同字符串。</p>
-<pre><code>Param1=%4d%c9%68%ff%0e%e3%5c%20%95%72%d4%77%7b%72%15%87%d3%6f%a7%b2%1b%dc%56%b7%4a%3d%c0%78%3e%7b%95%18%af%bf%a2%00%a8%28%4b%f3%6e%8e%4b%55%b3%5f%42%75%93%d8%49%67%6d%a0%d1%55%5d%83%60%fb%5f%07%fe%a2
-Param2=%4d%c9%68%ff%0e%e3%5c%20%95%72%d4%77%7b%72%15%87%d3%6f%a7%b2%1b%dc%56%b7%4a%3d%c0%78%3e%7b%95%18%af%bf%a2%02%a8%28%4b%f3%6e%8e%4b%55%b3%5f%42%75%93%d8%49%67%6d%a0%d1%d5%5d%83%60%fb%5f%07%fe%a2
-</code></pre>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Param1=%4d%c9%68%ff%0e%e3%5c%20%95%72%d4%77%7b%72%15%87%d3%6f%a7%b2%1b%dc%56%b7%4a%3d%c0%78%3e%7b%95%18%af%bf%a2%00%a8%28%4b%f3%6e%8e%4b%55%b3%5f%42%75%93%d8%49%67%6d%a0%d1%55%5d%83%60%fb%5f%07%fe%a2</span><br><span class="line">Param2=%4d%c9%68%ff%0e%e3%5c%20%95%72%d4%77%7b%72%15%87%d3%6f%a7%b2%1b%dc%56%b7%4a%3d%c0%78%3e%7b%95%18%af%bf%a2%02%a8%28%4b%f3%6e%8e%4b%55%b3%5f%42%75%93%d8%49%67%6d%a0%d1%d5%5d%83%60%fb%5f%07%fe%a2</span><br></pre></td></tr></table></figure>
+
 <p>MD5值相同使用谷歌可以搜到相当多被巧妙构造出的二进制文件，其MD5相同，注意一点，post时一定要urlencode！！！</p>
 
                 
@@ -127,7 +123,7 @@ Param2=%4d%c9%68%ff%0e%e3%5c%20%95%72%d4%77%7b%72%15%87%d3%6f%a7%b2%1b%dc%56%b7%
         <br>
         <span class="suffix-box-title">文章出处：</span><a href="/2023/10/20/MD5%E7%A2%B0%E6%92%9E%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/" target="_blank">MD5碰撞常见问题</a>
         <br>
-        <span class="suffix-box-title">作者签名：</span>简单地活着, 肆意又精彩.
+        <span class="suffix-box-title">作者签名：</span>我将,点燃大海！
         <br>
         <span class="suffix-box-title">关于主题：</span><a href="https://github.com/first19326/Hexo-LiveForCode" target="_blank">Hexo - Live For Code</a>
         <br>
@@ -176,7 +172,7 @@ Param2=%4d%c9%68%ff%0e%e3%5c%20%95%72%d4%77%7b%72%15%87%d3%6f%a7%b2%1b%dc%56%b7%
             <div class="menu-notice">
                 <span class="iconfont icon-notice"></span>
                 <div class="notice">
-                    <span>简单地活着，肆意而又精彩！</span>
+                    <span>我将，点燃大海</span>
                 </div>
             </div>
         
@@ -188,7 +184,7 @@ Param2=%4d%c9%68%ff%0e%e3%5c%20%95%72%d4%77%7b%72%15%87%d3%6f%a7%b2%1b%dc%56%b7%
                 <div class="introduce-info"> 
                     <div class="introduce-user">
                         
-                            <a href="https://worstone.cn" target="_blank"><span>Ec3o</span></a>
+                            <a href="ec3o.github.io" target="_blank"><span>Ec3o</span></a>
                         
                     </div>
                 </div> 
@@ -231,7 +227,7 @@ Param2=%4d%c9%68%ff%0e%e3%5c%20%95%72%d4%77%7b%72%15%87%d3%6f%a7%b2%1b%dc%56%b7%
                 
                     <a name="微信" href="javascript:;" class="" target="_self" data=""><span class="iconfont icon-wechat"></span></a>
                 
-                    <a name="GitHub" href="https://github.com/first19326" class="" target="_blank" data=""><span class="iconfont icon-github"></span></a>
+                    <a name="GitHub" href="https://github.com/Ec3o" class="" target="_blank" data=""><span class="iconfont icon-github"></span></a>
                 
             </div> 
         </nav>
@@ -345,7 +341,7 @@ Param2=%4d%c9%68%ff%0e%e3%5c%20%95%72%d4%77%7b%72%15%87%d3%6f%a7%b2%1b%dc%56%b7%
         User             : "Ec3o",
         UserAvatar       : "/image/sidebar/avatar.jpg",
         WebsiteStartDate : "2020-01-01",
-        Home             : "https://worstone.cn",
+        Home             : "ec3o.github.io",
 
         WebsiteTitleBlur         : "(◍´꒳`◍) Hi, Live For Code",
         WebsiteTitleBlurTimeOut  : 500,
@@ -451,7 +447,7 @@ Param2=%4d%c9%68%ff%0e%e3%5c%20%95%72%d4%77%7b%72%15%87%d3%6f%a7%b2%1b%dc%56%b7%
 
         MenuNotice : {
             enable : true,
-            notice : "简单地活着，肆意而又精彩！",
+            notice : "我将，点燃大海",
             speed  : 20
         },
         MenuList : [
@@ -589,7 +585,7 @@ Param2=%4d%c9%68%ff%0e%e3%5c%20%95%72%d4%77%7b%72%15%87%d3%6f%a7%b2%1b%dc%56%b7%
                     {
                         name   : "GitHub",
                         icon   : "icon-github",
-                        href   : "https://github.com/first19326",
+                        href   : "https://github.com/Ec3o",
                         class  : "",
                         target : "_blank",
                         image  : ""
@@ -677,7 +673,7 @@ Param2=%4d%c9%68%ff%0e%e3%5c%20%95%72%d4%77%7b%72%15%87%d3%6f%a7%b2%1b%dc%56%b7%
                 admin       : "博主",
                 anonymous   : "匿名用户",
                 sofa        : "快来做第一个评论的人吧 ~",
-                placeholder : "你是我一生只会遇见一次的惊喜...",
+                placeholder : "天生我才必有用,散尽千金还复来",
             },
             dark            : "html[color-scheme='dark']",
             search          : false,
@@ -691,7 +687,7 @@ Param2=%4d%c9%68%ff%0e%e3%5c%20%95%72%d4%77%7b%72%15%87%d3%6f%a7%b2%1b%dc%56%b7%
             appId          : "srhKtvWPQTWYKh3qX8G8M7v0-gzGzoHsz",
             appKey         : "8uVSP1q6UlALVC5igYfIfv2h",
             serverURLs     : "",
-            placeholder    : "你是我一生只会遇见一次的惊喜...",
+            placeholder    : "天生我才必有用,散尽千金还复来",
             avatar         : "mm",
             meta           : "nick,mail,link",
             requiredFields : "nick,mail",
@@ -822,7 +818,7 @@ Param2=%4d%c9%68%ff%0e%e3%5c%20%95%72%d4%77%7b%72%15%87%d3%6f%a7%b2%1b%dc%56%b7%
         },
 
         Suffix : {
-            about : "简单地活着, 肆意又精彩."
+            about : "我将,点燃大海！"
         },
             
         Theme : {

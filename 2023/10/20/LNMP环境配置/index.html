@@ -80,71 +80,57 @@
 <ul>
 <li>PHP、MySQL、Java、Go、Node.js和Python的安装可以通过各自的包管理器（如apt、yum等）来完成。例如，在Ubuntu系统中，你可以使用以下命令安装：</li>
 </ul>
-<pre><code>sudo apt update
-sudo apt install php mysql-server openjdk-11-jdk golang nodejs python3
-</code></pre>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt update</span><br><span class="line">sudo apt install php mysql-server openjdk-11-jdk golang nodejs python3</span><br></pre></td></tr></table></figure>
 </li>
 <li><p><strong>配置LNMP环境</strong>：</p>
 <ul>
 <li>首先安装Nginx：</li>
 </ul>
-<pre><code>sudo apt install nginx
-</code></pre>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install nginx</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>然后安装MySQL和PHP：</li>
 </ul>
-<pre><code>sudo apt install mysql-server php-fpm
-</code></pre>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install mysql-server php-fpm</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>最后，启动Nginx和PHP-FPM服务：</li>
 </ul>
-<pre><code>sudo systemctl start nginx
-sudo systemctl start php7.4-fpm   # 这里假设你使用的是PHP 7.4
-</code></pre>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl start nginx</span><br><span class="line">sudo systemctl start php7.4-fpm   # 这里假设你使用的是PHP 7.4</span><br></pre></td></tr></table></figure>
 </li>
 <li><p><strong>配置LAMP环境</strong>：</p>
 <ul>
 <li>安装Apache、MySQL和PHP：</li>
 </ul>
-<pre><code>sudo apt install apache2 mysql-server php libapache2-mod-php
-</code></pre>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install apache2 mysql-server php libapache2-mod-php</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>启动Apache和MySQL服务：</li>
 </ul>
-<pre><code>sudo systemctl start apache2
-sudo systemctl start mysql
-</code></pre>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl start apache2</span><br><span class="line">sudo systemctl start mysql</span><br></pre></td></tr></table></figure>
 </li>
 <li><p><strong>安装和配置Xdebug</strong>：</p>
 <ul>
 <li>首先，安装Xdebug扩展：</li>
 </ul>
-<pre><code>sudo apt install php-xdebug
-</code></pre>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install php-xdebug</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>然后编辑Xdebug的配置文件（通常是<code>/etc/php/7.4/mods-available/xdebug.ini</code>）并添加以下行：</li>
 </ul>
-<pre><code>zend_extension=xdebug.so
-xdebug.remote_enable=on
-xdebug.remote_handler=dbgp
-xdebug.remote_mode=req
-xdebug.remote_host=127.0.0.1
-xdebug.remote_port=9000
-</code></pre>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">zend_extension=xdebug.so</span><br><span class="line">xdebug.remote_enable=on</span><br><span class="line">xdebug.remote_handler=dbgp</span><br><span class="line">xdebug.remote_mode=req</span><br><span class="line">xdebug.remote_host=127.0.0.1</span><br><span class="line">xdebug.remote_port=9000</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>重启PHP-FPM或Apache：</li>
 </ul>
-<pre><code>sudo systemctl restart php7.4-fpm   # 或 sudo systemctl restart apache2
-</code></pre>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl restart php7.4-fpm   # 或 sudo systemctl restart apache2</span><br></pre></td></tr></table></figure>
 </li>
 <li><p><strong>验证环境</strong>：</p>
 <ul>
 <li>创建一个简单的PHP脚本，如<code>info.php</code>：</li>
 </ul>
-<pre><code>phpCopy code&lt;?php
-phpinfo();
-?&gt;
-</code></pre>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">phpCopy code&lt;?php</span><br><span class="line">phpinfo();</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>将该文件放置在Web服务器的根目录（通常是<code>/var/www/html/</code>）并在浏览器中访问，确保PHP和Xdebug都正常工作。</li>
 </ul>
@@ -164,7 +150,7 @@ phpinfo();
         <br>
         <span class="suffix-box-title">文章出处：</span><a href="/2023/10/20/LNMP%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" target="_blank">LNMP环境配置</a>
         <br>
-        <span class="suffix-box-title">作者签名：</span>简单地活着, 肆意又精彩.
+        <span class="suffix-box-title">作者签名：</span>我将,点燃大海！
         <br>
         <span class="suffix-box-title">关于主题：</span><a href="https://github.com/first19326/Hexo-LiveForCode" target="_blank">Hexo - Live For Code</a>
         <br>
@@ -215,7 +201,7 @@ phpinfo();
             <div class="menu-notice">
                 <span class="iconfont icon-notice"></span>
                 <div class="notice">
-                    <span>简单地活着，肆意而又精彩！</span>
+                    <span>我将，点燃大海</span>
                 </div>
             </div>
         
@@ -227,7 +213,7 @@ phpinfo();
                 <div class="introduce-info"> 
                     <div class="introduce-user">
                         
-                            <a href="https://worstone.cn" target="_blank"><span>Ec3o</span></a>
+                            <a href="ec3o.github.io" target="_blank"><span>Ec3o</span></a>
                         
                     </div>
                 </div> 
@@ -270,7 +256,7 @@ phpinfo();
                 
                     <a name="微信" href="javascript:;" class="" target="_self" data=""><span class="iconfont icon-wechat"></span></a>
                 
-                    <a name="GitHub" href="https://github.com/first19326" class="" target="_blank" data=""><span class="iconfont icon-github"></span></a>
+                    <a name="GitHub" href="https://github.com/Ec3o" class="" target="_blank" data=""><span class="iconfont icon-github"></span></a>
                 
             </div> 
         </nav>
@@ -384,7 +370,7 @@ phpinfo();
         User             : "Ec3o",
         UserAvatar       : "/image/sidebar/avatar.jpg",
         WebsiteStartDate : "2020-01-01",
-        Home             : "https://worstone.cn",
+        Home             : "ec3o.github.io",
 
         WebsiteTitleBlur         : "(◍´꒳`◍) Hi, Live For Code",
         WebsiteTitleBlurTimeOut  : 500,
@@ -490,7 +476,7 @@ phpinfo();
 
         MenuNotice : {
             enable : true,
-            notice : "简单地活着，肆意而又精彩！",
+            notice : "我将，点燃大海",
             speed  : 20
         },
         MenuList : [
@@ -628,7 +614,7 @@ phpinfo();
                     {
                         name   : "GitHub",
                         icon   : "icon-github",
-                        href   : "https://github.com/first19326",
+                        href   : "https://github.com/Ec3o",
                         class  : "",
                         target : "_blank",
                         image  : ""
@@ -716,7 +702,7 @@ phpinfo();
                 admin       : "博主",
                 anonymous   : "匿名用户",
                 sofa        : "快来做第一个评论的人吧 ~",
-                placeholder : "你是我一生只会遇见一次的惊喜...",
+                placeholder : "天生我才必有用,散尽千金还复来",
             },
             dark            : "html[color-scheme='dark']",
             search          : false,
@@ -730,7 +716,7 @@ phpinfo();
             appId          : "srhKtvWPQTWYKh3qX8G8M7v0-gzGzoHsz",
             appKey         : "8uVSP1q6UlALVC5igYfIfv2h",
             serverURLs     : "",
-            placeholder    : "你是我一生只会遇见一次的惊喜...",
+            placeholder    : "天生我才必有用,散尽千金还复来",
             avatar         : "mm",
             meta           : "nick,mail,link",
             requiredFields : "nick,mail",
@@ -861,7 +847,7 @@ phpinfo();
         },
 
         Suffix : {
-            about : "简单地活着, 肆意又精彩."
+            about : "我将,点燃大海！"
         },
             
         Theme : {

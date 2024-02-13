@@ -73,47 +73,42 @@
                 <h1 id="SQL教程"><a href="#SQL教程" class="headerlink" title="SQL教程"></a>SQL教程</h1><p>一个简单的SQL教程,基于MySQL数据库编写.</p>
 <h2 id="SQL-Select-语法"><a href="#SQL-Select-语法" class="headerlink" title="SQL Select 语法"></a>SQL Select 语法</h2><p><strong>SELECT</strong> 语句用于从数据库中选取数据。</p>
 <p>结果被存储在一个结果表中，称为结果集。</p>
-<pre><code class="sql">SELECT column1, column2, ...FROM table_name;
-</code></pre>
-<pre><code class="sql">SELECT * FROM table_name;
-</code></pre>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> column1, column2, ...<span class="keyword">FROM</span> table_name;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> table_name;</span><br></pre></td></tr></table></figure>
+
 <h2 id="SQL-SELECT-DISTINCT-语句"><a href="#SQL-SELECT-DISTINCT-语句" class="headerlink" title="SQL SELECT DISTINCT 语句"></a>SQL SELECT DISTINCT 语句</h2><p>在表中，一个列可能会包含多个重复值，有时您也许希望仅仅列出不同（distinct）的值。</p>
 <p><strong>DISTINCT</strong> 关键词用于返回唯一不同的值。</p>
-<pre><code class="sql">SELECT DISTINCT column1, column2, ...FROM table_name;
-</code></pre>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="keyword">DISTINCT</span> column1, column2, ...<span class="keyword">FROM</span> table_name;</span><br></pre></td></tr></table></figure>
+
 <h2 id="SQL-AND-OR-运算符"><a href="#SQL-AND-OR-运算符" class="headerlink" title="SQL AND &amp; OR 运算符"></a>SQL AND &amp; OR 运算符</h2><p>如果第一个条件和第二个条件都成立，则 <strong>AND</strong> 运算符显示一条记录。</p>
 <p>如果第一个条件和第二个条件中只要有一个成立，则 <strong>OR</strong> 运算符显示一条记录。</p>
-<pre><code class="sql">SELECT * FROM Websites WHERE country=&#39;CN&#39; AND alexa &gt; 50;
-</code></pre>
-<pre><code class="sql">SELECT * FROM Websites WHERE country=&#39;USA&#39; OR country=&#39;CN&#39;;
-</code></pre>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> Websites <span class="keyword">WHERE</span> country<span class="operator">=</span><span class="string">&#x27;CN&#x27;</span> <span class="keyword">AND</span> alexa <span class="operator">&gt;</span> <span class="number">50</span>;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> Websites <span class="keyword">WHERE</span> country<span class="operator">=</span><span class="string">&#x27;USA&#x27;</span> <span class="keyword">OR</span> country<span class="operator">=</span><span class="string">&#x27;CN&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
 <h2 id="SQL-ORDER-BY-关键字"><a href="#SQL-ORDER-BY-关键字" class="headerlink" title="SQL ORDER BY 关键字"></a>SQL ORDER BY 关键字</h2><p><strong>ORDER BY</strong> 关键字用于对结果集按照一个列或者多个列进行排序。</p>
 <p><strong>ORDER BY</strong> 关键字默认按照升序对记录进行排序。如果需要按照降序对记录进行排序，您可以使用 <strong>DESC</strong> 关键字。</p>
-<pre><code class="sql">SELECT column1, column2, ...FROM table_name ORDER BY column1, column2, ... ASC|DESC;
-</code></pre>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> column1, column2, ...<span class="keyword">FROM</span> table_name <span class="keyword">ORDER</span> <span class="keyword">BY</span> column1, column2, ... <span class="keyword">ASC</span><span class="operator">|</span><span class="keyword">DESC</span>;</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>**column1, column2, …**：要排序的字段名称，可以为多个字段。</li>
 <li><strong>ASC</strong>：表示按升序排序。</li>
 <li><strong>DESC</strong>：表示按降序排序。</li>
 </ul>
-<pre><code class="sql">SELECT * FROM Websites
-ORDER BY alexa;
-</code></pre>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> Websites</span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> alexa;</span><br></pre></td></tr></table></figure>
+
 <h2 id="SQL-INSERT-INTO-语句"><a href="#SQL-INSERT-INTO-语句" class="headerlink" title="SQL INSERT INTO 语句"></a>SQL INSERT INTO 语句</h2><p><strong>INSERT INTO</strong> 语句用于向表中插入新记录。</p>
 <p>INSERT INTO 语句可以有两种编写形式。</p>
 <p>第一种形式无需指定要插入数据的列名，只需提供被插入的值即可：</p>
-<pre><code class="sql">INSERT INTO table_name
-VALUES (value1,value2,value3,...);
-</code></pre>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> table_name</span><br><span class="line"><span class="keyword">VALUES</span> (value1,value2,value3,...);</span><br></pre></td></tr></table></figure>
+
 <p>第二种形式需要指定列名及被插入的值：</p>
-<pre><code class="sql">INSERT INTO table_name (column1,column2,column3,...)
-VALUES (value1,value2,value3,...);
-</code></pre>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> table_name (column1,column2,column3,...)</span><br><span class="line"><span class="keyword">VALUES</span> (value1,value2,value3,...);</span><br></pre></td></tr></table></figure>
+
 <h2 id="SQL-UPDATE-语句"><a href="#SQL-UPDATE-语句" class="headerlink" title="SQL UPDATE 语句"></a>SQL UPDATE 语句</h2><p>UPDATE 语句用于更新表中已存在的记录。</p>
-<pre><code class="sql">UPDATE table_name
-SET column1 = value1, column2 = value2, ...
-WHERE condition;
-</code></pre>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">UPDATE</span> table_name</span><br><span class="line"><span class="keyword">SET</span> column1 <span class="operator">=</span> value1, column2 <span class="operator">=</span> value2, ...</span><br><span class="line"><span class="keyword">WHERE</span> <span class="keyword">condition</span>;</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li><strong>table_name</strong>：要修改的表名称。</li>
 <li>**column1, column2, …**：要修改的字段名称，可以为多个字段。</li>
@@ -121,18 +116,15 @@ WHERE condition;
 <li><strong>condition</strong>：修改条件，用于指定哪些数据要修改。</li>
 </ul>
 <h3 id="Update-警告！"><a href="#Update-警告！" class="headerlink" title="Update 警告！"></a>Update 警告！</h3><p>在更新记录时要格外小心！在上面的实例中，如果我们省略了 WHERE 子句，如下所示：</p>
-<pre><code class="sql">UPDATE Websites
-SET alexa=&#39;5000&#39;, country=&#39;USA&#39;
-</code></pre>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">UPDATE</span> Websites</span><br><span class="line"><span class="keyword">SET</span> alexa<span class="operator">=</span><span class="string">&#x27;5000&#x27;</span>, country<span class="operator">=</span><span class="string">&#x27;USA&#x27;</span></span><br></pre></td></tr></table></figure>
+
 <p>执行以上代码会将 <strong>Websites</strong> 表中所有数据的 <strong>alexa</strong> 改为 5000，<strong>country</strong> 改为 USA。</p>
 <p>执行没有 <strong>WHERE</strong> 子句的 <strong>UPDATE</strong> 要慎重，再慎重。</p>
 <h2 id="SQL-DELETE-语句"><a href="#SQL-DELETE-语句" class="headerlink" title="SQL DELETE 语句"></a>SQL DELETE 语句</h2><p>DELETE 语句用于删除表中的行。</p>
-<pre><code class="sql">DELETE FROM table_name
-WHERE condition;
-</code></pre>
-<pre><code class="sql">DELETE FROM Websites
-WHERE name=&#39;Facebook&#39; AND country=&#39;USA&#39;;
-</code></pre>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">DELETE</span> <span class="keyword">FROM</span> table_name</span><br><span class="line"><span class="keyword">WHERE</span> <span class="keyword">condition</span>;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">DELETE</span> <span class="keyword">FROM</span> Websites</span><br><span class="line"><span class="keyword">WHERE</span> name<span class="operator">=</span><span class="string">&#x27;Facebook&#x27;</span> <span class="keyword">AND</span> country<span class="operator">=</span><span class="string">&#x27;USA&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
 <h2 id="SQL-SELECT-TOP-LIMIT-ROWNUM-子句"><a href="#SQL-SELECT-TOP-LIMIT-ROWNUM-子句" class="headerlink" title="SQL SELECT TOP, LIMIT, ROWNUM 子句"></a>SQL SELECT TOP, LIMIT, ROWNUM 子句</h2>
                 
                 <p class="end">__END__</p>
@@ -147,7 +139,7 @@ WHERE name=&#39;Facebook&#39; AND country=&#39;USA&#39;;
         <br>
         <span class="suffix-box-title">文章出处：</span><a href="/2023/11/29/SQL%E6%95%99%E7%A8%8B/" target="_blank">SQL教程</a>
         <br>
-        <span class="suffix-box-title">作者签名：</span>简单地活着, 肆意又精彩.
+        <span class="suffix-box-title">作者签名：</span>我将,点燃大海！
         <br>
         <span class="suffix-box-title">关于主题：</span><a href="https://github.com/first19326/Hexo-LiveForCode" target="_blank">Hexo - Live For Code</a>
         <br>
@@ -191,7 +183,7 @@ WHERE name=&#39;Facebook&#39; AND country=&#39;USA&#39;;
             <div class="menu-notice">
                 <span class="iconfont icon-notice"></span>
                 <div class="notice">
-                    <span>简单地活着，肆意而又精彩！</span>
+                    <span>我将，点燃大海</span>
                 </div>
             </div>
         
@@ -203,7 +195,7 @@ WHERE name=&#39;Facebook&#39; AND country=&#39;USA&#39;;
                 <div class="introduce-info"> 
                     <div class="introduce-user">
                         
-                            <a href="https://worstone.cn" target="_blank"><span>Ec3o</span></a>
+                            <a href="ec3o.github.io" target="_blank"><span>Ec3o</span></a>
                         
                     </div>
                 </div> 
@@ -246,7 +238,7 @@ WHERE name=&#39;Facebook&#39; AND country=&#39;USA&#39;;
                 
                     <a name="微信" href="javascript:;" class="" target="_self" data=""><span class="iconfont icon-wechat"></span></a>
                 
-                    <a name="GitHub" href="https://github.com/first19326" class="" target="_blank" data=""><span class="iconfont icon-github"></span></a>
+                    <a name="GitHub" href="https://github.com/Ec3o" class="" target="_blank" data=""><span class="iconfont icon-github"></span></a>
                 
             </div> 
         </nav>
@@ -360,7 +352,7 @@ WHERE name=&#39;Facebook&#39; AND country=&#39;USA&#39;;
         User             : "Ec3o",
         UserAvatar       : "/image/sidebar/avatar.jpg",
         WebsiteStartDate : "2020-01-01",
-        Home             : "https://worstone.cn",
+        Home             : "ec3o.github.io",
 
         WebsiteTitleBlur         : "(◍´꒳`◍) Hi, Live For Code",
         WebsiteTitleBlurTimeOut  : 500,
@@ -466,7 +458,7 @@ WHERE name=&#39;Facebook&#39; AND country=&#39;USA&#39;;
 
         MenuNotice : {
             enable : true,
-            notice : "简单地活着，肆意而又精彩！",
+            notice : "我将，点燃大海",
             speed  : 20
         },
         MenuList : [
@@ -604,7 +596,7 @@ WHERE name=&#39;Facebook&#39; AND country=&#39;USA&#39;;
                     {
                         name   : "GitHub",
                         icon   : "icon-github",
-                        href   : "https://github.com/first19326",
+                        href   : "https://github.com/Ec3o",
                         class  : "",
                         target : "_blank",
                         image  : ""
@@ -692,7 +684,7 @@ WHERE name=&#39;Facebook&#39; AND country=&#39;USA&#39;;
                 admin       : "博主",
                 anonymous   : "匿名用户",
                 sofa        : "快来做第一个评论的人吧 ~",
-                placeholder : "你是我一生只会遇见一次的惊喜...",
+                placeholder : "天生我才必有用,散尽千金还复来",
             },
             dark            : "html[color-scheme='dark']",
             search          : false,
@@ -706,7 +698,7 @@ WHERE name=&#39;Facebook&#39; AND country=&#39;USA&#39;;
             appId          : "srhKtvWPQTWYKh3qX8G8M7v0-gzGzoHsz",
             appKey         : "8uVSP1q6UlALVC5igYfIfv2h",
             serverURLs     : "",
-            placeholder    : "你是我一生只会遇见一次的惊喜...",
+            placeholder    : "天生我才必有用,散尽千金还复来",
             avatar         : "mm",
             meta           : "nick,mail,link",
             requiredFields : "nick,mail",
@@ -837,7 +829,7 @@ WHERE name=&#39;Facebook&#39; AND country=&#39;USA&#39;;
         },
 
         Suffix : {
-            about : "简单地活着, 肆意又精彩."
+            about : "我将,点燃大海！"
         },
             
         Theme : {
