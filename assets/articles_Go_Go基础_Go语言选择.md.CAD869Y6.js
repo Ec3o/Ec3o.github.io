@@ -1,0 +1,1 @@
+import{_ as e,c as t,o}from"./chunks/framework.CQ12TVIp.js";const l=JSON.parse('{"title":"","description":"","frontmatter":{},"headers":[],"relativePath":"articles/Go/Go基础/Go语言选择.md","filePath":"articles/Go/Go基础/Go语言选择.md"}'),a={name:"articles/Go/Go基础/Go语言选择.md"};function r(s,c,n,_,i,p){return o(),t("div")}const G=e(a,[["render",r]]);export{l as __pageData,G as default};
